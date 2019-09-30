@@ -1,8 +1,4 @@
 require "test_helper"
-require 'minitest/rails'
-
-Minitest::Reporters.use! Minitest::Reporters::SpecReporter.new
-
 
 describe TasksController do
   let (:task) {
