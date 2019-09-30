@@ -16,5 +16,6 @@ class TasksController < ApplicationController
     if @task.nil?
       head :not_found
       return
-    
+    end
+  end
 end
