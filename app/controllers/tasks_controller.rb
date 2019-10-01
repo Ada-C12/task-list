@@ -1,12 +1,12 @@
-TASKS = [
-  { task: "Make breakfast" },
-  { task: "Make bed" },
-  { task: "Brush teeth" },
-]
+# TASKS = [
+#   { task: "Make breakfast" },
+#   { task: "Make bed" },
+#   { task: "Brush teeth" },
+# ]
 
 class TasksController < ApplicationController
   def index
-    @tasks = TASKS
+    @tasks = Task.all
   end
 
   def show
