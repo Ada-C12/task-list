@@ -1,9 +1,10 @@
-TASKS = ["laundry", "grocery shopping", "hygiene", "take out recycling", "complete Ada's Ruby on Rails project"]
-
 class TasksController < ApplicationController
   def index
-    @tasks = TASKS
+    @tasks = Task.all
   end
 
+  def show
+    @tasks = Task.find_by(id: task_id)
+  end
 
 end
