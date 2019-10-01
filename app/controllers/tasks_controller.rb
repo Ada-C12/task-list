@@ -1,7 +1,9 @@
 TASKS = [
-    {task: "Do homework"},
-    {task: "Relax little"},
-    {task: "Come to class tomorrow"},
+    {to_do: "Do homework"},
+    {to_do: "Clean house"},
+    {to_do: "Cook dinner"},
+    {to_do: "Sleep"},
+    {to_do: "Come to class tomorrow"},
   ]
 class TasksController < ApplicationController
     def index
