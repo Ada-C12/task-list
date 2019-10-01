@@ -71,7 +71,7 @@ describe TasksController do
           name: "new task",
           description: "new task description",
           completed_at: nil,
-        },
+        }
       }
       
       # Act-Assert
@@ -99,8 +99,24 @@ describe TasksController do
   # Unskip and complete these tests for Wave 3
   describe "edit" do
     it "can get the edit page for an existing task" do
-      skip
-      # Your code here
+      # skip
+      # Arrange 
+      task_hash = {
+        task: {
+          id: 1,
+          name: "new task",
+          description: "new task description",
+          completed_at: nil,
+        }
+      }
+      # task = Task.new(task_hash)
+      new_task = Task.find_by(name: task_hash[:task][:name])
+      
+      # Act
+      get edit_task_path(new_task_path)
+      
+      # Assert
+      must_respond_with :success
     end
     
     it "will respond with redirect when attempting to edit a nonexistant task" do
