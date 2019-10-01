@@ -11,7 +11,6 @@ class TasksController < ApplicationController
       # return
       flash[:error] = "Could not find task with id: -1"
       redirect_to tasks_path #:flash => { :notice => "Could not find task with id: -1" } 
-      
     end
   end
   
@@ -37,6 +36,9 @@ class TasksController < ApplicationController
   
   def edit
     @task = Task.find_by(id: params[:id])
+    if @task.nil?
+      redirect_to tasks_path
+    end
   end
   
   def update
