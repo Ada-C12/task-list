@@ -1,4 +1,14 @@
+  TASKS = [
+    {task: "Do homework"},
+    {task: "Relax little"},
+    {task: "Come to class tomorrow"},
+  ]
+
 class TaskListController < ApplicationController
-    def index
-    end
+
+        def index
+            @tasks = TASKS
+        
+        end
+      
 end
