@@ -4,7 +4,7 @@ Let's build a Task List in Rails! We will solve the problem of tracking tasks in
 
 ## At a Glance
 - Individual, [stage 1](https://github.com/Ada-Developers-Academy/pedagogy/blob/master/rule-of-three.md#stage-1) project
-- Due before class on **DATE HERE**
+- Due before class on Monday Oct. 7th
 
 ## Learning Goals
 
