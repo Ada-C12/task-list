@@ -113,7 +113,7 @@ describe TasksController do
       new_task = Task.find_by(name: task_hash[:task][:name])
       
       # Act
-      get edit_task_path(new_task_path)
+      get edit_task_path(task.id)
       
       # Assert
       must_respond_with :success
