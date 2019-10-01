@@ -6,10 +6,10 @@ class TasksController < ApplicationController
   end
   
   def show
-    task = params[:id].to_i
+    task = params[:id]
     @task = Task.find_by(id: task)
     if @task.nil?
-      head :not_found
+      head :redirect
       return
     end
   end
