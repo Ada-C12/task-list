@@ -39,6 +39,8 @@ gem 'bootsnap', '>= 1.1.0', require: false
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'ruby-debug-ide'
+  gem 'debase'
 end
 
 group :development do
@@ -71,9 +73,9 @@ group :development do
   gem 'better_errors'
   gem 'binding_of_caller'
   gem 'guard'
-  gem 'guard-minitest'
-  gem 'debase', '>= 0.2.4.1'
-  gem 'ruby-debug-ide', '>= 0.7.0'
+  # gem 'guard-minitest'
+  # gem 'debase', '>= 0.2.4.1'
+  # gem 'ruby-debug-ide', '>= 0.7.0'
 end
 
 group :test do
@@ -82,3 +84,5 @@ group :test do
   gem 'minitest-skip'
   gem 'minitest-spec-rails'
 end
+
+
