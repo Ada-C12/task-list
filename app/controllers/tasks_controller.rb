@@ -1,7 +1,7 @@
 TASKS = [
-  { task: "Study", description: "Finish Wave 4 homework"},
-  { task: "Clean house", description: "Sweep and mop the floors"},
-  { task: "Buy groceries", description: "Buy all of trader joes"}
+  { task: "Study", description: "Finish Wave 4 homework", completion_date: "5 days"},
+  { task: "Clean house", description: "Sweep and mop the floors", completion_date: "3 days"},
+  { task: "Buy groceries", description: "Buy all of trader joes", completion_date: "6 days"}
 ]
 
 class TasksController < ApplicationController
