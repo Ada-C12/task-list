@@ -1,18 +1,18 @@
-TASKS = [
-  { task: "Study", description: "Finish Wave 4 homework", completion_date: "5 days"},
-  { task: "Clean house", description: "Sweep and mop the floors", completion_date: "3 days"},
-  { task: "Buy groceries", description: "Buy all of trader joes", completion_date: "6 days"}
-]
+# TASKS = [
+#   { name: "Study", description: "Finish Wave 4 homework", completion_date: nil},
+#   { name: "Clean house", description: "Sweep and mop the floors", completion_date: nil},
+#   { name: "Buy groceries", description: "Buy all of trader joes", completion_date: nil}
+# ]
 
 class TasksController < ApplicationController
   
   def index
-    @tasks = TASKS
+    @tasks = Task.all
   end
   
   def show
-    task_id = params[:id].to_i
-    @task = TASKS[task_id]
+    task_id = params[:id]
+    @task = Task.find_by[id:task_id]
     
     if @task.nil?
       head :not_found
