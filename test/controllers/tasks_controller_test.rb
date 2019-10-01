@@ -4,7 +4,6 @@ describe TasksController do
   let (:task) {
     Task.create id: 1, name: "sample task", description: "this is an example for a test",
     completed_at: Time.now + 5.days
-    
   }
   
   # Tests for Wave 1
@@ -120,8 +119,10 @@ describe TasksController do
     end
     
     it "will respond with redirect when attempting to edit a nonexistant task" do
-      skip
-      # Your code here
+      # skip
+      get edit_task_path(task_path(-1))
+      must_respond_with :redirect
+      must_redirect_to tasks_path
     end
   end
   
