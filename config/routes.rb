@@ -2,8 +2,12 @@ Rails.application.routes.draw do
 
   root :to => "tasks#index"
 
-  get '/tasks', to: 'tasks#index'
+  #routes for entire task list 
+  get '/tasks', to: 'tasks#index', as: 'tasks'
 
-  get '/tasks/:id', to: 'tasks#show'
-  
+
+
+  #routes for individual tasks 
+  get '/tasks/:id', to: 'tasks#show', as: 'task'
+
 end
