@@ -19,6 +19,7 @@ class TasksController < ApplicationController
     @task = Task.new
   end
   
+  # **Consider adding return after each action ?
   # submit and save the new task
   def create
     @task = Task.new(task_params)
@@ -48,7 +49,8 @@ class TasksController < ApplicationController
   end
   
   def destroy
-    
+    flash[:notice] = "Are you sure you want to delete?"
+    redirect_to tasks_path
   end
   
   
