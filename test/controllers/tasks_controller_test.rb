@@ -30,7 +30,7 @@ describe TasksController do
     it "can get a valid task" do
       # skip
       # Act
-      get tasks_path(task.id)
+      get task_path(task.id)
       
       # Assert
       must_respond_with :success
@@ -39,7 +39,7 @@ describe TasksController do
     it "will redirect for an invalid task" do
       # skip
       # Act
-      get tasks_path(-1)
+      get task_path(-1)
       
       # Assert
       must_respond_with :redirect
