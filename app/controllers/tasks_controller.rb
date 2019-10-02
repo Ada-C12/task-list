@@ -5,4 +5,14 @@ class TasksController < ApplicationController
   def index
     @tasks = Task.all
   end
+# create a controller action
+  def show
+    task_id = params[:id]
+    @task = Task.find(task_id)
+  
+    if @task.nil?
+      head :not_found
+      return
+    end
+  end
 end
