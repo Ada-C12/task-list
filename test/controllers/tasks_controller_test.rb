@@ -18,7 +18,7 @@ describe TasksController do
     
     it "can get the root path" do
       # Act
-      # get root_path
+      get root_path
       
       # Assert
       must_respond_with :success

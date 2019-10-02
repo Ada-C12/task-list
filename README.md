@@ -35,8 +35,8 @@ Tests have been created for waves 1 & 2.  You can find the tests in `test/contro
 This wave is where we introduce ActiveRecord to create a model. We use the model to persist our data. Make sure you are building the application so that it meets the requirements of the pre-written tests.
 
 1. create a migration which will create a new `Task` model
-    - create the database schema and tables by running the `rails db:migrate` command
-    - the `Task` model should include _at least_ a name, a description and a completion date
+    x create the database schema and tables by running the `rails db:migrate` command
+    x the `Task` model should include _at least_ a name, a description and a completion date
     - create at least 2 `Task` model instances using the `rails console`
 1. update the controller's `index` action you created to retrieve and show `all` Task objects from the database
     - you may need to update the view as well to use the model fields rather than the hard-coded data
