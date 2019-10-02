@@ -80,17 +80,9 @@ describe TasksController do
       
       new_task = Task.find_by(name: task_hash[:task][:name])
       expect(new_task.description).must_equal task_hash[:task][:description]
-      # ASK WHY DUE DATE IS INCLUDED?
-      # expect(new_task.due_date.to_time.to_i).must_equal task_hash[:task][:due_date].to_i
       expect(new_task.completed_at).must_equal task_hash[:task][:completed_at]
       
       must_respond_with :redirect
-      # REMOVE AFTER ASKING INSTRUCTOR FOR CLARIFICATION
-      # must_redirect_to tasks_path
-      # Test is expecting that after a new task is created,
-      # to redirect to the page of the new task
-      # Project requirements state that after a new task is created,
-      # to redirect to the index listing all tasks
       must_redirect_to task_path(new_task.id)
     end
   end
@@ -131,8 +123,8 @@ describe TasksController do
     # Note:  If there was a way to fail to save the changes to a task, that would be a great
     #        thing to test.
     it "can update an existing task" do
-      skip
-      # Your code here
+      # skip
+      
     end
     
     it "will redirect to the root page if given an invalid id" do
@@ -143,12 +135,14 @@ describe TasksController do
   
   # Complete these tests for Wave 4
   describe "destroy" do
+    # skip
     # Your tests go here
     
   end
   
   # Complete for Wave 4
   describe "toggle_complete" do
+    # skip
     # Your tests go here
   end
 end
