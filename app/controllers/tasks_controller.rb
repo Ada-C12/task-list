@@ -49,6 +49,8 @@ class TasksController < ApplicationController
   end
   
   def destroy
+    @task = Task.find(params[:id])
+    @task.destroy
     flash[:notice] = "Are you sure you want to delete?"
     redirect_to tasks_path
   end
