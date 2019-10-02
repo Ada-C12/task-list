@@ -32,4 +32,29 @@ class TasksController < ApplicationController
       return
     end
   end
+
+  def edit
+    task_id = params[:id]
+    @task = Task.find_by(id: task_id)
+
+    if @task.nil?
+      redirect_to tasks_path
+    end
+  end
+
+  def update
+    task_id = params[:id]
+    form_data = params["task"]
+    name = form_data["name"]
+    description = form_data["description"]
+    completion_date = form_data["completion_date"]
+
+    task_to_update = Task.find_by(id: task_id)
+
+    if @task.nil?
+      redirect_to tasks_path
+    else
+      task_to_update = Task.update(name: name, description: description)
+    end
+  end
 end
