@@ -13,4 +13,9 @@ class TasksController < ApplicationController
       return
     end
   end
+  
+  def new
+    
+  end
+  
 end
