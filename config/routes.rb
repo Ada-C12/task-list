@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   
   get '/tasks', to: 'tasks#index'
   root 'tasks#index'
+  
+  get 'tasks/:id', to: 'tasks#show'
 end
 
 

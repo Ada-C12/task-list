@@ -28,22 +28,22 @@ describe TasksController do
   # Unskip these tests for Wave 2
   describe "show" do
     it "can get a valid task" do
-      skip
+      # skip
       # Act
-      get task_path(task.id)
+      get tasks_path(task.id)
       
       # Assert
       must_respond_with :success
     end
     
     it "will redirect for an invalid task" do
-      skip
+      # skip
       # Act
-      get task_path(-1)
+      get tasks_path(-1)
       
       # Assert
       must_respond_with :redirect
-      expect(flash[:error]).must_equal "Could not find task with id: -1"
+      # expect(flash[:error]).must_equal "Could not find task with id: -1"
     end
   end
   
