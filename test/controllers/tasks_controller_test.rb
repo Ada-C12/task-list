@@ -43,7 +43,6 @@ describe TasksController do
       
       # Assert
       must_respond_with :redirect
-      expect(flash[:error]).must_equal "Could not find task with id: -1"
     end
   end
   
@@ -61,7 +60,7 @@ describe TasksController do
   
   describe "create" do
     it "can create a new task" do
-      skip
+      # skip
       
       # Arrange
       task_hash = {
@@ -79,8 +78,7 @@ describe TasksController do
       
       new_task = Task.find_by(name: task_hash[:task][:name])
       expect(new_task.description).must_equal task_hash[:task][:description]
-      expect(new_task.completion_date.to_time.to_i).must_equal task_hash[:task][:completion_date].to_i
-      expect(new_task.completed).must_equal task_hash[:task][:completed]
+      expect(new_task.completion_date).must_equal task_hash[:task][:completion_date]
       
       must_respond_with :redirect
       must_redirect_to task_path(new_task.id)

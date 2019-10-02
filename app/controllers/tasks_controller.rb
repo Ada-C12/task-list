@@ -21,15 +21,16 @@ class TasksController < ApplicationController
   end
   
   def create
-    completion_date = Time.parse("#{params[:task][:completion_date]}")
+    # completion_date = 0
+    # completion_date = Time.parse("#{params[:task][:completion_date]}")
     
     @task = Task.new(
       name: params[:task][:name], 
       description: params[:task][:description], 
-      completion_date: completion_date
+      completion_date: params[:task][:completion_date]
     )
     if @task.save
-      redirect_to tasks_path 
+      redirect_to task_path[:task.id]
       return
     else 
       render :new 
