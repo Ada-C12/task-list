@@ -1,18 +1,17 @@
 class TasksController < ApplicationController
   
-  TASKS = Task.all
-  
   def index
     @greeting = "HELLO, THERE!"
-    @tasks = TASKS
+    @tasks = Task.all
   end
   
   def show
-    @tasks = TASKS
-    @task_id = params[:id].to_i
-    @task = @tasks.find_by(id: @task_id)
+    @tasks = Task.all
+    task_id = params[:id].to_i
+    @task = @tasks.find_by(id: task_id)
     if @task.nil?
-      head :not_found
+      flash[:error] = "Could not find task with id: " + task_id.to_s
+      redirect_to root_path
       return
     end
   end
