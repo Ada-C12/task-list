@@ -103,21 +103,25 @@ describe TasksController do
   describe "update" do
     # Note:  If there was a way to fail to save the changes to a task, that would be a great
     #        thing to test.
-    it "can update an existing task" do
-      # Your code here
-
-      updated_task = {
+    before do
+      @updated_task = {
         task: {
           name: "Updated Task!", description: "I'm an updated task",
         },
       }
+    end
+    it "can update an existing task" do
+      # Your code here
 
       task_id = task.id
-      patch task_path(task_id), params: updated_task
+      patch task_path(task_id), params: @updated_task
 
       edited_task = Task.find_by(id: task_id)
-      expect(edited_task.name).must_equal updated_task[:task][:name]
-      expect(edited_task.description).must_equal updated_task[:task][:description]
+      expect(edited_task.name).must_equal @updated_task[:task][:name]
+      expect(edited_task.description).must_equal @updated_task[:task][:description]
+    end
+
+    it "redirects for a nonexisting task" do
     end
   end
 
