@@ -105,21 +105,19 @@ describe TasksController do
     #        thing to test.
     it "can update an existing task" do
       # Your code here
+
       updated_task = {
         task: {
-          name: "Updated task!", description: "This is an updated task",
+          name: "Updated Task!", description: "I'm an updated task",
         },
       }
 
       task_id = task.id
       patch task_path(task_id), params: updated_task
 
-      edited_task = Task.find_by(task_id)
-      expect(edited_task.name).must_equal updated_hash[:task][:name]
-    end
-
-    it "will redirect to the root page if given an invalid id" do
-      # Your code here
+      edited_task = Task.find_by(id: task_id)
+      expect(edited_task.name).must_equal updated_task[:task][:name]
+      expect(edited_task.description).must_equal updated_task[:task][:description]
     end
   end
 

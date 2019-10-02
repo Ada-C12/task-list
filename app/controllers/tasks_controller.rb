@@ -47,14 +47,15 @@ class TasksController < ApplicationController
     form_data = params["task"]
     name = form_data["name"]
     description = form_data["description"]
-    completion_date = form_data["completion_date"]
 
+    task_id = params[:id]
     task_to_update = Task.find_by(id: task_id)
 
-    if @task.nil?
+    if task_to_update.nil?
       redirect_to tasks_path
     else
-      task_to_update = Task.update(name: name, description: description)
+      task_to_update.update(name: name, description: description)
+      redirect_to task_path(task_to_update.id)
     end
   end
 end
