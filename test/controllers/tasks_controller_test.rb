@@ -43,7 +43,7 @@ describe TasksController do
       
       # Assert
       must_respond_with :redirect
-      # expect(flash[:error]).must_equal "Could not find task with id: -1"
+      expect(flash[:error]).must_equal "Could not find task with id: -1"
     end
   end
   
