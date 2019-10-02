@@ -15,4 +15,8 @@ class TasksController < ApplicationController
       return
     end
   end
+  #Create a new task
+  def new
+    @task = Task.new
+  end
 end
