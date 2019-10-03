@@ -159,9 +159,9 @@ describe TasksController do
       
       id = "bad-id"
       
-      expect {
-        delete task_path(id)
-      }.must_redirect_to root_path
+      delete task_path(id)
+      
+      must_redirect_to root_path
       
     end
     
