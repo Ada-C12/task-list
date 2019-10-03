@@ -9,18 +9,14 @@ describe TasksController do
   # Tests for Wave 1
   describe "index" do
     it "can get the index path" do
-      # Act
       get tasks_path
 
-      # Assert
       must_respond_with :success
     end
 
     it "can get the root path" do
-      # Act
       get root_path
 
-      # Assert
       must_respond_with :success
     end
   end
@@ -28,41 +24,28 @@ describe TasksController do
   # Unskip these tests for Wave 2
   describe "show" do
     it "can get a valid task" do
-      # skip
-      # Act
       get task_path(task.id)
 
-      # Assert
       must_respond_with :success
     end
 
     it "will redirect for an invalid task" do
-      # skip
-      # Act
       get task_path(-1)
 
-      # Assert
       must_respond_with :redirect
     end
   end
 
   describe "new" do
     it "can get the new task page" do
-      # skip
-
-      # Act
       get new_task_path
 
-      # Assert
       must_respond_with :success
     end
   end
 
   describe "create" do
     it "can create a new task" do
-      # skip
-
-      # Arrange
       task_hash = {
         task: {
           name: "new task",
@@ -71,7 +54,6 @@ describe TasksController do
         },
       }
 
-      # Act-Assert
       expect {
         post tasks_path, params: task_hash
       }.must_change "Task.count", 1
@@ -88,19 +70,15 @@ describe TasksController do
   # Unskip and complete these tests for Wave 3
   describe "edit" do
     it "can get the edit page for an existing task" do
-      skip
-      
-      #arrange
-      #act
-      #assert
+      get edit_task_path(task.id)
+
+      must_respond_with :success 
     end
 
     it "will respond with redirect when attempting to edit a nonexistant task" do
-      skip
-      # Your code here
-      #get a nonexisting task id 
-      #should return a 404 not found
-      # should redirect to root path
+      get edit_task_path(500)
+
+      must_redirect_to root_path
     end
   end
 
@@ -118,11 +96,13 @@ describe TasksController do
         }
       }
 
-      expect(Task.find_by(id:existing_task.id).title).must_equal "Feed Kaya"
+      expect(Task.find_by(id: existing_task.id).title).must_equal "Feed Kaya"
     end
 
     it "will redirect to the root page if given an invalid id" do
-      get task_path(500)
+      
+      patch task_path(500)
+
 
       must_redirect_to root_path 
     end
