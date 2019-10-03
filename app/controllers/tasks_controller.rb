@@ -52,7 +52,7 @@ class TasksController < ApplicationController
       return
     else # save failed :(
       # show the edit tasks form again
-      redner :edit
+      render :edit
       return
     end
   end
