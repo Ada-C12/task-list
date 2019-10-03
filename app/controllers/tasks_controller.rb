@@ -16,7 +16,7 @@ class TasksController < ApplicationController
   end
   
   # Wave 2 - create new task
-  def new 
+  def new
     @task = Task.new
   end
   
@@ -36,15 +36,19 @@ class TasksController < ApplicationController
     end
   end
   
+  # Wave 3 - edit task
   def edit
-    @task = Task.find_by(id: params[:id])
+    task_id = params[:id]
+    @task = Task.find_by(id: task_id)
     
     if @task.nil?
-      head :not_found
+      # head :not_found
+      redirect_to tasks_path
       return
     end
   end
   
+  # Wave 3 - update task
   def update
     @task = Task.find_by(id: params[:id])
     if @task.update(
@@ -60,6 +64,7 @@ class TasksController < ApplicationController
     end
   end
   
+  # Wave 4 - delete task
   def destroy
     task_id = params[:id]
     @task = Task.find_by(id: task_id)
