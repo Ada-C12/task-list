@@ -13,8 +13,7 @@ Rails.application.routes.draw do
 
    # Routes that operate on individual tasks
   get '/tasks/:id', to: 'tasks#show', as: 'task'
-
-
+  
    # # Routes that operate on all books
   # get '/books', to: 'books#index', as: 'books'
   # get '/books/new', to: 'books#new', as: 'new_book'
