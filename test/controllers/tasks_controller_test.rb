@@ -47,8 +47,6 @@ describe TasksController do
   
   describe "new" do
     it "can get the new task page" do
-      skip
-      
       # Act
       get new_task_path
       
@@ -58,9 +56,7 @@ describe TasksController do
   end
   
   describe "create" do
-    it "can create a new task" do
-      skip
-      
+    it "can create a new task" do  
       # Arrange
       task_hash = {
         task: {
@@ -77,8 +73,7 @@ describe TasksController do
       
       new_task = Task.find_by(name: task_hash[:task][:name])
       expect(new_task.description).must_equal task_hash[:task][:description]
-      expect(new_task.due_date.to_time.to_i).must_equal task_hash[:task][:due_date].to_i
-      expect(new_task.completed).must_equal task_hash[:task][:completed]
+      expect(new_task.completion_date).must_equal task_hash[:task][:completion_date]
       
       must_respond_with :redirect
       must_redirect_to task_path(new_task.id)
