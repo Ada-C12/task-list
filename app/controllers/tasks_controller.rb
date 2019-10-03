@@ -31,4 +31,29 @@ class TasksController < ApplicationController
       return
     end
   end
+
+  def edit
+      @task = Task.find_by(id: params[:id])
+
+    if @task.nil?
+      head :not_found
+      return
+    end
+  end
+
+  def update
+    @task = Task.find_by(id: params[:id])
+    if @task.update(
+      name: params[:task][:name], 
+      description: params[:task][:description], 
+      completion_date: params[:task][:completion_date]
+    )
+      redirect_to tasks_path # go to the index so we can see the updated task in the list of all tasks
+      return
+    else # save failed :(
+      render :edit # show the edit task form view again
+      return
+    end
+  end
+
 end

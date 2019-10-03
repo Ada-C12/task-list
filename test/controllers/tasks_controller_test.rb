@@ -80,17 +80,29 @@ describe TasksController do
     end
   end
   
-  # Unskip and complete these tests for Wave 3
   describe "edit" do
+
+    task_hash = {
+      task: {
+        name: "task to be edited",
+        description: "task to be edited description",
+        completion_date: nil,
+      },
+    }
+
     it "can get the edit page for an existing task" do
-      skip
-      # Your code here
+      
+      # Act
+      get edit_task_path
+      
+      # Assert
+      must_respond_with :success
     end
     
     it "will respond with redirect when attempting to edit a nonexistant task" do
-      skip
       # Your code here
     end
+    
   end
   
   # Uncomment and complete these tests for Wave 3
@@ -116,4 +128,5 @@ describe TasksController do
   describe "toggle_complete" do
     # Your tests go here
   end
+  
 end
