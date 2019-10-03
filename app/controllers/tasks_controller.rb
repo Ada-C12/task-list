@@ -6,9 +6,8 @@ class TasksController < ApplicationController
   end
   
   def show
-    @tasks = Task.all
     task_id = params[:id].to_i
-    @task = @tasks.find_by(id: task_id)
+    @task = Task.find_by(id: task_id)
     if @task.nil?
       flash[:error] = "Could not find task with id: " + task_id.to_s
       redirect_to tasks_path
@@ -34,9 +33,8 @@ class TasksController < ApplicationController
   end
   
   def edit
-    @task_id = params[:format].to_i
-    @tasks = Task.all
-    @edit_task = @tasks.find_by(id: @task_id)
+    task_id = params[:format].to_i
+    @edit_task = Task.find_by(id: task_id)
     
     if @edit_task.nil?
       redirect_to tasks_path
@@ -44,5 +42,20 @@ class TasksController < ApplicationController
     end    
   end
   
+  def update
+    @task = Task.find_by(id: params[:id])
+    @task.name = params[:task][:name]
+    @task.description = params[:task][:description]
+    @task.completion_date = params[:task][:completion_date]
+    
+    @task.save
+    
+    if @task.save
+      redirect_to task_path(@task.id)
+    else
+      render new_task_path
+    end
+    
+  end
   
 end

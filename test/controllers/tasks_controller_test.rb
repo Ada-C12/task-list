@@ -98,7 +98,7 @@ describe TasksController do
     end
     
     it "will respond with redirect when attempting to edit a nonexistant task" do
-      skip
+      # skip
       
       get edit_task_path(-1)
       
@@ -110,20 +110,34 @@ describe TasksController do
   describe "update" do
     
     before do
-      Task.create(name: "Test task name", description: "Test task description", completion_date: nil)
+      @updated_task = Task.create(name: "Test task name", description: "Test task description", completion_date: nil)
+      @task_hash = {
+        task: {
+          name: @updated_task.name,
+          description: @updated_task.description,
+          completion_date: @updated_task.completion_date
+        }
+      }
     end
     
     it "can update an existing task" do
-      skip
-      id = Task.first.id
+      # skip
+      
+      id = @updated_task.id
       
       expect {
-        patch task_path(id), params: Task.first
+        patch task_path(id), params: @task_hash
       }.wont_change "Task.count"
       
     end
     
     it "will redirect to the root page if given an invalid id" do
+      
+      #don't know why this test isn't passing, cuz the site is working ::shrug::
+      
+      patch task_path(-1)
+      
+      must_respond_with :redirect
       
     end
   end
