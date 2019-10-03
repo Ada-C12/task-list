@@ -1,12 +1,11 @@
 class TasksController < ApplicationController
+  before_action :find_by_task, only: [:show, :edit, :update, :destroy, :toggle_complete, :toggle_incomplete]
+
   def index
     @tasks = Task.all
   end
 
   def show
-    task_id = params[:id]
-    @task = Task.find_by(id: task_id)
-
     if @task.nil?
       redirect_to tasks_path
       return
@@ -18,12 +17,7 @@ class TasksController < ApplicationController
   end
 
   def create
-    form_data = params["task"]
-    name = form_data["name"]
-    description = form_data["description"]
-    completion_date = form_data["completion_date"]
-
-    @task = Task.new(name: name, description: description, completion_date: completion_date)
+    @task = Task.new(task_params)
 
     if @task.save
       redirect_to @task
@@ -34,9 +28,6 @@ class TasksController < ApplicationController
   end
 
   def edit
-    task_id = params[:id]
-    @task = Task.find_by(id: task_id)
-
     if @task.nil?
       redirect_to tasks_path
     end
@@ -49,34 +40,15 @@ class TasksController < ApplicationController
       @task.update(task_params)
       redirect_to task_path(@task.id)
     end
-
-    # task_id = params[:id]
-    # form_data = params["task"]
-    # name = form_data["name"]
-    # description = form_data["description"]
-
-    # task_id = params[:id]
-    # task_to_update = Task.find_by(id: task_id)
-
-    # if task_to_update.nil?
-    #   redirect_to tasks_path
-    # else
-    #   task_to_update.update(name: name, description: description)
-    #   redirect_to task_path(task_to_update.id)
-    # end
   end
 
   def destroy
-    task_id = params[:id]
-    @task = Task.find_by(id: task_id)
-
-    unless @task
+    if @task.nil?
       head :not_found
-      return
+    else
+      @task.destroy
+      redirect_to tasks_path
     end
-
-    @task.destroy
-    redirect_to tasks_path
   end
 
   private
