@@ -9,7 +9,8 @@ class TasksController < ApplicationController
     task = params[:id]
     @task = Task.find_by(id: task)
     if @task.nil?
-      head :not_found
+      flash[:error] = "Could not find task with id: #{task}"
+      redirect_to tasks_path 
       return
     end
   end
@@ -30,15 +31,35 @@ class TasksController < ApplicationController
   end
   
   def edit
-    
+    task = params[:id]
+    @task = Task.find_by(id: task)
+    if @task.nil?
+      flash[:error] = "Could not find task with id: #{task}"
+      redirect_to tasks_path 
+      return
+    end
   end
   
   def update
-    
+    @task = Task.find_by(id: params[:id])
+    if @task.update(name: params[:task][:name], description: params[:task][:description], completion_date: params[:task][:completion_date]) 
+      redirect_to tasks_path 
+      return
+    else 
+      render :new
+      return
+    end
   end
   
   def destroy
-    
+    @task = Task.find_by(id: params[:id])
+    if @task.destroy || @task.nil?
+      redirect_to tasks_path
+      return
+    else
+      render :new
+      return
+    end
   end
   
   
