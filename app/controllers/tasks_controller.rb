@@ -1,4 +1,3 @@
-
 class TasksController < ApplicationController
     def index
         @tasks = Task.all
@@ -7,12 +6,17 @@ class TasksController < ApplicationController
     def show
         task_id = params[:id].to_i
         @task = Task.find_by(id: task_id)
+
         if task_id < 0
             flash[:Error] = "Could not find task with id: -1"
             # redirect_to "Could not find task with id: -1"
         end
-        
-        
+
+        if @task.nil?
+            redirect_to new_task_path
+            return
+        end
+         
     end
 
     def new
@@ -68,8 +72,6 @@ class TasksController < ApplicationController
             return
         end
     end
-    
-
     
 end
     
