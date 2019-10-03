@@ -146,10 +146,24 @@ describe TasksController do
   describe "destroy" do
     # Your tests go here
     
+    # arrange by creating a book
+    # assert by deleting a book
+    #make sure Task.count decrements by 1
+    
+    # try destroy.all to make sure everything is destroyed
+    
+    
   end
+  
   
   # Complete for Wave 4
   describe "toggle_complete" do
     # Your tests go here
+    
+    # must redirect to tasks_path
+    # task.count must not change with invalid data
+    # try deleting the same thing twice
+    # try deleting a task that doesn't exist
+    
   end
 end
