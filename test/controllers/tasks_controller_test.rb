@@ -10,7 +10,7 @@ describe TasksController do
   describe "index" do
     it "can get the index path" do
       # Act
-      get "/tasks"
+      get tasks_path
 
       # Assert
       must_respond_with :success
@@ -18,7 +18,7 @@ describe TasksController do
 
     # it "can get the root path" do
     #   # Act
-    #   get "/task"
+    #   get root_path
 
     #   # Assert
     #   must_respond_with :success
