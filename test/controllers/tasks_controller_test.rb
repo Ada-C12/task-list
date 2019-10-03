@@ -121,7 +121,13 @@ describe TasksController do
       expect(edited_task.description).must_equal @updated_task[:task][:description]
     end
 
-    it "redirects for a nonexisting task" do
+    it "will redirect to the index page if given an invalid id" do
+      # Your code here
+      task_id = -1
+      patch task_path(task_id), params: @updated_task
+
+      must_respond_with :redirect
+      must_redirect_to tasks_path
     end
   end
 
