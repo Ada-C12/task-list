@@ -43,6 +43,18 @@ class TasksController < ApplicationController
   end
   
   def update
+    task_id = params[:id].to_i
+    @task = Task.find_by(id: task_id)
+    
+    if @task.update(name: params[:task][:name], description: params[:task][:description], completion_date: params[:task][:completion_date])
+      # go to that task's page
+      redirect_to task_path(@task.id)
+      return
+    else # save failed :(
+      # show the edit tasks form again
+      redner :edit
+      return
+    end
   end
   
 end

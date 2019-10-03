@@ -113,16 +113,18 @@ describe TasksController do
         },
       }
       
-      # Act-Assert      
+      # Act-Assert
       existing_task = Task.find_by(name: task.name)
       
       patch task_path(existing_task.id), params: task_hash
       
-      expect(existing_task.description).must_equal task_hash[:task][:description]
-      expect(existing_task.completion_date).must_equal task_hash[:task][:completion_date]
+      updated_task = Task.find_by(id: existing_task.id)
+      
+      expect(updated_task.description).must_equal task_hash[:task][:description]
+      expect(updated_task.completion_date).must_equal task_hash[:task][:completion_date]
       
       must_respond_with :redirect
-      must_redirect_to task_path(new_task.id)
+      must_redirect_to task_path(updated_task.id)
     end
     
     it "will redirect to the root page if given an invalid id" do
@@ -135,10 +137,14 @@ describe TasksController do
       }
       
       # Act-Assert
-      patch task_path(-1), params: task_hash
+      # patch task_path(-1), params: task_hash
       
-      must_respond_with :redirect
-      must_redirect_to root_path
+      expect {
+        patch task_path(-1), params: task_hash
+      }.must_redirect_to root_path
+      
+      # must_respond_with :redirect
+      # must_redirect_to root_path
     end
   end
   
