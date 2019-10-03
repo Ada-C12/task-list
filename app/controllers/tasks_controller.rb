@@ -86,6 +86,12 @@ class TasksController < ApplicationController
     
     @task = Task.find_by(id: params[:id])
     
+    @task.completion_date = Date.today
+    puts @task.completion_date
+    
+    @task.save
+    
+    
   end
   
   

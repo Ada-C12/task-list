@@ -190,7 +190,9 @@ describe TasksController do
       
       new_task = Task.create(name: "sample task", description: "this is an example for a test", completion_date: nil)
       
-      updated_task = { 
+      id = new_task.id
+      
+      task_updates = { 
         task: {
           name: new_task.name,
           description: new_task.description,
@@ -198,12 +200,14 @@ describe TasksController do
         }
       }
       
-      patch task_path(new_task.id), params: completion_date
-      
-      expect(new_task.completion_date).must_equal Date.today
+      patch task_path(id), params: task_updates
+            
+      expect {
+        patch task_path(id), params: task_updates
+      }.must_differ "Task.count", 0
       
     end
-
+    
     
     
   end
