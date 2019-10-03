@@ -33,5 +33,16 @@ class TasksController < ApplicationController
     end
   end
   
+  def edit
+    @task_id = params[:format].to_i
+    @tasks = Task.all
+    @edit_task = @tasks.find_by(id: @task_id)
+    
+    if @edit_task.nil?
+      redirect_to tasks_path
+      return
+    end    
+  end
+  
   
 end
