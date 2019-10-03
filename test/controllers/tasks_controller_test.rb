@@ -93,17 +93,14 @@ describe TasksController do
   describe "edit" do
     it "can get the edit page for an existing task" do
       get edit_task_path(task)
-      
       # Assert
       must_respond_with :success
       
     end
     
     it "will respond with redirect when attempting to edit a nonexistant task" do
-      # skip
       get edit_task_path(-1)
       must_respond_with :redirect
-      # Your code here
     end
   end
   
@@ -143,7 +140,6 @@ describe TasksController do
       patch update_task_path(-1), params: task_hash
       must_respond_with :redirect
       must_redirect_to root_path
-      # Your code here
     end
   end
   
