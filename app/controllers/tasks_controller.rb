@@ -56,4 +56,8 @@ class TasksController < ApplicationController
       return
     end
   end
+
+  def complete
+
+  end
 end
