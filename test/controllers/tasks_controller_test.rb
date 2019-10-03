@@ -6,7 +6,7 @@ describe TasksController do
                 completion_date: Time.now + 5.days
   }
 
-  # Tests for Wave 1
+# Tests for Wave 1
   describe "index" do
     it "can get the index path" do
       # Act
