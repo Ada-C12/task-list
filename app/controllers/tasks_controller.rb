@@ -45,4 +45,15 @@ class TasksController < ApplicationController
     end
   end
 
+  def destroy
+    choosen_task = Task.find_by(id: params[:id])
+    if choosen_task.nil?
+      redirect_to tasks_path
+      return
+    else
+      choosen_task.destroy
+      redirect_to root_path
+      return
+    end
+  end
 end
