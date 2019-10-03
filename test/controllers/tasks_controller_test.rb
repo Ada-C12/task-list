@@ -91,6 +91,7 @@ describe TasksController do
     it "will respond with redirect when attempting to edit a nonexistant task" do
       get edit_task_path(9999)
       
+      must_respond_with :redirect
       must_redirect_to tasks_path
     end
   end
@@ -118,13 +119,7 @@ describe TasksController do
     end
     
     it "will redirect to the root page if given an invalid id" do
-      task_hash = {
-        task: {
-          name: "changed task name"
-        }
-      }
-      
-      patch task_path(9999), params: task_hash
+      patch task_path(9999)
       
       must_respond_with :redirect
       must_redirect_to root_path
