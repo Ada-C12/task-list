@@ -43,20 +43,27 @@ class TasksController < ApplicationController
   end
 
   def update
-    task_id = params[:id]
-    form_data = params["task"]
-    name = form_data["name"]
-    description = form_data["description"]
-
-    task_id = params[:id]
-    task_to_update = Task.find_by(id: task_id)
-
-    if task_to_update.nil?
+    if @task.nil?
       redirect_to tasks_path
     else
-      task_to_update.update(name: name, description: description)
-      redirect_to task_path(task_to_update.id)
+      @task.update(task_params)
+      redirect_to task_path(@task.id)
     end
+
+    # task_id = params[:id]
+    # form_data = params["task"]
+    # name = form_data["name"]
+    # description = form_data["description"]
+
+    # task_id = params[:id]
+    # task_to_update = Task.find_by(id: task_id)
+
+    # if task_to_update.nil?
+    #   redirect_to tasks_path
+    # else
+    #   task_to_update.update(name: name, description: description)
+    #   redirect_to task_path(task_to_update.id)
+    # end
   end
 
   def destroy
@@ -75,9 +82,10 @@ class TasksController < ApplicationController
   private
 
   def find_by_task
+    @task = Task.find_by(id: params[:id])
   end
 
   def task_params
-    return params.require(:task).permit(:name, :description)
+    return params.require(:task).permit(:name, :description, :completion_date)
   end
 end
