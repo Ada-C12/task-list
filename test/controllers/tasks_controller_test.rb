@@ -153,17 +153,18 @@ describe TasksController do
     # try destroy.all to make sure everything is destroyed
     
     
+    # must redirect to tasks_path
+    # task.count must not change with invalid data
+    # try deleting the same thing twice
+    # try deleting a task that doesn't exist
+    
+    
   end
   
   
   # Complete for Wave 4
   describe "toggle_complete" do
     # Your tests go here
-    
-    # must redirect to tasks_path
-    # task.count must not change with invalid data
-    # try deleting the same thing twice
-    # try deleting a task that doesn't exist
     
   end
 end
