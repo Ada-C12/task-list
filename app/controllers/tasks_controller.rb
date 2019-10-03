@@ -51,6 +51,26 @@ class TasksController < ApplicationController
     end
   end
 
+  def toggle_complete
+    if @task.nil?
+      redirect_to tasks_path
+    else
+      @task.completion_date = DateTime.current
+      @task.save
+      redirect_to tasks_path
+    end
+  end
+
+  def toggle_incomplete
+    if @task.nil?
+      redirect_to tasks_path
+    else
+      @task.completion_date = nil?
+      @task.save
+      redirect_to tasks_path
+    end
+  end
+
   private
 
   def find_by_task

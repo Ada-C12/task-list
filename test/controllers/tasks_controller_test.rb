@@ -90,7 +90,7 @@ describe TasksController do
       must_respond_with :success
     end
 
-    it "will respond with redirect when attempting to edit a nonexistent task" do
+    it "will respond with redirect when attempting to edit a non-existent task" do
       # Your code here
       get edit_task_path(-1)
 
@@ -121,7 +121,7 @@ describe TasksController do
       expect(edited_task.description).must_equal @updated_task[:task][:description]
     end
 
-    it "will redirect to the index page if given an invalid id" do
+    it "will redirect to the list of tasks if given an invalid id" do
       # Your code here
       task_id = -1
       patch task_path(task_id), params: @updated_task
@@ -158,5 +158,25 @@ describe TasksController do
   # Complete for Wave 4
   describe "toggle_complete" do
     # Your tests go here
+    it "marks the task as complete" do
+      task = Task.new(name: "A Task", description: "A task to be completed")
+      task.save
+
+      patch complete_task_path(task.id)
+
+      must_respond_with :redirect
+
+      task.reload
+      expect(task.completion_date).wont_be_nil
+    end
+
+    it "will redirect to the list of tasks for a non-existent task" do
+      task_id = 59485
+
+      patch complete_task_path(task_id)
+
+      must_respond_with :redirect
+      must_redirect_to tasks_path
+    end
   end
 end
