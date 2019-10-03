@@ -186,6 +186,25 @@ describe TasksController do
   # Complete for Wave 4
   describe "toggle_complete" do
     # Your tests go here
+    it "marks a task as completed by updating the completion date" do
+      
+      new_task = Task.create(name: "sample task", description: "this is an example for a test", completion_date: nil)
+      
+      updated_task = { 
+        task: {
+          name: new_task.name,
+          description: new_task.description,
+          completion_date: Date.today 
+        }
+      }
+      
+      patch task_path(new_task.id), params: completion_date
+      
+      expect(new_task.completion_date).must_equal Date.today
+      
+    end
+
+    
     
   end
 end

@@ -57,6 +57,7 @@ class TasksController < ApplicationController
     
     if @task.save
       redirect_to task_path(@task.id)
+      return
     else
       render new_task_path
     end
@@ -78,6 +79,12 @@ class TasksController < ApplicationController
     else
       return
     end
+    
+  end
+  
+  def complete 
+    
+    @task = Task.find_by(id: params[:id])
     
   end
   
