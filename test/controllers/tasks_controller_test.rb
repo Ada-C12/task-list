@@ -116,7 +116,9 @@ describe TasksController do
       # Act-Assert
       existing_task = Task.find_by(name: task.name)
       
-      patch task_path(existing_task.id), params: task_hash
+      expect {
+        patch task_path(existing_task.id), params: task_hash
+      }.wont_change "Task.count", 1
       
       updated_task = Task.find_by(id: existing_task.id)
       
@@ -138,10 +140,6 @@ describe TasksController do
       
       # Act-Assert
       patch task_path(-1), params: task_hash
-      
-      # expect {
-      #   patch task_path(-1), params: task_hash
-      # }.must_redirect_to root_path
       
       must_respond_with :redirect
       must_redirect_to root_path
