@@ -1,9 +1,12 @@
 Rails.application.routes.draw do
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
     # verb 'path', to: 'controller#action'
-    get '/tasks', to: 'tasks#index'
-    get "/tasks/:id", to: 'tasks#show'
-    root 'tasks#index'
+    root to: 'tasks#index'
+    resources :tasks
+    
+    # get '/tasks', to: 'tasks#index'
+    # get '/tasks/:id', to: 'tasks#show'
+   
 end
 
 # https://github.com/Ada-Developers-Academy/textbook-curriculum/blob/master/08-rails/restful-routing.md
