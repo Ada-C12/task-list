@@ -111,10 +111,21 @@ describe TasksController do
     #        thing to test.
     it "can update an existing task" do
       # Your code here
+      existing_task = Task.first
+      updated_task_form_data = {
+        task: {
+          name: "Practical Object Oriented Programming in Ruby",
+          description: 'A look at how to design object-oriented systems',
+          due_date: 20191015
+        }
+      }
     end
 
     it "will redirect to the root page if given an invalid id" do
       # Your code here
+      get task_path(-1)
+
+      must_respond_with :redirect
     end
   end
 

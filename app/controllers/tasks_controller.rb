@@ -33,4 +33,16 @@ class TasksController < ApplicationController
     end
   end
 
+  def update
+    @task = Task.find_by(id: params[:id])
+    @task.name = params[:task][:name]
+    @task.description = params[:task][:description]
+    @task.due_date = params[:task][:due_date]
+    if @task.save
+      redirect_to task_path(@task.id)
+    else
+      render new_task_path
+    end
+  end
+
 end
