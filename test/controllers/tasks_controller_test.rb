@@ -93,19 +93,22 @@ describe TasksController do
     it "can get the edit page for an existing task" do
       
       # Act
-      get edit_task_path
+      get edit_task_path(task)
       
       # Assert
       must_respond_with :success
     end
     
     it "will respond with redirect when attempting to edit a nonexistant task" do
-      # Your code here
+       # Act
+       get edit_task_path(5000)
+      
+       # Assert
+       must_respond_with :redirect
     end
     
   end
   
-  # Uncomment and complete these tests for Wave 3
   describe "update" do
     # Note:  If there was a way to fail to save the changes to a task, that would be a great
     #        thing to test.
