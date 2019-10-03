@@ -18,5 +18,6 @@ class TasksController < ApplicationController
   #Create a new task
   def new
     @task = Task.new
+    @task.save
   end
 end
