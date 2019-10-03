@@ -7,12 +7,23 @@
     <h2>Your Tasks</h2>
     <ol>
       <% @tasks.each do |task| %>
-        <li>
-          <%= link_to task.name, task_path(task) %> <br>
-          <%= task.description %> <br>
-          <%= link_to "Show Details", task_path(task) %>
-          <%= link_to "Edit Task", edit_task_path(task) %>
-          <%= link_to "Delete Task", task_path(task), method: :delete, data: { confirm: "Are you sure you want to delete this task?" } %>
+        <% if task.completion_data.nil? %>
+          <li>
+            <%= link_to task.name, task_path(task) %> <br>
+            <%= task.description %> <br>
+            <%= link_to "Mark Task Complete", complete_task_path(task.id), method: :patch, data: { confirm: "Would you like to mark this task as 'complete'?" } %>
+            <%= link_to "Show Details", task_path(task) %>
+            <%= link_to "Edit Task", edit_task_path(task) %>
+            <%= link_to "Delete Task", task_path(task), method: :delete, data: { confirm: "Are you sure you want to delete this task?" } %>
+            <% else %>
+            <li>
+            <%= link_to task.name, task_path(task) %> <br>
+            <%= task.description %> <br>
+            <%= link_to "Unmark Complete", incomplete_task_path(task.id), method: :patch, data: { confirm: "Would you like to unmark this task as 'complete'?" } %>
+            <%= link_to "Show Details", task_path(task) %>
+            <%= link_to "Edit Task", edit_task_path(task) %>
+            <%= link_to "Delete Task", task_path(task), method: :delete, data: { confirm: "Are you sure you want to delete this task?" } %>
+          <% end %>
         </li>
         <br>
       <% end %>  
