@@ -10,10 +10,10 @@ class TasksController < ApplicationController
   end
 
   def show
-    task_id = params[:task].to_i
+    task_id = params[:id].to_i
     @task = Task.find_by(id: task_id)
-    if @tasks.nil?
-      return head :not_found
+    if @task.nil?
+      redirect_to new_task_path
     end
   end
 
@@ -36,9 +36,9 @@ class TasksController < ApplicationController
 
   def update
     @task = Task.find_by(id: params[:id])
-    @task.name = params[:book][:name]
-    @task.description = params[:book][:description]
-    @task.completed = params[:book][:description]
+    @task.name = params[:task][:name]
+    @task.description = params[:task][:description]
+    @task.completed = params[:task][:description]
 
     if new_task.save
       redirect_to task_path(@task.id)
