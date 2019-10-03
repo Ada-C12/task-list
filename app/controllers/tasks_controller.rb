@@ -65,7 +65,7 @@ class TasksController < ApplicationController
     if @task.nil?
       redirect_to tasks_path
     else
-      @task.completion_date = nil?
+      @task.completion_date = nil
       @task.save
       redirect_to tasks_path
     end
