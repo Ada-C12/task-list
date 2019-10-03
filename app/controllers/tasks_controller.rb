@@ -26,6 +26,7 @@ class TasksController < ApplicationController
     # form_date = "#{form["due_date(2i)"]}/#{form["due_date(3i)"]}/#{form["due_date(1i)"]}"
     # new_task.due_date = DateTime.parse(Date.parse(form_date).strftime("%Y/%-d/%-m"))
 
+    @new_task.completed = nil
     @new_task.status = "INCOMPLETE"
     
     if @new_task.save
