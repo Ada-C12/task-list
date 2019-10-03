@@ -1,12 +1,17 @@
-<ul>
-<% @tasks.each do |task|%>
-    <li>
-      <% link_to task.title, task_path(task.id)%> 
-    <%# <a href="/tasks/<%= task[:id] %>
-        <%= task.name %>
-    </a>
-    </li>
-<% end %>
-</ul>
 
-<a href="/new_task">Add Task</a>
+
+<section>
+    <article>
+    <h1>TaskList</h1>
+    <%= link_to "Add Task", new_task_path, class: 'btn' %>
+    <%= link_to "All Tasks", tasks_path, class: 'btn' %>
+    </article>
+  <ol>
+    <% @tasks.each do |task| %>
+      <li>
+        <%= link_to task.name, task_path( task.id ), class: 'task-name' %>
+        <p><%= task.description %> | <%= link_to "Edit", task_edit_path( task.id )%> | <%= link_to "Delete", task_delete_conf_path( task.id ) %></p>
+      </li>
+    <% end %>
+  </ol>
+</section>

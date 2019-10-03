@@ -6,11 +6,12 @@ class TasksController < ApplicationController
 
     def show
         task_id = params[:id].to_i
+        @task = Task.find_by(id: task_id)
         if task_id < 0
             flash[:Error] = "Could not find task with id: -1"
             # redirect_to "Could not find task with id: -1"
         end
-        @task = Task.find_by(id: task_id)
+        
         
     end
 
@@ -28,7 +29,10 @@ class TasksController < ApplicationController
 
         # redirect_to :controller => 'tasks', :action => 'index'
         
-        @task = Task.new( name: params[:task][:name], description: params[:task][:description]
+        @task = Task.new( 
+            name: params[:task][:name], 
+            description: params[:task][:description]
+        )
 
         if @task.save
             redirect_to task_path(@task.id)
@@ -38,24 +42,22 @@ class TasksController < ApplicationController
     end
     
     def edit
-        @task = task.find_by(id: params[:id] )
+        @task = Task.find_by(id: params[:id] )
     end
         
     def update
-        @task = Task.find_by(id: params[:id] )
-        @task.name = params[:task][:name]
-        @task.description = params[:task][:description]
+        @task = Task.find_by(id: params[:id])
+        @task[:name] = params[:task][:name]
+        @task[:description] = params[:task][:description]
                 
-            if @task.save
-                redirect_to task_path(@task.id)
-            else
-                render new_task_path
-            end
+        if @task.save
+            redirect_to task_path(@task.id)
+        else
+            render new_task_path
         end
-    
     end
+
     
-        
 end
-end
+    
 
