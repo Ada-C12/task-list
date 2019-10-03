@@ -60,9 +60,7 @@ describe TasksController do
   
   describe "create" do
     it "can create a new task" do
-      #skip
       
-      # Arrange
       task_hash = {
         task: {
           name: "new task",
@@ -71,19 +69,19 @@ describe TasksController do
         },
       }
       
-      # Act-Assert
       expect {
         post tasks_path, params: task_hash
       }.must_change "Task.count", 1
       
       new_task = Task.find_by(name: task_hash[:task][:name])
+      
       expect(new_task.description).must_equal task_hash[:task][:description]
+      
       assert_nil(new_task.completion_date)
       
       must_respond_with :redirect
       
-      #changed because of project instructions
-      must_redirect_to tasks_path
+      must_redirect_to task_path(new_task)
     end
   end
   
@@ -100,11 +98,10 @@ describe TasksController do
     it "will respond with redirect when attempting to edit a nonexistant task" do
       #skip
       
-      invalid_task_id = 50
-      
-      get edit_task_path(id: 50)
+      get edit_task_path(id: -1)
       
       must_respond_with :redirect
+      must_redirect_to tasks_path
     end
   end
   
@@ -127,9 +124,11 @@ describe TasksController do
       
       updated_task = Task.find_by(id: task.id)
       
+      expect(updated_task.name).must_equal updated_task_hash[:task][:name]
       expect(updated_task.description).must_equal updated_task_hash[:task][:description]
       
       must_respond_with :redirect
+      must_redirect_to task_path(task)
       
     end
     
@@ -147,6 +146,7 @@ describe TasksController do
       
       patch task_path(invalid_task_id), params: updated_task_hash
       
+      must_respond_with :redirect
       must_redirect_to tasks_path
     end
   end
