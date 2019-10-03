@@ -37,6 +37,7 @@ class TasksController < ApplicationController
 
     if @task.nil?
       redirect_to tasks_path
+      return
     end
   end
 
@@ -47,7 +48,7 @@ class TasksController < ApplicationController
       description: params[:task][:description], 
       completion_date: params[:task][:completion_date]
     )
-      redirect_to tasks_path # go to the index so we can see the updated task in the list of all tasks
+      redirect_to task_path # go to the task show page so we can see the updates in place
       return
     else # save failed :(
       render :edit # show the edit task form view again

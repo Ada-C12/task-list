@@ -81,7 +81,7 @@ describe TasksController do
   end
   
   describe "edit" do
-
+    
     task_hash = {
       task: {
         name: "task to be edited",
@@ -89,7 +89,7 @@ describe TasksController do
         completion_date: nil,
       },
     }
-
+    
     it "can get the edit page for an existing task" do
       
       # Act
@@ -100,24 +100,55 @@ describe TasksController do
     end
     
     it "will respond with redirect when attempting to edit a nonexistant task" do
-       # Act
-       get edit_task_path(5000)
+      # Act
+      get edit_task_path(5000)
       
-       # Assert
-       must_respond_with :redirect
+      # Assert
+      must_respond_with :redirect
     end
     
   end
   
   describe "update" do
-    # Note:  If there was a way to fail to save the changes to a task, that would be a great
-    #        thing to test.
+    
+    task_hash = {
+      task: {
+        name: "task to update",
+        description: "description to update",
+        completion_date: nil,
+      },
+    }
+    
+    # Note:  If there was a way to fail to save the changes to a task, that would be a great thing to test.
     it "can update an existing task" do
-      # Your code here
+      
+      # Act-Assert
+      expect {
+        patch task_path(task), params: task_hash
+      }.must_change "Task.count", 0
+      
+      updated_task = Task.find_by(name: task_hash[:task][:name])
+      expect(updated_task.description).must_equal task_hash[:task][:description]
+      expect(updated_task.completion_date).must_equal task_hash[:task][:completion_date]
+      
+      # must_respond_with :redirect
+      # must_redirect_to task_path(new_task.id)
+      
     end
     
     it "will redirect to the root page if given an invalid id" do
-      # Your code here
+      # Arrange
+
+      # updated_task = Task.find_by(name: task_hash[:task][:name])
+      # expect(updated_task.description).must_equal task_hash[:task][:description]
+      # expect(updated_task.completion_date).must_equal task_hash[:task][:completion_date]
+      
+      # # Act
+      # patch task_path(-123)
+      
+      # # Assert
+      # must_respond_with :redirect
+      
     end
   end
   
