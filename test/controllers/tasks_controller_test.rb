@@ -72,7 +72,6 @@ describe TasksController do
       
       new_task = Task.find_by(name: task_hash[:task][:name])
       expect(new_task.description).must_equal task_hash[:task][:description]
-      expect(new_task.completion_date).must_equal task_hash[:task][:completion_date]
       
       must_respond_with :redirect
       must_redirect_to task_path(new_task.id)
@@ -121,7 +120,6 @@ describe TasksController do
       updated_task = Task.find_by(id: existing_task.id)
       
       expect(updated_task.description).must_equal task_hash[:task][:description]
-      expect(updated_task.completion_date).must_equal task_hash[:task][:completion_date]
       
       must_respond_with :redirect
       must_redirect_to task_path(updated_task.id)
@@ -160,7 +158,27 @@ describe TasksController do
   
   # Complete these tests for Wave 4
   describe "destroy" do
-    # Your tests go here
+    it "reduces the Task count by one" do
+      # arrange
+      bad_task = Task.create(name: "sample task", description: "this is an example for a test")
+      
+      # act and assert
+      expect {
+        delete task_path(bad_task.id)
+      }.must_change "Task.count", 1
+    end
+    
+    it "should return nil for a deleted task id" do
+      # arrange
+      bad_task = Task.create(name: "sample task", description: "this is an example for a test")
+      
+      # act
+      delete task_path(bad_task.id)
+      
+      # assert
+      same_bad_task = Task.find_by(id: bad_task.id)
+      expect(same_bad_task).must_be_nil
+    end
     
   end
   
