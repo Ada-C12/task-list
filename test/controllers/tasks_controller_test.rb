@@ -128,8 +128,24 @@ describe TasksController do
   
   # Complete these tests for Wave 4
   describe "destroy" do
-    # Your tests go here
+    it "can delete a task" do
+      test_task_id = Task.create(name: "test")
+      new_task = Task.find_by(id: test_task_id)
+      
+      expect {
+        delete task_path(new_task.id) 
+      }.must_differ 'Task.count', -1
+      
+      must_respond_with :redirect
+      must_redirect_to tasks_path
+    end
     
+    it "will redirect for an invalid task" do
+      delete task_path(-1)
+      
+      must_respond_with :redirect
+      must_redirect_to tasks_path
+    end
   end
   
   # Complete for Wave 4
