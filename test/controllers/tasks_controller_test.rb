@@ -66,7 +66,6 @@ describe TasksController do
     it "can get the edit page for an existing task" do
       get edit_task_path(task)
       must_respond_with :success
-      
     end
     
     it "will respond with redirect when attempting to edit a nonexistant task" do
@@ -113,11 +112,39 @@ describe TasksController do
   
   # Complete these tests for Wave 4
   describe "destroy" do
-    # Your tests go here
+    it "should delete a task when prompted to" do
+      count = Task.count
+      new_task = Task.create name: "sample task", description: "this is an example for a test",
+      completion_date: Time.now + 5.days
+      
+      # make sure that the new task is created 
+      expect(Task.count).must_equal (count + 1)
+      
+      # make sure that when you delete the task, that the count of the Tasks database decreases by 1
+      expect{
+        delete task_path(new_task.id)
+      }.must_change "Task.count", 1
+      must_redirect_to root_path 
+    end
+    
+    it "will redirect to the root page if given an invalid id" do
+      task_hash = {
+        task: {
+          name: "updated task",
+          description: "update new task description"
+        }
+      }
+      delete task_path(-1), params: task_hash
+      must_respond_with :redirect
+      must_redirect_to root_path
+    end
   end
   
   # Complete for Wave 4
   describe "toggle_complete" do
     # Your tests go here
+    it "must instantiate with toggle_complete set to false" do
+      
+    end
   end
 end

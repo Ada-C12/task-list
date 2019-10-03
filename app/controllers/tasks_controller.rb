@@ -52,6 +52,21 @@ class TasksController < ApplicationController
     redirect_to task_path(task)
   end
   
+  def delete
+    task_id = params[:id]
+    @task = Task.find_by(id: task_id)
+    
+    if @task.nil?
+      flash[:error] = "Error, could not delete task."
+      redirect_to root_path
+      
+      return
+    end
+    @task.destroy
+    redirect_to root_path
+  end
   
+  def toggle_complete
+  end
   
 end
