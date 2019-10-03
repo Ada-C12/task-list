@@ -115,7 +115,7 @@ describe TasksController do
     it "can update an existing task" do
       # Your code here
       
-      task_hash = {
+      updated_task_hash = {
         task: {
           name: "new task",
           description: "new task description",
@@ -123,16 +123,31 @@ describe TasksController do
         },
       }
       
-      expect {
-        post tasks_path, params: task_hash
-      }.must_change "Task.count", 1
+      patch task_path(task), params: updated_task_hash
       
+      updated_task = Task.find_by(id: task.id)
       
+      expect(updated_task.description).must_equal updated_task_hash[:task][:description]
+      
+      must_respond_with :redirect
       
     end
     
     it "will redirect to the root page if given an invalid id" do
       # Your code here
+      updated_task_hash = {
+        task: {
+          name: "new task",
+          description: "new task description",
+          completion_date: nil,
+        },
+      }
+      
+      invalid_task_id = -1
+      
+      patch task_path(invalid_task_id), params: updated_task_hash
+      
+      must_redirect_to tasks_path
     end
   end
   
