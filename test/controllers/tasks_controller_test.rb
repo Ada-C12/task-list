@@ -98,6 +98,9 @@ describe TasksController do
     it "will respond with redirect when attempting to edit a nonexistant task" do
       skip
       # Your code here
+      #get a nonexisting task id 
+      #should return a 404 not found
+      # should redirect to root path
     end
   end
 
@@ -106,11 +109,22 @@ describe TasksController do
     # Note:  If there was a way to fail to save the changes to a task, that would be a great
     #        thing to test.
     it "can update an existing task" do
-      # Your code here
+      existing_task = Task.first
+      updated_task_form_data = {
+        task: {
+          name: "Feed Kaya",
+          description: "She's a fatty. Feed half a cup a meal and lots of snacks -- don't forget 1 dental a day.",
+          completed: nil
+        }
+      }
+
+      expect(Task.find_by(id:existing_task.id).title).must_equal "Feed Kaya"
     end
 
     it "will redirect to the root page if given an invalid id" do
-      # Your code here
+      get task_path(500)
+
+      must_redirect_to root_path 
     end
   end
 
