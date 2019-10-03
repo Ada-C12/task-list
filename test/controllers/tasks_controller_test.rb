@@ -47,7 +47,6 @@ describe TasksController do
   
   describe "new" do
     it "can get the new task page" do
-      skip
       # Act
       get new_task_path
       
