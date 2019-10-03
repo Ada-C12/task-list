@@ -121,7 +121,6 @@ describe TasksController do
     end
     
     it "can update an existing task" do
-      # skip
       
       id = @updated_task.id
       
@@ -144,20 +143,42 @@ describe TasksController do
   
   # Complete these tests for Wave 4
   describe "destroy" do
-    # Your tests go here
     
-    # arrange by creating a book
-    # assert by deleting a book
-    #make sure Task.count decrements by 1
+    it "will delete a task" do
+      
+      new_task = Task.create(name: "sample task", description: "this is an example for a test", completion_date: Time.now + 5.days)
+      
+      expect {
+        delete task_path(new_task.id)
+      }.must_differ "Task.count", -1
+      
+    end
     
-    # try destroy.all to make sure everything is destroyed
+    
+    it "will redirect to the root page if given an invalid id" do
+      
+      id = "bad-id"
+      
+      expect {
+        delete task_path(id)
+      }.must_redirect_to root_path
+      
+    end
     
     
-    # must redirect to tasks_path
-    # task.count must not change with invalid data
-    # try deleting the same thing twice
-    # try deleting a task that doesn't exist
-    
+    it "will only delete a task once" do
+      
+      new_task = Task.create(name: "sample task", description: "this is an example for a test", completion_date: Time.now + 5.days)
+      
+      expect {
+        delete task_path(new_task.id)
+      }.must_differ "Task.count", -1
+      
+      expect {
+        delete task_path(new_task.id)
+      }.must_differ "Task.count", 0
+      
+    end    
     
   end
   
