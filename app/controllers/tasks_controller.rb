@@ -48,9 +48,7 @@ class TasksController < ApplicationController
     if @task.nil?
       redirect_to root_path
       return
-    end
-    
-    if @task.update(
+    elsif @task.update(
       name: params[:task][:name],
       description: params[:task][:description],
       completion_date: params[:task][:completion_date])
@@ -60,6 +58,20 @@ class TasksController < ApplicationController
     else 
       render :edit
       return
+    end
+  end
+  
+  def destroy
+    @task = Task.find_by(id: params[:id])
+    
+    if @task.nil?
+      redirect_to root_path
+      return
+    elsif @task.destroy
+      redirect_to tasks_path
+      return
+    else
+      render :show
     end
   end
 end
