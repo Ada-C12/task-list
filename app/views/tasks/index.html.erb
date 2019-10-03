@@ -3,8 +3,15 @@
 <ul>
 <% @tasks.each do |task| %>
   <li>
-  <%=task.name%> - <%=task.description%> - <%=task.completion_date%>
+  <%= link_to task.name, task_path(task) %>
+  <p>
+  <%= task.description%> - Due: <%= task.completion_date%>
+  <%= link_to "Edit", edit_task_path(task) %>
+  <%= link_to "Create", new_task_path(task) %>
+  <%= link_to "Delete", task_path(task), method: :delete, data: {confirm: "Are you sure?"}%>
+  </p>
+  
   </li>
+  </br>
   <% end %>
 </ul>
-

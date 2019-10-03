@@ -1,17 +1,78 @@
-# TASKS = ["Get groceries", "Clean kitchen", "Read about rails", "Do laundry"]
-
 class TasksController < ApplicationController
   def index
     @tasks = Task.all
   end 
-end
-
-def show
-  task_id = params[:id]
-  @task = Task.find_by(id: task_id)
   
-  if @task.nil?
-    head :not_found
+  # Wave 2 - shows task
+  def show
+    task_id = params[:id]
+    @task = Task.find_by(id: task_id)
+    
+    if @task.nil?
+      # head :not_found
+      redirect_to tasks_path
+      return
+    end
+  end
+  
+  # Wave 2 - create new task
+  def new 
+    @task = Task.new
+  end
+  
+  def create 
+    @task = Task.new(
+    name: params[:task][:name],
+    description: params[:task][:description],
+    completion_date: params[:task][:completion_date]
+    ) #instantiate a new task
+    
+    if @task.save #save returns true if the database insert succeeds
+      redirect_to task_path(@task.id)  #go to the index so we can see the task in the list
+      return
+    else #save failed
+      render :new #show the new task form view again
+      return
+    end
+  end
+  
+  def edit
+    @task = Task.find_by(id: params[:id])
+    
+    if @task.nil?
+      head :not_found
+      return
+    end
+  end
+  
+  def update
+    @task = Task.find_by(id: params[:id])
+    if @task.update(
+      name: params[:task][:name],
+      description: params[:task][:description],
+      completion_date: params[:task][:completion_date]
+      )
+      redirect_to tasks_path # go to the index so we can see the book in the list
+      return
+    else # save failed :(
+      render :edit # show the new book form view again
+      return
+    end
+  end
+  
+  def destroy
+    task_id = params[:id]
+    @task = Task.find_by(id: task_id)
+    
+    if @task.nil?
+      head :not_found
+      return
+    end
+    
+    @task.destroy
+    
+    redirect_to tasks_path
     return
   end
-end
+  
+end 
