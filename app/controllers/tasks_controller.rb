@@ -71,4 +71,13 @@ class TasksController < ApplicationController
     @task.destroy
     redirect_to tasks_path
   end
+
+  private
+
+  def find_by_task
+  end
+
+  def task_params
+    return params.require(:task).permit(:name, :description)
+  end
 end
