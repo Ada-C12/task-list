@@ -33,7 +33,7 @@ class TasksController < ApplicationController
   end
   
   def edit
-    task_id = params[:format].to_i
+    task_id = params[:id].to_i
     @edit_task = Task.find_by(id: task_id)
     
     if @edit_task.nil?
@@ -44,6 +44,11 @@ class TasksController < ApplicationController
   
   def update
     @task = Task.find_by(id: params[:id])
+    if @task.nil?
+      redirect_to tasks_path
+      return
+    end
+    
     @task.name = params[:task][:name]
     @task.description = params[:task][:description]
     @task.completion_date = params[:task][:completion_date]

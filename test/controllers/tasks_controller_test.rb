@@ -110,7 +110,7 @@ describe TasksController do
   describe "update" do
     
     before do
-      @updated_task = Task.create(name: "Test task name", description: "Test task description", completion_date: nil)
+      @updated_task = task
       @task_hash = {
         task: {
           name: @updated_task.name,
