@@ -62,7 +62,6 @@ describe TasksController do
         task: {
           name: "new task",
           description: "new task description",
-          completion_date: nil,
         },
       }
       
@@ -109,7 +108,6 @@ describe TasksController do
       task_hash = {
         task: {
           description: "updated description",
-          completion_date: nil,
         },
       }
       
@@ -134,7 +132,6 @@ describe TasksController do
       task_hash = {
         task: {
           description: "updated description",
-          completion_date: nil,
         },
       }
       
@@ -143,6 +140,18 @@ describe TasksController do
       
       must_respond_with :redirect
       must_redirect_to root_path
+    end
+    
+    it "throws an error for empty params" do
+      # arrange
+      task_hash = {}
+      
+      # act-assert
+      expect {
+        patch task_path(task.id), params: task_hash
+      }.wont_change 'Task.count'
+      
+      must_respond_with :bad_request
     end
   end
   
