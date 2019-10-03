@@ -137,14 +137,14 @@ describe TasksController do
       }
       
       # Act-Assert
-      # patch task_path(-1), params: task_hash
+      patch task_path(-1), params: task_hash
       
-      expect {
-        patch task_path(-1), params: task_hash
-      }.must_redirect_to root_path
+      # expect {
+      #   patch task_path(-1), params: task_hash
+      # }.must_redirect_to root_path
       
-      # must_respond_with :redirect
-      # must_redirect_to root_path
+      must_respond_with :redirect
+      must_redirect_to root_path
     end
   end
   
