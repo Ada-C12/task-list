@@ -18,6 +18,15 @@ class TasksController < ApplicationController
   #Create a new task
   def new
     @task = Task.new
-    @task.save
+  end
+  def create
+    @task = Task.new(name: params[:task][:name], description: params[:task][:description], date: params[:task][:date]) #instantiate a new book
+    if @task.save 
+      redirect_to tasks_path 
+      return
+    else 
+      render :new 
+      return
+    end
   end
 end
