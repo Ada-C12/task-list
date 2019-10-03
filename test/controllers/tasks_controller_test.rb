@@ -3,7 +3,7 @@ require "test_helper"
 describe TasksController do
   let (:task) {
     Task.create name: "sample task", description: "this is an example for a test",
-                completion_date: Time.now + 5.days
+                date: Time.now + 5.days
   }
 
   # Tests for Wave 1
@@ -27,79 +27,79 @@ describe TasksController do
   end
 
   # Unskip these tests for Wave 2
-  # describe "show" do
-  #   it "can get a valid task" do
-  #     skip
-  #     # Act
-  #     get task_path(task.id)
+  describe "show" do
+    it "can get a valid task" do
+      #skip
+      # Act
+      get task_path(task.id)
 
-  #     # Assert
-  #     must_respond_with :success
-  #   end
+      # Assert
+      must_respond_with :success
+    end
 
-  #   it "will redirect for an invalid task" do
-  #     skip
-  #     # Act
-  #     get task_path(-1)
+    it "will redirect for an invalid task" do
+      #skip
+      # Act
+      get task_path(-1)
 
-  #     # Assert
-  #     must_respond_with :redirect
-  #     expect(flash[:error]).must_equal "Could not find task with id: -1"
-  #   end
-  # end
+      # Assert
+      must_respond_with :redirect
+      expect(flash[:error]).must_equal "Could not find task with id: -1"
+    end
+  end
 
-  # describe "new" do
-  #   it "can get the new task page" do
-  #     skip
+  describe "new" do
+    it "can get the new task page" do
+      #skip
 
-  #     # Act
-  #     get new_task_path
+      # Act
+      get new_task_path
 
-  #     # Assert
-  #     must_respond_with :success
-  #   end
-  # end
+      # Assert
+      must_respond_with :success
+    end
+  end
 
-  # describe "create" do
-  #   it "can create a new task" do
-  #     skip
+  describe "create" do
+    it "can create a new task" do
+      #skip
 
-  #     # Arrange
-  #     task_hash = {
-  #       task: {
-  #         name: "new task",
-  #         description: "new task description",
-  #         completion_date: nil,
-  #       },
-  #     }
+      # Arrange
+      task_hash = {
+        task: {
+          name: "new task",
+          description: "new task description",
+          date: nil,
+        },
+      }
 
-  #     # Act-Assert
-  #     expect {
-  #       post tasks_path, params: task_hash
-  #     }.must_change "Task.count", 1
+      # Act-Assert
+      expect {
+        post tasks_path, params: task_hash
+      }.must_change "Task.count", 1
 
-  #     new_task = Task.find_by(name: task_hash[:task][:name])
-  #     expect(new_task.description).must_equal task_hash[:task][:description]
-  #     expect(new_task.due_date.to_time.to_i).must_equal task_hash[:task][:due_date].to_i
-  #     expect(new_task.completed).must_equal task_hash[:task][:completed]
+      new_task = Task.find_by(name: task_hash[:task][:name])
+      expect(new_task.description).must_equal task_hash[:task][:description]
+      #expect(new_task.due_date.to_time.to_i).must_equal task_hash[:task][:due_date].to_i
+      expect(new_task.date).must_equal task_hash[:task][:date]
 
-  #     must_respond_with :redirect
-  #     must_redirect_to task_path(new_task.id)
-  #   end
-  # end
+      must_respond_with :redirect
+      must_redirect_to task_path(new_task.id)
+    end
+  end
 
-  # # Unskip and complete these tests for Wave 3
-  # describe "edit" do
-  #   it "can get the edit page for an existing task" do
-  #     skip
-  #     # Your code here
-  #   end
+  # Unskip and complete these tests for Wave 3
+  describe "edit" do
+    it "can get the edit page for an existing task" do
+      #skip
+      # Your code here
+    end
 
-  #   it "will respond with redirect when attempting to edit a nonexistant task" do
-  #     skip
-  #     # Your code here
-  #   end
-  # end
+    it "will respond with redirect when attempting to edit a nonexistant task" do
+      #skip
+      # Your code here
+    end
+  end
 
   # Uncomment and complete these tests for Wave 3
   describe "update" do
@@ -107,6 +107,8 @@ describe TasksController do
     #        thing to test.
     it "can update an existing task" do
       # Your code here
+      
+
     end
 
     it "will redirect to the root page if given an invalid id" do
@@ -114,14 +116,14 @@ describe TasksController do
     end
   end
 
-  # Complete these tests for Wave 4
-  describe "destroy" do
-    # Your tests go here
+#   # Complete these tests for Wave 4
+#   describe "destroy" do
+#     # Your tests go here
 
-  end
+#   end
 
-  # Complete for Wave 4
-  describe "toggle_complete" do
-    # Your tests go here
-  end
+#   # Complete for Wave 4
+#   describe "toggle_complete" do
+#     # Your tests go here
+#   end
 end

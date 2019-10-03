@@ -8,7 +8,7 @@ class TasksController < ApplicationController
 # create a controller action
   def show
     task_id = params[:id]
-    @task = Task.find(task_id)
+    @task = Task.find_by(id:task_id)
   
     if @task.nil?
       head :not_found
@@ -19,6 +19,7 @@ class TasksController < ApplicationController
   def new
     @task = Task.new
   end
+
   def create
     @task = Task.new(name: params[:task][:name], description: params[:task][:description], date: params[:task][:date]) #instantiate a new book
     if @task.save 
@@ -26,6 +27,28 @@ class TasksController < ApplicationController
       return
     else 
       render :new 
+      return
+    end
+  end
+  
+  def edit
+    @task = Task.find_by(id: params[:id])
+
+    if @task.nil?
+      head :not_found
+      return
+    end
+  end
+  def update
+    @task = Task.find_by(id: params[:id])
+    if @task.update(
+      name: params[:task][:name], 
+      description: params[:task][:description],
+      date: params[:task][:date]
+    )
+      redirect_to books_path 
+    else 
+      render :edit 
       return
     end
   end
