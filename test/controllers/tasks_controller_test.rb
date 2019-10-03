@@ -133,7 +133,7 @@ describe TasksController do
     
     it "will redirect to the root page if given an invalid id" do
       
-      #don't know why this test isn't passing, cuz the site is working ::shrug::
+      #it's working now!
       
       patch task_path(-1)
       
