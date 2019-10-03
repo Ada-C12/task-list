@@ -32,4 +32,17 @@ class TasksController < ApplicationController
     end
   end
   
+  def edit
+    task_id = params[:id].to_i
+    @task = Task.find_by(id: task_id)
+    
+    if @task.nil?
+      redirect_to tasks_path, flash: { error: "Could not find task with id: #{task_id}" }
+      return
+    end
+  end
+  
+  def update
+  end
+  
 end
