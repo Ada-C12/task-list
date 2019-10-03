@@ -16,13 +16,13 @@ describe TasksController do
       must_respond_with :success
     end
 
-    it "can get the root path" do
-      # Act
-      get root_path
+    # it "can get the root path" do
+    #   # Act
+    #   get root_path
 
-      # Assert
-      must_respond_with :success
-    end
+    #   # Assert
+    #   must_respond_with :success
+    # end
   end
 
   # Unskip these tests for Wave 2
