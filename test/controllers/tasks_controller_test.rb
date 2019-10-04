@@ -89,8 +89,8 @@ describe TasksController do
     end
 
     it "will respond with redirect when attempting to edit a nonexistant task" do
-      skip
-      # Your code here
+      get edit_task_path(-1)
+      must_respond_with :redirect
     end
   end
 

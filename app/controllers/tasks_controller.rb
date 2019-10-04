@@ -26,5 +26,6 @@ class TasksController < ApplicationController
 
   def edit
     @task = Task.find_by(id: params[:id])
+    redirect_to tasks_path unless @task
   end
 end
