@@ -124,6 +124,7 @@ describe TasksController do
       patch task_path(@original_task.id), params: @updated_task
       
       expect(Task.find_by(id: @original_task.id).description).must_equal "updated description"
+      expect(Task.find_by(id: @original_task.id).name).must_equal "test name"
     end
     
     it "will redirect to the root page if given an invalid id" do
@@ -136,6 +137,11 @@ describe TasksController do
   # Complete these tests for Wave 4
   describe "destroy" do
     # Your tests go here
+    it "can remove an existing task" do
+    end
+    
+    it "will redirect to the root page if given an invalid id" do
+    end
     
   end
   
