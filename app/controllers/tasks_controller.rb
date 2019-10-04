@@ -82,7 +82,7 @@ class TasksController < ApplicationController
     @task = Task.find_by(id: task_id)
     
     if @task.completion_date.nil?
-      @task.completion_date = Time.now
+      @task.completion_date = Time.current
     else
       @task.completion_date = nil
     end

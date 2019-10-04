@@ -200,7 +200,7 @@ describe TasksController do
     
     it "when complete, it should mark nil" do
       # arrange
-      new_task = Task.create(name: "sample task", description: "this is an example for a test", completion_date: DateTime.now)
+      new_task = Task.create(name: "sample task", description: "this is an example for a test", completion_date: Time.current)
       
       # act
       patch mark_complete_path(new_task.id)
