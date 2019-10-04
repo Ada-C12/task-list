@@ -3,7 +3,7 @@ require "test_helper"
 describe TasksController do
   let (:task) {
     Task.create name: "sample task", description: "this is an example for a test",
-                completion_date: Time.now + 5.days
+                completion_date: DateTime.now + 5.days
   }
 
   # Tests for Wave 1
@@ -170,7 +170,7 @@ describe TasksController do
       expect(task.completion_date).wont_be_nil
     end
 
-    it "will redirect to the list of tasks for a non-existent task" do
+    it "will redirect the user to the list of tasks for a non-existent task" do
       task_id = 59485
 
       patch complete_task_path(task_id)
