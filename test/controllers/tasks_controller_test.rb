@@ -149,8 +149,41 @@ describe TasksController do
     end
   end
   
-  # Complete for Wave 4
-  describe "toggle_complete" do
-    # Your tests go here
+  # Tests for Wave 4: make_completed
+  describe "make completed" do
+    before do
+      @not_completed_task = Task.create(name: "wash car", description: "rinse and wash", completed: nil)
+    end
+    
+    it "can make a task that wasn't complete to completed" do
+      expect {
+        patch completed_task_path(@not_completed_task)
+      }.wont_change "Task.count"
+      
+      find_task = Task.find_by(id: @not_completed_task)
+      expect(find_task.completed).wont_equal nil
+      
+      must_respond_with :redirect
+      must_redirect_to tasks_path
+    end
+  end
+  
+  # Tests for Wave 4: make_not_completed
+  describe "make not completed" do
+    before do
+      @completed_task = Task.create(name: "wash car", description: "rinse and wash", completed: DateTime.now)
+    end
+    
+    it "can make a task that was completed to not complete" do
+      expect {
+        patch not_completed_task_path(@completed_task)
+      }.wont_change "Task.count"
+      
+      find_task = Task.find_by(id: @completed_task)
+      expect(find_task.completed).must_equal nil
+      
+      must_respond_with :redirect
+      must_redirect_to tasks_path
+    end
   end
 end
