@@ -113,14 +113,18 @@ describe TasksController do
     it "can update an existing task" do
       # Arrange
       
-      task.description = "different description"
-      task.save
+      patch :update, task: Task.attributes_for(description: "Updated")
+      task.reload
+      task.description.must_equal "Updated"
       
-      patch edit_task_path, params: task 
+      # task.description = "different description"
+      # task.save
       
-      new_task2 = Task.find_by(name: task[:task][:name])
+      # patch edit_task_path, params: task 
       
-      expect(new_task2.description).must_equal task[:task][:description]
+      # new_task2 = Task.find_by(name: task[:task][:name])
+      
+      # expect(new_task2.description).must_equal task[:task][:description]
       
       
     end
