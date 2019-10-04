@@ -179,4 +179,27 @@ describe TasksController do
       must_redirect_to tasks_path
     end
   end
+
+  describe "toggle_incomplete" do
+    it "marks the task as incomplete" do
+      task = Task.new(name: "New task", description: "A task to be marked incomplete")
+      task.save
+
+      patch incomplete_task_path(task.id)
+
+      must_respond_with :redirect
+
+      task.reload
+      assert_nil(task.completion_date)
+    end
+
+    it "will redirect the user to the list of tasks for a non-existent task" do
+      task_id = 12324
+
+      patch incomplete_task_path(task_id)
+
+      must_respond_with :redirect
+      must_redirect_to tasks_path
+    end
+  end
 end
