@@ -103,7 +103,7 @@ describe TasksController do
   describe "update" do
     # Note:  If there was a way to fail to save the changes to a task, that would be a great thing to test.
     before do
-      Task.create(name: "NOT washing my hair", description: "SLEEK HAIR", completion_date: "never ever ever")
+      Task.create(name: "NOT washing my hair", description: "SLEEK HAIR", completion_date: Time.now)
     end
 
     let (:new_task_hash) {
@@ -111,7 +111,7 @@ describe TasksController do
         task: {
           name: "A wrinkle in time",
           description: "a fabulous adventure",
-          completion_date: "time is infinite"
+          completion_date: (Time.now + 1.days)
         }
       }
     }
