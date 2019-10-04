@@ -99,14 +99,15 @@ describe TasksController do
     let (:changes_hash) {
       {
         task: {
-          description: "new task description",
+          name: "changed task",
+          description: "new task description"
         },
       }
     }
     
     it "can update an existing task" do
       existing_task = Task.create name: "sample task", description: "this is an example for a test",
-      completion_date: Time.now + 5.days
+      completion_date: nil
       
       expect {
         patch task_path(existing_task.id), params: changes_hash
@@ -115,8 +116,10 @@ describe TasksController do
       must_respond_with :redirect
       
       task = Task.find_by(id: existing_task.id)
-      #TIFF You could expand here if you wanted to
+      
+      expect(task.name).must_equal changes_hash[:task][:name]
       expect(task.description).must_equal changes_hash[:task][:description]
+      expect(task.completion_date).must_be_nil
     end
     
     it "will redirect to the root page if given an invalid id" do
