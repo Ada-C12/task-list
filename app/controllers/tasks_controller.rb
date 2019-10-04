@@ -47,7 +47,7 @@ class TasksController < ApplicationController
     @task.completion_date = params[:task][:completion_date]
     
     if @task.save
-      redirect_to edit_task_path(@task.id)
+      redirect_to task_path(@task.id)
       return
     else
       render edit_task_path(@task.id)

@@ -133,6 +133,7 @@ describe TasksController do
       }.must_differ "Task.count", 0
       
       must_respond_with :redirect
+      must_redirect_to task_path
       
       current_task = Task.find_by(id: current_id)
       expect(current_task.name).must_equal new_task_details[:task][:name]
