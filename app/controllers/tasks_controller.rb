@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
   def index
-    @tasks = Task.order(:name)
+    @tasks = Task.order(:id)
   end
   
   def show
@@ -22,12 +22,6 @@ class TasksController < ApplicationController
   end
   
   def create
-    # @task = Task.new(
-    #   name: params[:task][:name], 
-    #   description: params[:task][:description], 
-    #   completed: params[:task][:completed]
-    # )
-    
     @task = Task.new(task_params)
     
     if @task.save
@@ -55,10 +49,6 @@ class TasksController < ApplicationController
       redirect_to root_path
       return
     elsif @task.update(task_params)
-      # name: params[:task][:name],
-      # description: params[:task][:description],
-      # completed: params[:task][:completed]
-      
       redirect_to task_path(@task.id)
       return
     else 
@@ -89,7 +79,7 @@ class TasksController < ApplicationController
       return
     else
       @task.update(completed: DateTime.now)
-      redirect_to tasks_path
+      redirect_back(fallback_location: root_path)
       return
     end
   end
@@ -102,7 +92,7 @@ class TasksController < ApplicationController
       return
     else
       @task.update(completed: nil)
-      redirect_to tasks_path
+      redirect_back(fallback_location: root_path)
       return
     end
   end
