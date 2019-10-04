@@ -61,13 +61,13 @@ describe TasksController do
   describe "create" do
     it "can create a new task" do
       # skip
-      
+      date_time = Date.current + 5.days
       # Arrange
       task_hash = {
         task: {
           name: "new task",
           description: "new task description",
-          completion_date: nil,
+          completion_date: date_time,
         },
       }
       
@@ -82,6 +82,41 @@ describe TasksController do
       
       must_respond_with :redirect
       must_redirect_to task_path(new_task.id)
+    end
+    
+    it "redirect to new_task page if input is not valid" do
+      task_hashes = [
+        {
+          task: {
+            name: "No description",
+            description: nil,
+            completion_date: Date.current + 5.days,
+          },
+        },
+        {
+          task: {
+            name: "No completion date",
+            description: "No completion date description",
+            completion_date: nil,
+          },
+        },
+        {
+          task: {
+            name: nil,
+            description: "No name task description",
+            completion_date: Date.current + 5.days,
+          },
+        }   
+      ]
+      
+      task_hashes.each do |task_hash|
+        expect {
+          post tasks_path, params: task_hash
+        }.must_differ "Task.count", 0
+        
+        must_respond_with :redirect
+        must_redirect_to new_task_path
+      end
     end
   end
   
@@ -105,24 +140,27 @@ describe TasksController do
   # Uncomment and complete these tests for Wave 3
   describe "update" do
     before do 
+      date_time = Date.current + 5.days
       @task_hash = {
         task: {
           name: "updated task",
           description: "updated task description",
-          completion_date: nil,
+          completion_date: date_time + 2.days,
         },
       }
     end
     # Note:  If there was a way to fail to save the changes to a task, that would be a great
     #        thing to test.
     it "can update an existing task" do
-      existing_task = Task.create(@task_hash[:task])
+      existing_task = Task.find_by(id: task[:id])
       expect _(Task.count).must_equal 1
-
+      expect _(Task.all.first[:name]).must_equal existing_task[:name]
+      expect _(Task.all.first[:description]).must_equal existing_task[:description]
+      
       expect { 
         patch task_path(Task.first.id), params: @task_hash
       }.must_differ "Task.count", 0
-
+      
       expect _(Task.first.name).must_equal @task_hash[:task][:name]
       expect _(Task.first.description).must_equal @task_hash[:task][:description]
       expect _(Task.first.completion_date).must_equal @task_hash[:task][:completion_date]
@@ -139,51 +177,85 @@ describe TasksController do
       must_respond_with :redirect
       must_redirect_to tasks_path
     end
+    
+    it "redirect to new_task page if input is not valid" do
+      task_hashes = [
+        {
+          task: {
+            name: "No description",
+            description: nil,
+            completion_date: Date.current + 5.days,
+          },
+        },
+        {
+          task: {
+            name: "No completion date",
+            description: "No completion date description",
+            completion_date: nil,
+          },
+        },
+        {
+          task: {
+            name: nil,
+            description: "No name task description",
+            completion_date: Date.current + 5.days,
+          },
+        }   
+      ]
+      
+      existing_task = Task.find_by(id: task[:id])
+      expect _(Task.count).must_equal 1
+      expect _(Task.all.first[:name]).must_equal existing_task[:name]
+      expect _(Task.all.first[:description]).must_equal existing_task[:description]
+      
+      expect { 
+        
+      }.must_differ "Task.count", 0
+      
+      task_hashes.each do |task_hash|
+        patch task_path(Task.first.id), params: task_hash    
+
+        must_respond_with :redirect
+        must_redirect_to edit_path(Task.all.first[:id])
+      end
+    end
   end
   
   # Complete these tests for Wave 4
   describe "destroy" do
-    before do
-      @task_info = {
-        name: "task", 
-        description: "task description", 
-        completion_date: nil
-      }
-    end
-
     it "can delete an existing task" do
-      existing_task = Task.create(@task_info)
-      existing_task_id = Task.first.id
+      existing_task = Task.find_by(id: task[:id])
+      existing_task_id = Task.all.first.id
       expect _(Task.count).must_equal 1
-
+      
       expect {
         delete task_path(existing_task_id)
       }.must_differ "Task.count", -1
-
+      
       assert_nil (Task.find_by(id: existing_task_id))
       must_respond_with :redirect
       must_redirect_to tasks_path
     end
-
+    
     it "will redirect to the index page if given an invalid id" do
       expect {
         delete task_path(-1)
       }.must_differ "Task.count", 0
-  
+      
       must_respond_with :redirect
       must_redirect_to tasks_path
     end
-
+    
     it "will redirect to the index page if requested on the same task twice" do
-      existing_task = Task.create(@task_info)
-      existing_task_id = Task.first.id
+      existing_task = Task.find_by(id: task[:id])
+      existing_task_id = Task.all.first.id
       delete task_path(existing_task_id)
       expect _(Task.count).must_equal 0
-
+      
       expect {
         delete task_path(existing_task_id)
       }.must_differ "Task.count", 0
-
+      
       must_respond_with :redirect
       must_redirect_to tasks_path
     end

@@ -25,13 +25,15 @@ class TasksController < ApplicationController
         }
         
         @task = Task.new(hash_info)
-        if @task.save
-            redirect_to task_path(@task.id)
+        begin
+            @task.save!
+        rescue ActiveRecord::RecordInvalid
+            redirect_to new_task_path
             return
-        else
-            render new_book_path
-            return
-        end
+        end 
+        
+        redirect_to task_path(@task.id)   
+        return    
     end
     
     def edit
@@ -49,19 +51,24 @@ class TasksController < ApplicationController
             @task.description = params[:task][:description]
             @task.completion_date = params[:task][:completion_date]
             
-            if @task.save
-                redirect_to task_path(@task.id)
+            begin
+                @task.save!
+            rescue ActiveRecord::RecordInvalid
+                redirect_to edit_path(@task.id)
                 return
-            end
+            end 
+
+            redirect_to task_path(@task.id)
+            return
         else
             redirect_to tasks_path
             return
         end  
     end
-
+    
     def destroy
         selected_task = Task.find_by(id: params[:id])
-
+        
         if !selected_task
             redirect_to tasks_path
             return
