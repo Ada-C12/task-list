@@ -69,7 +69,8 @@ class TasksController < ApplicationController
       redirect_to root_path
       return
     else @task.update(completed: Time.now)      
-      redirect_to root_path
+      # redirect_to root_path
+      redirect_back(fallback_location: root_path)
       return
     end
   end
@@ -81,7 +82,8 @@ class TasksController < ApplicationController
       redirect_to root_path
       return
     else @task.update(completed: nil)
-      redirect_to root_path
+      # redirect_to root_path
+      redirect_back(fallback_location: root_path)
       return
     end
   end
