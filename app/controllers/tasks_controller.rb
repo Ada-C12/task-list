@@ -18,7 +18,7 @@ class TasksController < ApplicationController
   end
 
   def create
-    @task = Task.new(name: params[:task][:name], description: params[:task][:description], assignment_date: params[:task][:assignment_date], completion_date: params[:task][:completion_date])
+    @task = Task.new(name: params[:task][:name], description: params[:task][:description], completion_date: nil)
     if @task.save
       redirect_to task_path(@task)
       return
@@ -39,7 +39,7 @@ class TasksController < ApplicationController
 
   def update
     @task = Task.find_by(id: params[:id])
-    if @task.update(name: params[:task][:name], description: params[:task][:description], assignment_date: params[:task][:assignment_date], completion_date: params[:task][:completion_date])
+    if @task.update(name: params[:task][:name], description: params[:task][:description], completion_date: params[:task][:completion_date])
       redirect_to tasks_path
       return
     else
