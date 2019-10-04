@@ -242,7 +242,7 @@ describe TasksController do
         
         params = {
           task: {
-            completed_at: Time.parse("2019-03-22"),
+            completed_at: Time.now,
             id: task.id,
           }
         }
@@ -253,7 +253,7 @@ describe TasksController do
         task.reload
         
         # assert
-        assert_equal params[:task][:completed_at], Time.parse("2019-03-22")
+        assert_not_nil params[:task][:completed_at]
         must_respond_with :redirect
         must_redirect_to task_path(task)
       end

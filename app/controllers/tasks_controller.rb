@@ -68,7 +68,7 @@ class TasksController < ApplicationController
   def complete
     task = Task.find_by(id: params[:id])
     
-    if task.update_attribute(:completed_at, Time.parse("2019-03-22"))
+    if task.update_attribute(:completed_at, Time.now)
       flash[:success] = "Your task has successfully been marked as completed." 
     else
       flash[:error] = "Uh Oh! Something went wrong."
