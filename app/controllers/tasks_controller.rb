@@ -19,12 +19,12 @@ class TasksController < ApplicationController
   end
   
   def create
-    @task = Task.new(completion_date: params[:task][:completion_date], name: params[:task][:name], description: params[:task][:description]) #instantiate a new book
-    if @task.save # save returns true if the database insert succeeds
+    @task = Task.new(name: params[:task][:name], description: params[:task][:description]) 
+    if @task.save 
       redirect_to task_path(@task.id)
       return
-    else # save failed :(
-      render :new # show the new book form view again
+    else 
+      render :new 
       return
     end
   end

@@ -88,7 +88,7 @@ describe TasksController do
   # Unskip and complete these tests for Wave 3
   describe "edit" do
     it "can get the edit page for an existing task" do
-      #skip
+      skip
       # Act
       get new_task_path
       
@@ -97,9 +97,7 @@ describe TasksController do
     end
     
     it "will respond with redirect when attempting to edit a nonexistant task" do
-      #skip
-      task = 
-      edit_task = Task.find_by(id:)
+      skip
     end
   end
   
@@ -121,6 +119,7 @@ describe TasksController do
   
   describe "create" do
     it "can create a book!" do
+      skip
       # Arrange
       test_params = {
         book: {
@@ -150,3 +149,5 @@ describe TasksController do
         # Your tests go here
       end
     end
+  end
+end
