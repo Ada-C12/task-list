@@ -108,37 +108,26 @@ describe TasksController do
   
   # Uncomment and complete these tests for Wave 3
   describe "update" do
+    before do
+      @original_task = Task.create name: "test name", description: "test description"
+      @updated_task = {
+        task: {
+          name: "test name",
+          description: "updated description",
+          completion_date: nil,
+        },
+      }
+    end
     # Note:  If there was a way to fail to save the changes to a task, that would be a great
     #        thing to test.
     it "can update an existing task" do
+      patch task_path(@original_task.id), params: @updated_task
       
-      #create a new task
-      #create a varaible (hash) with info to update
-      original_task = Task.create name: "test name", description: "test description"
-      updated_task = {
-        task: {
-          name: "test name",
-          description: "updated description",
-          completion_date: nil,
-        },
-      }
-      
-      patch task_path(original_task.id), params: updated_task
-      
-      expect(Task.find_by(id: original_task.id).description).must_equal "updated description"
+      expect(Task.find_by(id: @original_task.id).description).must_equal "updated description"
     end
     
-    
     it "will redirect to the root page if given an invalid id" do
-      updated_task = {
-        task: {
-          name: "test name",
-          description: "updated description",
-          completion_date: nil,
-        },
-      }
-      
-      patch task_path(-1), params: updated_task
+      patch task_path(-1), params: @updated_task
       
       must_redirect_to root_path
     end
