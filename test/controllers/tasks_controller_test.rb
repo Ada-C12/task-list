@@ -1,13 +1,14 @@
 require "test_helper"
 
 describe TasksController do
+  
   let (:task) {
     Task.create name: "sample task", description: "this is an example for a test",
     completion_date: Time.now + 5.days
   }
   
-  # Tests for Wave 1
   describe "index" do
+    
     it "can get the index path" do
       # Act
       get tasks_path
@@ -23,6 +24,7 @@ describe TasksController do
       # Assert
       must_respond_with :success
     end
+    
   end
   
   describe "show" do
@@ -54,16 +56,16 @@ describe TasksController do
     end
   end
   
-  describe "create" do
+  describe "create action" do
     it "can create a new task" do
       
-      # Arrange
+      # Arrange test data
       task_hash = {
         task: {
           name: "new task",
           description: "new task description",
-          completion_date: nil,
-        },
+          completion_date: nil
+        }
       }
       
       # Act-Assert
@@ -87,10 +89,10 @@ describe TasksController do
         name: "task to be edited",
         description: "task to be edited description",
         completion_date: nil,
-      },
+      }
     }
     
-    it "can get the edit page for an existing task" do
+    it "can get the edit page For an existing task" do
       
       # Act
       get edit_task_path(task)
@@ -110,47 +112,51 @@ describe TasksController do
   end
   
   describe "update" do
+    before do 
+      @new_task = Task.create(name: "new task")
+    end
     
     # Note:  If there was a way to fail to save the changes to a task, that would be a great thing to test.
     it "can update an existing task" do
       
-      # Arrange
-      task_hash = {
+      # Arrange: find an existing task ...
+      existing_task = Task.first
+      
+      # ... and update the data
+      updated_task_form_data = {
         task: {
-          name: "task to update",
-          description: "description to update",
-          completion_date: nil,
-        },
-      }
-      
-      # Act-Assert
-      expect {
-        patch task_path(task), params: task_hash
-      }.must_change "Task.count", 0
-      
-      updated_task = Task.find_by(name: task_hash[:task][:name])
-      
-    end
-    
-    it "will redirect to the root page if given an invalid id" do
-      
-      # Arrange
-      task_hash = {
-        task: {
-          name: "task to update",
-          description: "description to update",
-          completion_date: nil,
-          id: 123456789
-        },
+          name: "Updated task", 
+          description: "Updated task description",
+          completion_date: nil
+        }
       }
       
       # Act
-      patch update_task_path(task)
-
+      # Update the task data and don't forget to send the updated_task_form_data
+      
+      expect {
+        patch task_path(existing_task.id) , params: updated_task_form_data
+      }.wont_change 'Task.count'
+      
       # Assert
-      must_respond_with :redirect
+      expect( Task.find_by(id: existing_task.id).name ).must_equal "Updated task"
       
     end
+    
+    
+    it "will redirect to the root page If given an invalid id" do
+      
+      # Arrange
+      invalid_id = -5
+      
+      # Act
+      patch task_path(invalid_id)
+      
+      # Assert
+      must_redirect_to root_path
+      
+    end
+    
   end
   
   # Complete these tests for Wave 4
@@ -164,4 +170,6 @@ describe TasksController do
     # Your tests go here
   end
   
-end
+end # final end
+
+
