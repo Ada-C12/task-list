@@ -3,7 +3,7 @@ require "test_helper"
 describe TasksController do
   let (:task) {
     Task.create name: "sample task", description: "this is an example for a test",
-    completion_date: Time.now + 5.days
+    completion_date: Date.today + 5.days
   }
   
   # Tests for Wave 1
@@ -130,19 +130,73 @@ describe TasksController do
       end
       
       it "will redirect to the root page if given an invalid id" do
-        # Your code here
+        patch task_path(-12)
+        
+        # Assert
+        must_respond_with :redirect
+        expect(flash[:error]).must_equal "Could not find task with id: -12"
       end
     end
     
     # Complete these tests for Wave 4
     describe "destroy" do
-      # Your tests go here
+      
+      it "can destroy an existing task" do
+        
+        old_task = Task.find_by(id: task.id)
+        
+        
+        expect {delete task_path(old_task.id)}.must_change "Task.count", -1
+        
+        
+        
+      end
+      
+      it "will redirect to the root page if given an invalid id" do
+        delete task_path(-12)
+        
+        # Assert
+        must_respond_with :redirect
+        expect(flash[:error]).must_equal "Could not find task with id: -12"
+      end
       
     end
     
     # Complete for Wave 4
     describe "toggle_complete" do
-      # Your tests go here
+      
+      it "will change a nil completion_date to today's date" do
+        
+        completed = Task.create name: "task", description: "this is an example for a test"
+        
+        patch toggle_complete_path(completed.id)
+        
+        expect(Task.find_by(id: completed.id).completion_date).wont_equal nil 
+        expect(Task.find_by(id: completed.id).completion_date).must_equal Date.today
+        
+      end
+      
+      it "will change a today's date completion_date to nil" do
+        
+        completed = Task.create name: "task", description: "this is an example for a test",
+        completion_date: Date.today
+        
+        patch toggle_complete_path(completed.id)
+        
+        expect(Task.find_by(id: completed.id).completion_date).wont_equal Date.today
+        expect(Task.find_by(id: completed.id).completion_date).must_equal nil
+        
+      end
+      
+      it "won't change the task count" do
+        completed = Task.create name: "task", description: "this is an example for a test",
+        completion_date: Date.today
+        
+        
+        
+        expect {patch toggle_complete_path(completed.id)}.wont_change "Task.count"
+      end
+      
     end
+    
   end
-  
