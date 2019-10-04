@@ -77,4 +77,24 @@ class TasksController < ApplicationController
     end
   end
   
+  def mark_complete
+    task_id = params[:id].to_i
+    @task = Task.find_by(id: task_id)
+    
+    if @task.completion_date.nil?
+      @task.completion_date = Time.now
+    else
+      @task.completion_date = nil
+    end
+    
+    if @task.save
+      redirect_to task_path(@task.id)
+      return
+    else
+      redirect_to tasks_path, flash: { error: "Could not save completion date" }
+      return
+    end
+    
+  end
+  
 end

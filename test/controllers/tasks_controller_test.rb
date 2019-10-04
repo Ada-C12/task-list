@@ -184,6 +184,31 @@ describe TasksController do
   
   # Complete for Wave 4
   describe "toggle_complete" do
-    # Your tests go here
+    it "when incomplete, it should mark with a time" do
+      # arrange
+      new_task = Task.create(name: "sample task", description: "this is an example for a test", completion_date: nil)
+      
+      # act
+      patch mark_complete_path(new_task.id)
+      
+      updated_task = Task.find_by(id: new_task.id)
+      
+      # assert
+      expect(updated_task.completion_date).wont_be_nil
+      expect(updated_task.completion_date).must_be_instance_of ActiveSupport::TimeWithZone
+    end
+    
+    it "when complete, it should mark nil" do
+      # arrange
+      new_task = Task.create(name: "sample task", description: "this is an example for a test", completion_date: DateTime.now)
+      
+      # act
+      patch mark_complete_path(new_task.id)
+      
+      updated_task = Task.find_by(id: new_task.id)
+      
+      # assert
+      expect(updated_task.completion_date).must_be_nil
+    end
   end
 end
