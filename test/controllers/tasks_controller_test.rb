@@ -71,7 +71,7 @@ describe TasksController do
       # Act-Assert
       expect {
         post tasks_path, params: task_hash
-      }.must_change "Task.count", 1
+      }.must_change 'Task.count', 1
       
       new_task = Task.find_by(name: task_hash[:task][:name])
       expect(new_task.description).must_equal task_hash[:task][:description]
@@ -117,12 +117,13 @@ describe TasksController do
     end
     
     # Note:  If there was a way to fail to save the changes to a task, that would be a great thing to test.
+    
     it "can update an existing task" do
       
       # Arrange: find an existing task ...
       existing_task = Task.first
       
-      # ... and update the data
+      # Act: ... and update the data
       updated_task_form_data = {
         task: {
           name: "Updated task", 
@@ -131,15 +132,15 @@ describe TasksController do
         }
       }
       
-      # Act
-      # Update the task data and don't forget to send the updated_task_form_data
+      # Assert
       
       expect {
         patch task_path(existing_task.id) , params: updated_task_form_data
       }.wont_change 'Task.count'
       
-      # Assert
       expect( Task.find_by(id: existing_task.id).name ).must_equal "Updated task"
+      
+      expect( Task.find_by(id: existing_task.id).description ).must_equal "Updated task description"
       
     end
     
@@ -159,13 +160,25 @@ describe TasksController do
     
   end
   
-  # Complete these tests for Wave 4
   describe "destroy" do
-    # Your tests go here
+    
+    it "removes a task from the task list" do
+      # Arrange: make sure our task list has at least one object ... 
+      new_task = Task.create(name: "New task")
+      
+      # ... and designate an existing task to be deleted
+      to_be_deleted = Task.first
+
+      # Act/Assert: delete the task and confirm that the task list is one object shorter
+      
+      expect{
+        delete task_path(to_be_deleted.id)
+      }.must_differ 'Task.count', -1
+      
+    end
     
   end
   
-  # Complete for Wave 4
   describe "toggle_complete" do
     # Your tests go here
   end
