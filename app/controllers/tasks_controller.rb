@@ -61,4 +61,28 @@ class TasksController < ApplicationController
       return
     end
   end
+  
+  def complete
+    @task = Task.find_by(id: params[:id])
+    
+    if @task.nil?
+      redirect_to tasks_path
+      return
+    else @task.update(completed: Time.now)
+      redirect_to tasks_path
+      return
+    end
+  end
+  
+  def not_complete
+    @task = Task.find_by(id: params[:id])
+    
+    if @task.nil?
+      redirect_to tasks_path
+      return
+    else @task.update(completed: nil)
+      redirect_to tasks_path
+      return
+    end
+  end
 end

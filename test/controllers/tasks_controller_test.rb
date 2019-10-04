@@ -72,7 +72,7 @@ describe TasksController do
       
       new_task = Task.find_by(name: task_hash[:task][:name])
       expect(new_task.description).must_equal task_hash[:task][:description]
-      expect(new_task.completed).must_equal task_hash[:task][:completed]
+      assert_nil(new_task.completed)
       
       must_respond_with :redirect
       must_redirect_to task_path(new_task.id)
@@ -117,7 +117,7 @@ describe TasksController do
       
       expect(updated_task.name).must_equal task_hash[:task][:name]
       expect(updated_task.description).must_equal task_hash[:task][:description]
-      expect(updated_task.completed).must_equal task_hash[:task][:completed]
+      assert_nil(updated_task.completed)
       
       must_respond_with :redirect
       must_redirect_to task_path
@@ -141,12 +141,13 @@ describe TasksController do
     end
   end
   
-  # Complete these tests for Wave 4
+  # Tests for Wave 4
   describe "destroy" do
     it "reduces the total task count by 1" do  
       test_task = task
+      
       expect{
-        delete task_path(test_task.id)
+        delete task_path(test_task.id)  
       }.must_differ "Task.count", -1
     end
     
@@ -155,13 +156,28 @@ describe TasksController do
       
       updated_task = Task.find_by(id: task.id)
       
-      expect(updated_task).must_equal nil
+      assert_nil(updated_task)
       must_redirect_to tasks_path  
     end
   end
   
-  # Complete for Wave 4
   describe "toggle_complete" do
-    # Your tests go here
+    it "correctly changes a task from complete to not_complete" do
+      patch not_complete_task_path(task.id)
+      
+      updated_task = Task.find_by(id: task.id)
+      
+      assert_nil(updated_task.completed)
+    end    
+    
+    it "correctly changes a task from not_complete to complete" do
+      task2 = Task.create(name: "sample task 2", description: "this is an example", completed: nil)
+      
+      patch complete_task_path(task2.id)
+      
+      updated_task = Task.find_by(id: task2.id)
+      
+      expect(updated_task.completed).must_be_instance_of ActiveSupport::TimeWithZone
+    end
   end
 end
