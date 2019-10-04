@@ -84,19 +84,25 @@ describe TasksController do
   end
   
   # Unskip and complete these tests for Wave 3
+  # I Interpret this to be the form coming up to ENTER the information that's going to be edited. 
+
   describe "edit" do
     it "can get the edit page for an existing task" do
-      skip
       # Your code here
     end
     
     it "will respond with redirect when attempting to edit a nonexistant task" do
-      skip
       # Your code here
     end
+    
+    
+    
+ 
+    
   end
   
   # Uncomment and complete these tests for Wave 3
+  # I interpret this as POSTING  
   describe "update" do
     # Note:  If there was a way to fail to save the changes to a task, that would be a great
     #        thing to test.
@@ -106,6 +112,9 @@ describe TasksController do
     
     it "will redirect to the root page if given an invalid id" do
       # Your code here
+    end
+
+    it "will verify that the count does not change after editing an existing task" do
     end
   end
   

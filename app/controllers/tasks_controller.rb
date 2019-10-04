@@ -14,20 +14,27 @@ class TasksController < ApplicationController
   end
  end
  
+ 
+ #new and create methods work in congress. New makes a new instance. Create actually uses the information from the filled in form to then save the instance into the db. 
  def new
   @task = Task.new
  end
  
  def create
-  @task = Task.new( name: params[:task][:name], description: params[:task][:description], progress: params[:task][:progress], completion_date: params[:task][:completion_date])
-  
-  # @task.completion_date.to_date
+  @task = Task.new(task_params)
   
   if @task.save
    redirect_to task_path(@task.id)
   else
    render new_task_path
   end
+ end
+ 
+ 
+ private
+ 
+ def task_params
+  return params.require(:task).permit(:name, :description, :progress, :completion_date)
  end
  
 end
