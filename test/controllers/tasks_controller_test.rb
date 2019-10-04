@@ -2,9 +2,8 @@ require "test_helper"
 
 describe TasksController do
   let (:task) {
-    Task.create name: "sample task", description: "this is an example for a test",
-    completed: Time.now + 5.days
-  }
+  Task.create name: "sample task", description: "this is an example for a test",
+  completed: Time.now + 5.days }
   
   # Tests for Wave 1
   describe "index" do
@@ -57,18 +56,11 @@ describe TasksController do
   describe "create" do
     it "can create a new task" do
       # Arrange
-      task_hash = {
-        task: {
-          name: "new task",
-          description: "new task description",
-          completed: nil,
-        },
-      }
+      task_hash = { task: 
+      { name: "new task", description: "new task description", completed: nil }}
       
       # Act-Assert
-      expect {
-        post tasks_path, params: task_hash
-      }.must_change "Task.count", 1
+      expect { post tasks_path, params: task_hash }.must_change "Task.count", 1
       
       new_task = Task.find_by(name: task_hash[:task][:name])
       expect(new_task.description).must_equal task_hash[:task][:description]
@@ -95,6 +87,7 @@ describe TasksController do
       
       # Assert
       must_respond_with :redirect
+      must_redirect_to root_path
     end
   end
   
@@ -102,13 +95,8 @@ describe TasksController do
     # Note:  If there was a way to fail to save the changes to a task, that would be a great thing to test.
     it "can update an existing task" do
       # Arrange
-      task_hash = {
-        task: {
-          name: "new task",
-          description: "new task description",
-          completed: nil,
-        },
-      }
+      task_hash = { task: 
+      { name: "new task", description: "new task description", completed: nil}}
       
       # Act-Assert
       patch task_path(task.id), params: task_hash
@@ -125,19 +113,14 @@ describe TasksController do
     
     it "will redirect to the root page if given an invalid id" do
       # Arrange
-      task_hash = {
-        task: {
-          name: "new task",
-          description: "new task description",
-          completed: nil,
-        },
-      }
+      task_hash = { task: 
+      { name: "new task", description: "new task description", completed: nil }}
       
       # Act-Assert
       patch task_path(-1), params: task_hash
       
       must_respond_with :redirect
-      must_redirect_to tasks_path
+      must_redirect_to root_path
     end
   end
   
@@ -146,9 +129,7 @@ describe TasksController do
     it "reduces the total task count by 1" do  
       test_task = task
       
-      expect{
-        delete task_path(test_task.id)  
-      }.must_differ "Task.count", -1
+      expect{ delete task_path(test_task.id) }.must_differ "Task.count", -1
     end
     
     it "removes the record from the database" do
@@ -157,7 +138,7 @@ describe TasksController do
       updated_task = Task.find_by(id: task.id)
       
       assert_nil(updated_task)
-      must_redirect_to tasks_path  
+      must_redirect_to root_path  
     end
   end
   
