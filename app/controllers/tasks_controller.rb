@@ -49,4 +49,17 @@ class TasksController < ApplicationController
       return
     end
   end
+  
+  def destroy
+    @task = Task.find_by(id: params[:id])
+    
+    if @task.nil?
+      head :not_found
+      return
+    end
+    
+    @task.destroy
+    
+    redirect_to tasks_path
+  end
 end
