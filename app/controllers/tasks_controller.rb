@@ -48,7 +48,11 @@ class TasksController < ApplicationController
       redirect_to tasks_path
       return
     end
-    
+    # params_to_update = {
+    #   name: params[:task][:name], 
+    #   description: params[:task][:description], 
+    #   completion_date: params[:task][:description]
+    # }
     @task.name = params[:task][:name]
     @task.description = params[:task][:description]
     @task.completion_date = params[:task][:completion_date]
@@ -82,15 +86,21 @@ class TasksController < ApplicationController
     
   end
   
+  
+  
   def complete 
     
     @task = Task.find_by(id: params[:id])
     
-    @task.completion_date = Date.today
-    puts @task.completion_date
+    if @task.completion_date.nil?
+      @task.completion_date = Date.today
+    else
+      @task.completion_date = nil
+    end
     
     @task.save
     
+    redirect_to root_path
     
   end
   

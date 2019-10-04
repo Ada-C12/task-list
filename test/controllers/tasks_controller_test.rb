@@ -178,6 +178,7 @@ describe TasksController do
         delete task_path(new_task.id)
       }.must_differ "Task.count", 0
       
+      must_redirect_to root_path
     end    
     
   end
@@ -186,28 +187,63 @@ describe TasksController do
   # Complete for Wave 4
   describe "toggle_complete" do
     # Your tests go here
-    it "marks a task as completed by updating the completion date" do
+    
+    before do
+      @new_task = Task.create(name: "sample task", description: "this is an example for a test", completion_date: nil)
       
-      new_task = Task.create(name: "sample task", description: "this is an example for a test", completion_date: nil)
+      @id = @new_task.id
       
-      id = new_task.id
-      
-      task_updates = { 
+      @task_updates = { 
         task: {
-          name: new_task.name,
-          description: new_task.description,
+          name: @new_task.name,
+          description: @new_task.description,
           completion_date: Date.today 
         }
       }
       
-      patch task_path(id), params: task_updates
-            
+    end
+    
+    it "marks a task as completed by updating the completion date" do
+      
+      
+      puts "before anything"
+      puts @new_task.name
+      puts @new_task.completion_date
+      puts @new_task.id
+      puts @id
+      
+      patch complete_task_path(@new_task.id)
+      
+      @new_task.reload
+      
+      puts "before expect"
+      puts @new_task.name
+      puts @new_task.completion_date
+      puts @new_task.id
+      puts @id
+      
+      puts task.name
+      puts task.completion_date
+      
       expect {
-        patch task_path(id), params: task_updates
+        patch complete_task_path(@id), params: @task_updates
       }.must_differ "Task.count", 0
+      
+      
+      puts "after expect"
+      puts @new_task.name
+      puts @new_task.completion_date
+      puts task.name
+      puts task.completion_date
+      
+      expect(@new_task.completion_date).must_equal Date.today
       
     end
     
+    it "renders the task page when completed" do
+      
+      
+    end
     
     
   end
