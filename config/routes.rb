@@ -4,5 +4,7 @@ Rails.application.routes.draw do
   root to: "tasks#index"
   
   get '/tasks', to: 'tasks#index'
+  get '/books/new', to: 'books#new'
+  get '/tasks/:id', to: 'tasks#show'
   
 end
