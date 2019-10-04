@@ -1,6 +1,16 @@
-<h2><%= @task.name.upcase %></h2>
-<p>Description: <%= @task.description %></p>
-<p>Completion Date: <%= @task.completion_date %></p>
+<div class="description">
+  <h2><%= @task.name.upcase %></h2>
+  <p>Description: <%= @task.description %></p>
+  <p>Completion Date: <%= @task.completion_date %></p>
+</div>
 
-<%= link_to "Edit Task", edit_task_path %>
-<%= link_to "Index", tasks_path %>
+<div class="actions">
+  <%= link_to "All Tasks", tasks_path %>
+  <%= link_to 'Edit', edit_task_path %>
+  <%= link_to 'Delete', task_path, method: :delete, data: {confirm: "Delete task?"} %>
+  <% if @task.completion_date == nil %>
+    <%= link_to 'Mark Complete', mark_complete_path, method: :patch %>
+  <% else %>
+    <%= link_to 'Unmark Complete', mark_complete_path, method: :patch %>
+  <% end %>
+</div>

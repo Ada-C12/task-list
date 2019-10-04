@@ -1,18 +1,33 @@
-<h2>YOUR TASKS</h2>
+<div id="index_body">
 
-<ul>
-  <% @tasks.order(:id).each_with_index do |task, i|  %>
-    <li>
-      <%= link_to task.name, task_path(task.id) %>
-      <%= link_to 'Edit', edit_task_path(task.id) %>
-      <%= link_to 'Delete', task_path(task.id), method: :delete, data: {confirm: "Delete task?"} %>
-      <% if task.completion_date == nil %>
-        <%= link_to 'Mark Complete', mark_complete_path(task.id), method: :patch %>
-      <% else %>
-        <%= link_to 'Unmark Complete', mark_complete_path(task.id), method: :patch %>
+  <div id="add_button"><%= link_to "Add Task", new_task_path %></div>
+
+  <div id="list_area">
+    <h2>Your Tasks</h2>
+    <ul>
+      <% @tasks.order(:id).each_with_index do |task, i|  %>
+        <li>
+          <div class="task">
+            <%= i+1 %>.
+            <% if task.completion_date == nil %>
+              <%= link_to task.name, task_path(task.id)%>
+            <% else %>
+              <span class="complete"><%= link_to task.name, task_path(task.id)%></span>
+            <% end %>
+          </div>
+
+          <div class="actions">
+            <%= link_to 'Edit', edit_task_path(task.id) %>
+            <%= link_to 'Delete', task_path(task.id), method: :delete, data: {confirm: "Delete task?"} %>
+            <% if task.completion_date == nil %>
+              <%= link_to 'Mark Complete', mark_complete_path(task.id), method: :patch %>
+            <% else %>
+              <%= link_to 'Unmark Complete', mark_complete_path(task.id), method: :patch %>
+            <% end %>
+          </div>
+        </li>
       <% end %>
-    </li>
-  <% end %>
-</ul>
+    </ul>
+  </div>
 
-<%= link_to "Add Task", new_task_path %>
+</div>
