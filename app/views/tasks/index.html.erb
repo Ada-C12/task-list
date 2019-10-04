@@ -1,10 +1,24 @@
 <h2>Your Tasks</h2>
 
 <ol class="task-data">
+  <% count = 0 %>
   <% @tasks.each do |task| %>
     <li>
-      <%= link_to task.name, task_path(task.id), class: "task-name" %>
-
+      <% if !(task.completion_date.nil?) %>
+        <%# apparently, I have to repeat the counter
+        if I want it to be part of the task-complete strikethrough
+        and get toggled appropriately for that %>
+        <span class="task-name task-complete">
+          <span class="list-number"><%= (count + 1) %></span>
+          <%= link_to task.name, task_path(task.id) %>
+        </span>
+      <% else %>
+        <span class="task-name">
+          <span class="list-number"><%= (count + 1) %></span>
+          <%= link_to task.name, task_path(task.id) %>
+        </span>
+      <% end %>
+      
       <div class="task-options">
         <% if task.completion_date.nil? %>
           <%= link_to "Mark Complete", mark_complete_path(task.id), method: :patch %>
@@ -16,5 +30,6 @@
         <%= link_to "Delete", task_path(task.id), method: :delete, data: {confirm: "Are you sure you want to delete this task?"} %>
       </div>
     </li>
+    <% count += 1 %>
   <% end %>
 </ol>
