@@ -32,7 +32,7 @@ class TasksController < ApplicationController
     @task = Task.find_by(id: params[:id])
 
     if @task.nil?
-      head :not_found
+      redirect_to task_path
       return
     end
   end
@@ -44,7 +44,7 @@ class TasksController < ApplicationController
       description: params[:task][:description], 
       completed: params[:task][:completed]
     )
-      redirect_to tasks_path 
+      redirect_to tasks_path
       return
     else 
       render :edit 
