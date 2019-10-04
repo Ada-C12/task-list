@@ -128,7 +128,7 @@ describe TasksController do
         task: {
           name: "updated task",
           description: "updated task description"
-        },
+        }
       }
     end
 
@@ -173,7 +173,7 @@ describe TasksController do
             name: nil,
             description: "No name task description",
             completion_date: nil,
-          },
+          }
         }   
       ]
       
@@ -182,13 +182,11 @@ describe TasksController do
       expect _(Task.all.first[:name]).must_equal existing_task[:name]
       expect _(Task.all.first[:description]).must_equal existing_task[:description]
       
-      expect { 
-        
-      }.must_differ "Task.count", 0
-      
       task_hashes.each do |task_hash|
-        patch task_path(Task.first.id), params: task_hash    
-
+        expect { 
+            patch task_path(Task.all.first.id), params: task_hash
+        }.must_differ "Task.count", 0
+            
         must_respond_with :redirect
         must_redirect_to edit_task_path(Task.all.first[:id])
       end
@@ -239,5 +237,6 @@ describe TasksController do
   # Complete for Wave 4
   describe "toggle_complete" do
     # Your tests go here
+    # Complete for Wave 4
   end
 end
