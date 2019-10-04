@@ -118,7 +118,7 @@ describe TasksController do
         task: {
           name: "Clean your room",
           description: "Get tidy!",
-          completion_date: Time.now + 1.days
+          completion_date: DateTime.now + 1.days
         }
       }
     }
@@ -139,6 +139,7 @@ describe TasksController do
       expect(current_task.name).must_equal new_task_details[:task][:name]
       expect(current_task.description).must_equal new_task_details[:task][:description]
       expect(current_task.completion_date).wont_be_nil
+      expect(current_task.completion_date).must_be_instance_of ActiveSupport::TimeWithZone
       
     end
     
@@ -184,7 +185,40 @@ describe TasksController do
   # Complete for Wave 4
   describe "toggle_complete" do
     # Your tests go here
+    it "succesfully updates the completion date to not be nil if it was previously nil and redirects to index page" do
+      new_task_1 = Task.create(name: "Toggle test task!", description: "Testing the toggle task")
+      expect(new_task_1.completion_date).must_be_nil
+      test_id = new_task_1.id
+      
+      patch toggle_path(test_id)
+      new_task_1.reload
+      expect(new_task_1.completion_date).wont_be_nil
+      
+      must_redirect_to tasks_path
+    end
     
+    it "successfully updates the completion date to nil if it was previously not nil and redirectsto index page" do
+      new_task_2 = Task.create(name: "Toggle test task again!", description: "Testing the toggle task again")
+      expect(new_task_2.completion_date).must_be_nil
+      test_id_2 = new_task_2.id
+      
+      patch toggle_path(test_id_2)
+      new_task_2.reload
+      expect(new_task_2.completion_date).wont_be_nil
+      
+      patch toggle_path(test_id_2)
+      new_task_2.reload
+      expect(new_task_2.completion_date).must_be_nil
+      
+      must_redirect_to tasks_path
+    end
     
+    it "redirects to the index page if given an invalid id" do
+      new_task_3 = Task.create(name: "Toggle test task times 3!", description: "Testing the toggle for the third time!")
+      invalid_id = -1
+      
+      patch toggle_path(invalid_id)
+      must_redirect_to tasks_path
+    end
   end
 end
