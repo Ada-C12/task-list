@@ -28,8 +28,46 @@ class TasksController < ApplicationController
     task_params = params[:task]
     task = Task.new(name: task_params[:name], description: task_params[:description])
     task.save
+    #^instance variables?
     
     redirect_to task_path(task)
+  end
+  
+  def edit
+    @task = Task.find_by(id: params[:id])
+    
+    if @tasks.nil?
+      head :not_found
+      return
+    end
+  end
+  
+  def destroy
+    task_id = params[:id]
+    @task = Task.find_by(id: task_id)
+    
+    if @task.nil?
+      head :not_found
+      return
+    end
+    
+    @task.destroy
+    
+    redirect_to tasks_path
+    return
+  end
+  
+  def toggle_complete
+    # list = Task.find(params[:id])
+    # list.tasks.each do |task|
+    #   task.update_attributes(completion_date: DateTime.now)
+    # end
+    
+    task = Task.create(:completion_date => DateTime.now)
+    
+    
+    redirect_to tasks_path
+    return
   end
 end
 
