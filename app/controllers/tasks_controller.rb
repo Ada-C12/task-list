@@ -25,7 +25,7 @@ class TasksController < ApplicationController
   end
 
   def create
-    @task = Task.new(name: params[:task][:name], description: params[:task][:description], completion: params[:task][:completion]) #instantiate a new task
+    @task = Task.new(name: params[:task][:name], description: params[:task][:description], completed: params[:task][:completed]) #instantiate a new task
     if @task.save # save returns true if the database insert succeeds
       redirect_to tasks_path # go to the index so we can see the task in the list
       return
