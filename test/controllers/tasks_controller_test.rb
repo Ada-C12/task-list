@@ -157,11 +157,35 @@ describe TasksController do
   # Complete these tests for Wave 4
   describe "destroy" do
     # Your tests go here
+    it "successfully deletes the selected task and redirects back to the list of tasks" do
+      Task.create(name: "Test task!", description: "Testing this task", completion_date: Time.now)
+      valid_id = Task.find_by(name: "Test task!").id
+      expect {delete task_path(valid_id)}.must_differ "Task.count", -1
+      must_redirect_to tasks_path
+    end
     
+    it "does not delete any tasks and redirects back to the list of tasks if the given task does not exist" do
+      Task.destroy_all
+      invalid_id = 1
+      
+      expect {delete task_path(invalid_id)}.must_differ "Task.count", 0
+      must_redirect_to tasks_path
+    end
+    
+    it "does not delete any tasks and redirects to the list of tasks if the user tries to delete a task that was already deleted" do
+      Task.create(name: "Another test task!", description: "Testing this task again", completion_date: Time.now)
+      valid_id = Task.find_by(name: "Another test task!").id
+      delete task_path(valid_id)
+      expect {delete task_path(valid_id)}.must_differ "Task.count", 0
+      must_redirect_to tasks_path
+    end
   end
   
   # Complete for Wave 4
   describe "toggle_complete" do
     # Your tests go here
+    
+    
+    
   end
 end
