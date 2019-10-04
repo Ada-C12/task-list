@@ -1,18 +1,28 @@
 <body>
   <h1>TASK LIST</h1>
-  <section id="container">
-    <section id="buttons">
+  <section class="container">
+    <section class="buttons">
       <p><%= link_to "Add Task", new_task_path %></p>
       <p><%= link_to "All Tasks", tasks_path %></p>
     </section>
 
     <ol>
+      <h2>Your Tasks:</h2>
       <% @tasks.each do |task| %>
         <li>
-          <p> <strong> Name: </strong> <%= link_to task.name, task_path(task.id) %> <br>
-          <strong> Description: </strong> <%= task.description %> <br>
-          <strong> Completion Date: </strong> <%= task.completion_date %> </p>
-          <%= link_to "Edit", edit_task_path(task) %> <%= link_to "Delete", task_path(task), method: :delete, data: {confirm: "Are you sure?"}%>
+          <p> <%if task.completion_date != nil %> 
+            <s><%= link_to task.name, task_path(task.id), class: "link"%> </s> 
+            <% else %> <%= link_to task.name, task_path(task.id), class: "link"%>
+            <% end %>
+          <br></p>
+          
+          <%if task.completion_date == nil %>
+            <%= link_to "Mark Complete", complete_task_path(task), method: :put, class: "link" %>
+          <% else %>
+            <%= link_to "Unmark Complete", complete_task_path(task), method: :put, class: "link" %>
+          <%end%>
+          | <%= link_to "Edit", edit_task_path(task), class: "link" %> | <%= link_to "Delete", task_path(task), method: :delete, data: {confirm: "Are you sure you would like to delete the test?"}, class: "link"%>
+        
         </li>
       <% end %>
     </ol>
