@@ -17,7 +17,7 @@ class TasksController < ApplicationController
   end
   
   def create
-    @task = Task.new(name: params[:task][:name], description: params[:task][:description], due_date: params[:task][:due_date])
+    @task = Task.new(name: params[:task][:name], description: params[:task][:description], completed: params[:task][:completed])
     if @task.save
       redirect_to task_path(@task.id)
     else
@@ -42,7 +42,7 @@ class TasksController < ApplicationController
 
       @task.name = params[:task][:name]
       @task.description = params[:task][:description]
-      @task.due_date = params[:task][:due_date]
+      @task.completed = params[:task][:completed]
     end
     if @task.save
       redirect_to task_path(@task.id)

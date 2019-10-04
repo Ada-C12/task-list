@@ -3,7 +3,7 @@ require "test_helper"
 describe TasksController do
   let (:task) {
     Task.create name: "sample task", description: "this is an example for a test",
-    due_date: Time.now + 5.days
+    completed: Time.now + 5.days
   }
   
   # Tests for Wave 1
@@ -68,7 +68,7 @@ describe TasksController do
         task: {
           name: "new task",
           description: "new task description",
-          due_date: nil,
+          completed: nil,
         },
       }
       
@@ -79,7 +79,7 @@ describe TasksController do
       
       new_task = Task.find_by(name: task_hash[:task][:name])
       expect(new_task.description).must_equal task_hash[:task][:description]
-      expect(new_task.due_date).must_equal task_hash[:task][:due_date]
+      expect(new_task.completed).must_equal task_hash[:task][:completed]
       
       must_respond_with :redirect
       must_redirect_to task_path(new_task.id)
@@ -111,14 +111,14 @@ describe TasksController do
     # Note:  If there was a way to fail to save the changes to a task, that would be a great
     #        thing to test.
     before do
-      Task.create(name: "Laundry", description: "drop off at John Doe LLC", due_date: nil)
+      Task.create(name: "Laundry", description: "drop off at John Doe LLC", completed: nil)
     end
     
     updated_task_hash = {
       task: {
         name: "Dry cleaning",
         description: "drop off at Jane Doe LLC",
-        due_date: nil
+        completed: nil
       },
     }
     
@@ -153,7 +153,7 @@ describe TasksController do
   describe "destroy" do
     # Your tests go here
     it "will delete an existing task" do
-      Task.create(name: "Meal Prep", description: "Egg salad sandwiches", due_date: nil)
+      Task.create(name: "Meal Prep", description: "Egg salad sandwiches", completed: nil)
       existing_task_id = Task.find_by(name: "Meal Prep").id
 
       expect {
@@ -177,7 +177,7 @@ describe TasksController do
     end
     
     it "will redirect if deleting the same task twice" do
-      Task.create(name: "Meal Prep", description: "Egg salad sandwiches", due_date: nil)
+      Task.create(name: "Meal Prep", description: "Egg salad sandwiches", completed: nil)
       task_id = Task.find_by(name: "Meal Prep").id
       Task.destroy_all
 
