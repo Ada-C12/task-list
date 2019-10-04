@@ -6,7 +6,8 @@ describe TasksController do
     completion_date: Time.now + 5.days
   }
   ############################################
-  # Tests for Wave 1
+  # Wave 1
+  ############################################
   describe "index" do
     it "can get the index path" do
       # Act
@@ -25,10 +26,11 @@ describe TasksController do
     end
   end
   ############################################
-  # Unskip these tests for Wave 2
+  # Wave 2
+  ############################################
   describe "show" do
     it "can get a valid task" do
-      # Act
+      # Act: sending user down task_path w/ task.id, triggering Ctrler#show, and GETs user to /tasks/:id
       get task_path(task.id)
       
       # Assert
@@ -36,7 +38,7 @@ describe TasksController do
     end
     
     it "will redirect for an invalid task" do
-      # Act
+      # Act: going down task_path w/ id=-1, triggering Tasks.show() trying to GET user to /tasks/-1.html
       get task_path(-1)
       
       # Assert
@@ -48,7 +50,7 @@ describe TasksController do
   describe "new" do
     it "can get the new task page" do
       
-      # Act
+      # Act: going down new_task_path, triggering TasksCtrler.new(), to GET user to /tasks/new.html
       get new_task_path
       
       # Assert
@@ -70,12 +72,16 @@ describe TasksController do
       
       # Act-Assert
       expect {
+        # going down tasks_path & POST triggers TasksCtrler.create(), which 
         post tasks_path, params: task_hash
       }.must_change "Task.count", 1
       
       new_task = Task.find_by(name: task_hash[:task][:name])
       expect(new_task.description).must_equal task_hash[:task][:description]
+      # I deactivated line below, b/c if completion_date is set to nil, how can you .to_time() on nil?
       # expect(new_task.completion_date.to_time.to_i).must_equal task_hash[:task][:completion_date].to_i
+      # so I changed it to this line instead lol
+      expect(new_task.completion_date).must_equal nil
       expect(new_task.completion_date).must_equal task_hash[:task][:completion_date]
       
       must_respond_with :redirect

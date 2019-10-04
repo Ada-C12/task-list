@@ -4,9 +4,39 @@ class TasksController < ApplicationController
     @tasks = Task.all 
   end
   
+  def new
+    # ROUTES SAYS: get '/tasks/new', to: 'tasks#new', as: 'new_task' 
+    @task = Task.new
+    # @task.completion_date = nil
+  end
+  # .new() GETs user to /tasks/new, form.submit there POSTs to .create()
+  def create
+    # This is AFTER user submits form to make new Task
+    @task = Task.new(params_from_form)
+    @msg = nil
+    
+    # validate parameters
+    if @task.name == ""
+      @msg = "You must name your task"
+      render new_task_path
+      return
+    end
+    
+    # ready to save
+    if @task.save
+      redirect_to task_path(@task.id)
+    else
+      @msg = "for some reason Task.save() failed"
+      render new_task_path(@task)
+    end
+    
+  end
+  
   def show
-    user_input = params[:id]
-    if user_input.to_i.to_s == user_input
+    # input may be from user manually typing in URL
+    # input may be from another Ctrler#action sending us down task_path(id), which involves triggering .show()
+    input = params[:id]
+    if input.to_i.to_s == input
       # if input is a valid integer
       @task = Task.find_by(id: params[:id])
       unless @task
@@ -19,33 +49,6 @@ class TasksController < ApplicationController
       return
     end
   end
-  
-  def new
-    # User wants to make a new Task, so we'll need to send user to empty form
-    @task = Task.new
-    # @task.completion_date = "Pending"
-  end
-  
-  def create
-    # This is AFTER user submits form to make new Task
-    @task = Task.new(params_from_form)
-    @error_msg = ""
-    
-    # validate parameters
-    invalid_form = false
-    if @task.name == ""
-      @error_msg = "You must name your task"
-      # elsif @task.completion_date 
-      #parse the comp date soemhow
-    else
-      if @task.save
-        redirect_to task_path(@task.id)
-      else
-        render tasks_new_path(@task)
-      end
-    end
-  end
-  
   
   private
   def params_from_form
