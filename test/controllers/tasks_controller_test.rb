@@ -259,8 +259,6 @@ describe TasksController do
       end
     end
     
-    
-    
     describe 'when the task does not exist' do
       it 'redirects to tasks list' do
         # Setup

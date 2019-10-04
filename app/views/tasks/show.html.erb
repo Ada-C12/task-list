@@ -4,7 +4,13 @@
   <div class="notice"><%= flash[:notice] %></div>
 <% else %>
   <%= "Task Name: #{@task.name}" %><br/>
-  <%= "Task Description: #{@task.description}" %>
+  <%= "Task Description: #{@task.description}" %><br/>
+  <% if @task.completed_at.nil?%>
+    <%= "Status: INCOMPLETE" %><br/>
+  <% else %>
+    <%= "Status: COMPLETED at #{@task.completed_at}" %><br/>
+    <p><%= link_to 'Mark Incomplete', tasks_path %></p>
+  <% end %>
   <p><%= link_to 'Return to Task List', tasks_path %></p>
   <p><%= link_to 'Edit Task', edit_task_path %></p>
 <% end %>
