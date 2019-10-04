@@ -110,7 +110,7 @@ describe TasksController do
   # Uncomment and complete these tests for Wave 3
   describe "update" do
     before do
-      Task.create(name: "Sweep the floors", description: "Grab a broom!", completion_date: "October 10, 2019")
+      Task.create(name: "Sweep the floors", description: "Grab a broom!", completion_date: nil)
     end
     
     let (:new_task_details) {
@@ -118,7 +118,7 @@ describe TasksController do
         task: {
           name: "Clean your room",
           description: "Get tidy!",
-          completion_date: "November 1, 2019"
+          completion_date: Time.now + 1.days
         }
       }
     }
@@ -138,7 +138,7 @@ describe TasksController do
       current_task = Task.find_by(id: current_id)
       expect(current_task.name).must_equal new_task_details[:task][:name]
       expect(current_task.description).must_equal new_task_details[:task][:description]
-      expect(current_task.completion_date).must_equal new_task_details[:task][:completion_date]
+      expect(current_task.completion_date).wont_be_nil
       
     end
     
@@ -158,7 +158,7 @@ describe TasksController do
   describe "destroy" do
     # Your tests go here
     it "successfully deletes the selected task and redirects back to the list of tasks" do
-      Task.create(name: "Test task!", description: "Testing this task", completion_date: Time.now)
+      Task.create(name: "Test task!", description: "Testing this task", completion_date: nil)
       valid_id = Task.find_by(name: "Test task!").id
       expect {delete task_path(valid_id)}.must_differ "Task.count", -1
       must_redirect_to tasks_path
@@ -173,7 +173,7 @@ describe TasksController do
     end
     
     it "does not delete any tasks and redirects to the list of tasks if the user tries to delete a task that was already deleted" do
-      Task.create(name: "Another test task!", description: "Testing this task again", completion_date: Time.now)
+      Task.create(name: "Another test task!", description: "Testing this task again", completion_date: nil)
       valid_id = Task.find_by(name: "Another test task!").id
       delete task_path(valid_id)
       expect {delete task_path(valid_id)}.must_differ "Task.count", 0
@@ -184,7 +184,6 @@ describe TasksController do
   # Complete for Wave 4
   describe "toggle_complete" do
     # Your tests go here
-    
     
     
   end
