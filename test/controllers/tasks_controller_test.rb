@@ -155,7 +155,15 @@ end
 
 # Complete these tests for Wave 4
 describe "destroy" do
-  # Your tests go here
+  before do 
+    @task = Task.create name: "sample task", description: "this is an example for a test",
+    completion_date: Time.now + 5.days
+  end
+  it 'will decrease the count of the tasks in the database by 1' do
+    expect{delete task_path(@task.id)}.must_differ 'Task.count', -1
+    
+    must_respond_with :redirect 
+  end
   
 end
 
