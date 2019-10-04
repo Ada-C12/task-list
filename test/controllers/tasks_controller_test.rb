@@ -183,9 +183,11 @@ describe TasksController do
     # end
   end
   
-  # Complete these tests for Wave 4
+  
+  
+  
+  #Wave 4
   describe '#destroy' do
-    # skip
     describe 'when the task exists' do 
       it 'deletes the tasks and redirect the user to tasks list when successful' do
         task = Task.create(
@@ -200,20 +202,61 @@ describe TasksController do
         
         assert_nil Task.find_by(id: task.id)
       end
-      
-      it 'redirects to the task page with an error when not successful' do
-      end
     end 
     
     describe 'when the task does not exist' do
+      it 'redirects to tasks list' do
+        # Setup
+        params = {
+          task: {
+            name: 'new name',
+            description: 'new description',
+            id: -1,
+          }
+        }
+        
+        # Act
+        put task_path(-1), params: params
+        
+        # Assert
+        must_respond_with :redirect
+        must_redirect_to tasks_path
+      end
+    end
+    
+  end
+  
+  
+  # COMPLETE METHOD
+  describe '#complete' do
+    
+    describe 'when the task exists' do 
       
     end
     
-    # Your tests go here
-    # add a must differ 
+    
+    
+    describe 'when the task does not exist' do
+      it 'redirects to tasks list' do
+        # Setup
+        params = {
+          task: {
+            name: 'new name',
+            description: 'new description',
+            id: -1,
+          }
+        }
+        
+        # Act
+        put task_path(-1), params: params
+        
+        # Assert
+        must_respond_with :redirect
+        must_redirect_to tasks_path
+      end
+    end
   end
   
-  describe '#complete' do
-    
-  end
+  
+  
 end
