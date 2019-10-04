@@ -6,7 +6,7 @@ describe TasksController do
     completion_date: Time.now + 5.days
   }
   
-  # Tests for Wave 1
+  # Wave 1
   describe "index" do
     it "can get the index path" do
       # Act
@@ -25,10 +25,9 @@ describe TasksController do
     end
   end
   
-  # Unskip these tests for Wave 2
+  # Wave 2
   describe "show" do
     it "can get a valid task" do
-      # skip
       # Act
       get task_path(task.id)
       
@@ -37,7 +36,6 @@ describe TasksController do
     end
     
     it "will redirect for an invalid task" do
-      # skip
       # Act
       get task_path(-1)
       
@@ -48,8 +46,6 @@ describe TasksController do
   
   describe "new" do
     it "can get the new task page" do
-      # skip
-      
       # Act
       get new_task_path
       
@@ -60,14 +56,12 @@ describe TasksController do
   
   describe "create" do
     it "can create a new task" do
-      # skip
-      date_time = Date.current + 5.days
       # Arrange
       task_hash = {
         task: {
           name: "new task",
           description: "new task description",
-          completion_date: date_time,
+          completion_date: nil,
         },
       }
       
@@ -78,7 +72,6 @@ describe TasksController do
       
       new_task = Task.find_by(name: task_hash[:task][:name])
       expect(new_task.description).must_equal task_hash[:task][:description]
-      expect(new_task.completion_date).must_equal task_hash[:task][:completion_date]
       
       must_respond_with :redirect
       must_redirect_to task_path(new_task.id)
@@ -90,13 +83,6 @@ describe TasksController do
           task: {
             name: "No description",
             description: nil,
-            completion_date: Date.current + 5.days,
-          },
-        },
-        {
-          task: {
-            name: "No completion date",
-            description: "No completion date description",
             completion_date: nil,
           },
         },
@@ -104,7 +90,7 @@ describe TasksController do
           task: {
             name: nil,
             description: "No name task description",
-            completion_date: Date.current + 5.days,
+            completion_date: nil,
           },
         }   
       ]
@@ -120,37 +106,32 @@ describe TasksController do
     end
   end
   
-  # Unskip and complete these tests for Wave 3
+  # Wave 3
   describe "edit" do
     it "can get the edit page for an existing task" do
-      # Your code here
       get edit_path(task[:id])
       
       must_respond_with :success
     end
     
     it "will respond with redirect when attempting to edit a nonexistant task" do
-      # Your code here
       get edit_path(-1)
       
       must_respond_with :redirect
     end
   end
   
-  # Uncomment and complete these tests for Wave 3
+  # Wave 3
   describe "update" do
     before do 
-      date_time = Date.current + 5.days
       @task_hash = {
         task: {
           name: "updated task",
-          description: "updated task description",
-          completion_date: date_time + 2.days,
+          description: "updated task description"
         },
       }
     end
-    # Note:  If there was a way to fail to save the changes to a task, that would be a great
-    #        thing to test.
+
     it "can update an existing task" do
       existing_task = Task.find_by(id: task[:id])
       expect _(Task.count).must_equal 1
@@ -178,19 +159,12 @@ describe TasksController do
       must_redirect_to tasks_path
     end
     
-    it "redirect to new_task page if input is not valid" do
+    it "redirect to new_task page if input is not valid and save fails" do
       task_hashes = [
         {
           task: {
             name: "No description",
             description: nil,
-            completion_date: Date.current + 5.days,
-          },
-        },
-        {
-          task: {
-            name: "No completion date",
-            description: "No completion date description",
             completion_date: nil,
           },
         },
@@ -198,7 +172,7 @@ describe TasksController do
           task: {
             name: nil,
             description: "No name task description",
-            completion_date: Date.current + 5.days,
+            completion_date: nil,
           },
         }   
       ]
@@ -221,7 +195,7 @@ describe TasksController do
     end
   end
   
-  # Complete these tests for Wave 4
+  # Wave 4
   describe "destroy" do
     it "can delete an existing task" do
       existing_task = Task.find_by(id: task[:id])
