@@ -1,12 +1,16 @@
 <h1>Task List</h1>
 
 <ol>
-  <%# @tasks.sort_by! {&:id} need to print tasks in order of id, not updated time%>
   <% @tasks.each do |task|  %>
     <li> <%= link_to "Task: #{task.name}", task_path(task.id) %> </li>
       <ul>
         <li> Details: <%= task.description %> </li>
-        <li> Due by: <%= task.completion_date %> </li>
+        <li> Completed: <%= task.completed %> </li>
+        <% if task.completed == nil %>
+          <%= link_to "Mark as Complete", completed_task_path(task), method: :patch %>
+        <% else %>
+          <%= link_to "Mark as Not Complete", not_completed_task_path(task),    method: :patch %>
+        <% end %>  
         <%= link_to "Edit", edit_task_path(task) %> 
         <%= link_to "Delete", task_path(task), method: :delete, data: {confirm: "Are you sure you want to delete?"} %>
       </ul>
@@ -17,3 +21,4 @@
 
 <%= image_tag "tasks.jpg", alt: "Picture of tasks." %>
 
+<%# <% if completed = true %> %> %>

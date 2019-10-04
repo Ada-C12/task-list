@@ -2,7 +2,15 @@
 <li>Task: <%= @task.name %></li>
   <ul>
     <li> Details: <%= @task.description %> </li>
-    <li> Due by: <%= @task.completion_date %> </li>
+
+      <% if @task.completed == nil %>
+        <%= link_to "Mark as Complete", completed_task_path(@task), method: :patch %>
+      <% else %>
+        <%= link_to "Mark as Not Complete", not_completed_task_path(@task), method: :patch %>
+      <% end %>  
+
+      <%= link_to "Edit", edit_task_path(@task) %> 
+      <%= link_to "Delete", task_path(@task), method: :delete, data: {confirm: "Are you sure you want to delete?"} %>
   </ul>
 </ul>
 

@@ -3,7 +3,7 @@ require "test_helper"
 describe TasksController do
   let (:task) {
     Task.create name: "sample task", description: "this is an example for a test",
-    completion_date: Time.now + 5.days
+    completed: nil
   }
   
   # Tests for Wave 1
@@ -52,7 +52,7 @@ describe TasksController do
         task: {
           name: "new task",
           description: "new task description",
-          completion_date: nil,
+          completed: nil,
         },
       }
       
@@ -62,7 +62,7 @@ describe TasksController do
       
       new_task = Task.find_by(name: task_hash[:task][:name])
       expect(new_task.description).must_equal task_hash[:task][:description]
-      expect(new_task.completion_date).must_equal task_hash[:task][:completion_date]
+      expect(new_task.completed).must_equal task_hash[:task][:completed]
       
       must_respond_with :redirect
       must_redirect_to task_path(new_task.id)
@@ -89,13 +89,13 @@ describe TasksController do
     # Note:  If there was a way to fail to save the changes to a task, that would be a great
     #        thing to test.
     before do
-      @update_task = Task.create(name: "wash car", description: "rinse and wash", completion_date: nil)
+      @update_task = Task.create(name: "wash car", description: "rinse and wash", completed: nil)
       
       @updated_task_hash = {
         task: {
           name: "updated task",
           description: "updated task description",
-          completion_date: nil,
+          completed: nil,
         },
       }
     end
@@ -110,7 +110,7 @@ describe TasksController do
       updated_task = Task.find_by(id: @update_task.id)
       expect(updated_task.name).must_equal @updated_task_hash[:task][:name]
       expect(updated_task.description).must_equal @updated_task_hash[:task][:description]
-      expect(updated_task.completion_date).must_equal @updated_task_hash[:task][:completion_date]
+      expect(updated_task.completed).must_equal @updated_task_hash[:task][:completed]
     end
     
     it "will redirect to the root page if given an invalid id" do
@@ -125,7 +125,7 @@ describe TasksController do
   # Tests for Wave 4: destroy
   describe "destroy" do
     before do
-      @delete_task = Task.create(name: "wash car", description: "rinse and wash", completion_date: nil)
+      @delete_task = Task.create(name: "wash car", description: "rinse and wash", completed: nil)
     end
     
     it "can delete an existing task" do
