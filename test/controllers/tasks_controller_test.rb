@@ -152,15 +152,6 @@ describe TasksController do
   
   # Complete for Wave 4
   describe "toggle_complete" do
-    
-    let (:changes_hash) {
-      {
-        task: {
-          description: "new task description",
-        },
-      }
-    }
-    
     it "can toggle a task to complete" do
       incomplete_task = Task.create name: "mark as complete", description: "incomplete to complete",
       completion_date: nil
