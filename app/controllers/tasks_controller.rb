@@ -10,7 +10,7 @@ class TasksController < ApplicationController
     @task = Task.find_by(id: task_id)
     if @task.nil?
       flash[:error] = "Could not find task with id: " + task_id.to_s
-      redirect_to tasks_path
+      redirect_to root_path
       return
     end
   end
@@ -37,7 +37,7 @@ class TasksController < ApplicationController
     @edit_task = Task.find_by(id: task_id)
     
     if @edit_task.nil?
-      redirect_to tasks_path
+      redirect_to root_path
       return
     end    
   end
@@ -45,7 +45,7 @@ class TasksController < ApplicationController
   def update
     @task = Task.find_by(id: params[:id])
     if @task.nil?
-      redirect_to tasks_path
+      redirect_to root_path
       return
     end
     
@@ -72,6 +72,7 @@ class TasksController < ApplicationController
     
     if @task.destroy
       redirect_to root_path
+      return
     else
       return
     end
