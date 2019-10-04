@@ -70,22 +70,43 @@ class TasksController < ApplicationController
     redirect_to root_path
     return
   end
-  # def toggle_complete
-  #   # list = Task.find(params[:id])
-  #   # list.tasks.each do |task|
-  #   #   task.update_attributes(completion_date: DateTime.now)
-  #   # end
   
-  #   task = Task.create(:completion_date => DateTime.now)
+  def toggle_complete
+    # list = Task.find(params[:id])
+    # list.tasks.each do |task|
+    #   task.update_attributes(completion_date: DateTime.now)
+    # end
+    task_id = params[:id]
+    @task = Task.find_by(id: task_id)
+    
+    if @task.nil? 
+      redirect_to root_path
+    else
+      @task.completion_date = DateTime.now
+      @task.save
+      redirect_to root_path
+      return
+    end
+    # task = Task.create(:completion_date => DateTime.now)
+    # redirect_to task_path(@task)
+    
+  end
   
+  def toggle_incomplete
+    # list = Task.find(params[:id])
+    # list.tasks.each do |task|
+    #   task.update_attributes(completion_date: DateTime.now)
+    # end
+    if @task.nil?
+      redirect_to root_path
+    end
+    
+  end
   
-  #   redirect_to tasks_path
-  #   return
-  # end
   private
   
   
   def task_params
-    return params.require(:task).permit(:name, :description)
+    return params.permit(:name, :description)
   end
 end
