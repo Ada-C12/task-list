@@ -231,7 +231,32 @@ describe TasksController do
   describe '#complete' do
     
     describe 'when the task exists' do 
-      
+      it 'updates the completed_at attributes to current time' do
+        # setup
+        task = Task.create(
+          id: 1, 
+          name: 'sample task', 
+          description: 'this is an example for a test',
+          completed_at: nil,
+        )
+        
+        params = {
+          task: {
+            completed_at: Time.parse("2019-03-22"),
+            id: task.id,
+          }
+        }
+        # act
+        put task_path(task.id), params: params
+        
+        # This reloads the `task` object with the new data updated in line 143.
+        task.reload
+        
+        # assert
+        assert_equal params[:task][:completed_at], Time.parse("2019-03-22")
+        must_respond_with :redirect
+        must_redirect_to task_path(task)
+      end
     end
     
     
