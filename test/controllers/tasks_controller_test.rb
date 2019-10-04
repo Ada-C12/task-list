@@ -152,32 +152,40 @@ describe TasksController do
   
   # Complete for Wave 4
   describe "toggle_complete" do
+    
+    let (:changes_hash) {
+      {
+        task: {
+          description: "new task description",
+        },
+      }
+    }
+    
     it "can toggle a task to complete" do
-      # incomplete_task = Task.create name: "task to be destroyed", description: "delete me please",
-      # completion_date: nil
+      incomplete_task = Task.create name: "mark as complete", description: "incomplete to complete",
+      completion_date: nil
       
-      # expect {
-      #   patch mark_complete_path(incomplete_task.id)
-      # }.wont_change "Task.count"
+      expect {
+        patch toggle_complete_path(incomplete_task.id)
+      }.wont_change "Task.count"
       
-      # expect(completed_task.completion_date).must_be_nil
+      current_task = Task.find_by(id: incomplete_task.id)
+      
+      # Is there a better way to do not equal to nil??
+      expect(current_task.completion_date).wont_equal nil
     end
     
     it "can toggle a completed task to nil" do
-      # completed_task = Task.create name: "completed task", description: "needs to be toggled to incomplete",
-      # completion_date: Time.now
+      completed_task = Task.create name: "mark as incomplete", description: "complete to incomplete",
+      completion_date: Time.now
       
-      # puts "this is ID:"
-      # puts completed_task.id
+      expect {
+        patch toggle_complete_path(completed_task.id)
+      }.wont_change "Task.count"
       
-      # expect {
-      #   patch mark_complete_path(completed_task.id), params: {id: completed_task.id}
-      # }.wont_change "Task.count"
+      current_task = Task.find_by(id: completed_task.id)
       
-      # puts completed_task.name
-      # puts completed_task.completion_date
-      
-      # expect(completed_task.completion_date).must_be_nil
+      expect(current_task.completion_date).must_be_nil
     end
   end
 end
