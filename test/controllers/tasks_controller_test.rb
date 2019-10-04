@@ -40,6 +40,7 @@ describe TasksController do
       
       # Assert
       must_respond_with :redirect
+      must_redirect_to root_path
     end
   end
   
@@ -56,8 +57,7 @@ describe TasksController do
   describe "create" do
     it "can create a new task" do
       # Arrange
-      task_hash = { task: 
-      { name: "new task", description: "new task description", completed: nil }}
+      task_hash = { task: { name: "new task", description: "new task description", completed: nil }}
       
       # Act-Assert
       expect { post tasks_path, params: task_hash }.must_change "Task.count", 1
@@ -95,8 +95,7 @@ describe TasksController do
     # Note:  If there was a way to fail to save the changes to a task, that would be a great thing to test.
     it "can update an existing task" do
       # Arrange
-      task_hash = { task: 
-      { name: "new task", description: "new task description", completed: nil}}
+      task_hash = { task: { name: "new task", description: "new task description", completed: nil }}
       
       # Act-Assert
       patch task_path(task.id), params: task_hash
@@ -111,10 +110,9 @@ describe TasksController do
       must_redirect_to task_path
     end
     
-    it "will redirect to the root page if given an invalid id" do
+    it "will redirect to the root path if given an invalid id" do
       # Arrange
-      task_hash = { task: 
-      { name: "new task", description: "new task description", completed: nil }}
+      task_hash = { task: { name: "new task", description: "new task description", completed: nil }}
       
       # Act-Assert
       patch task_path(-1), params: task_hash
@@ -159,6 +157,7 @@ describe TasksController do
       updated_task = Task.find_by(id: task2.id)
       
       expect(updated_task.completed).must_be_instance_of ActiveSupport::TimeWithZone
+      expect(updated_task.completed).must_be_close_to Time.now, 0.05
     end
   end
 end
