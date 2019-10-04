@@ -30,9 +30,16 @@ class TasksController < ApplicationController
   end
 
   def update
-    return redirect_to root_path unless Task.find_by(id: params[:id])
+    return redirect_to tasks_path unless Task.find_by(id: params[:id])
     Task.update(task_params)
     redirect_to task_path(params[:id])
+  end
+
+  def destroy
+    task = Task.find_by(id: params[:id])
+    return redirect_to tasks_path unless task
+    task.destroy
+    redirect_to tasks_path
   end
 
   private
