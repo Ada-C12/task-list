@@ -80,36 +80,74 @@ describe TasksController do
     end
   end
   
-  # Unskip and complete these tests for Wave 3
   describe "edit" do
     it "can get the edit page for an existing task" do
-      skip
-      # Your code here
+      get edit_task_path(task.id)
+      must_respond_with :success
     end
     
     it "will respond with redirect when attempting to edit a nonexistant task" do
-      skip
-      # Your code here
+      get edit_task_path(-1)
+      must_respond_with :redirect
     end
   end
   
-  # Uncomment and complete these tests for Wave 3
   describe "update" do
     # Note:  If there was a way to fail to save the changes to a task, that would be a great
     #        thing to test.
+    
+    let (:changes_hash) {
+      {
+        task: {
+          description: "new task description",
+        },
+      }
+    }
+    
     it "can update an existing task" do
-      # Your code here
+      existing_task = Task.create name: "sample task", description: "this is an example for a test",
+      completion_date: Time.now + 5.days
+      
+      expect {
+        patch task_path(existing_task.id), params: changes_hash
+      }.wont_change "Task.count"
+      
+      must_respond_with :redirect
+      
+      task = Task.find_by(id: existing_task.id)
+      #TIFF You could expand here if you wanted to
+      expect(task.description).must_equal changes_hash[:task][:description]
     end
     
     it "will redirect to the root page if given an invalid id" do
-      # Your code here
+      id = -1
+      
+      expect {
+        patch task_path(id), params: changes_hash
+      }.wont_change "Task.count"
+      
+      must_redirect_to root_path
     end
   end
   
   # Complete these tests for Wave 4
   describe "destroy" do
-    # Your tests go here
-    
+    it "can destroy a model" do
+      tbd_task = Task.create name: "task to be destroyed", description: "delete me please",
+      completion_date: nil
+      
+      tbd_task.save
+      id = tbd_task.id
+      
+      expect { delete task_path(id) }.must_change 'Task.count', -1
+      
+      tbd_task = Task.find_by(id: id)
+      
+      expect(tbd_task).must_be_nil
+      
+      must_respond_with :redirect
+      must_redirect_to root_path
+    end
   end
   
   # Complete for Wave 4
