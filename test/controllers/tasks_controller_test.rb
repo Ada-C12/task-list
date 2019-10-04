@@ -192,9 +192,44 @@ describe TasksController do
   
   # Complete for Wave 4
   describe "toggle_complete" do
+    before do
+      Task.create(name: "Laundry", description: "drop off at John Doe LLC", completed: nil)
+    end
+    
+    completed_task_hash = {
+      task: {
+        name: "Dry cleaning",
+        description: "drop off at Jane Doe LLC",
+        completed: nil
+      },
+    }
     # Your tests go here
     it "will mark task as completed by filling in completed column" do
+      id = Task.first.id
+      expect {
+        patch completed_task_path(id), params: completed_task_hash
+      }.wont_change "Task.count"
       
+      must_respond_with :redirect
+      
+      completed_task = Task.find_by(id: id)
+      expect(completed_task.completed).wont_equal nil
+    end
+
+    it "will put nil in completed column if user mark a completed tast as not completed" do
+      id = Task.first.id
+      expect {
+        patch completed_task_path(id), params: completed_task_hash
+      }.wont_change "Task.count"
+      expect {
+        patch completed_task_path(id), params: completed_task_hash
+      }.wont_change "Task.count"
+
+      must_respond_with :redirect
+      
+      completed_task = Task.find_by(id: id)
+      expect(completed_task.completed).must_equal nil
+
     end
   end
 end
