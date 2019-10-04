@@ -56,7 +56,7 @@ describe TasksController do
 
       new_task = Task.find_by(name: task_hash[:task][:name])
       expect(new_task.description).must_equal task_hash[:task][:description]
-      expect(new_task.completed).must_equal task_hash[:task][:completed]
+      expect(new_task.completed).must_be_nil task_hash[:task][:completed]
 
       must_respond_with :redirect
       must_redirect_to task_path(new_task.id)
@@ -77,10 +77,8 @@ describe TasksController do
   end
 
   describe "update action" do
-    # Note:  If there was a way to fail to save the changes to a task, that would be a great
-    #        thing to test.
     it "can update an existing task" do
-      existing_task = Task.first
+      existing_task = Task.create(name:"Feed Kaya", description: "She's a fatty. Feed half a cup a meal and lots of snacks.")
       updated_task_data = {
         task: {
           name: "Feed Kaya",
@@ -89,16 +87,15 @@ describe TasksController do
         }
       }
 
-      expect {
-        patch task_path(existing_task.id), params: updated_task_data
-      }.must_change "Task.count", 0
+      patch task_path(existing_task.id), params: updated_task_data
 
-      expect(existing_task.name).must_equal updated_task_data[:task][:name]
-      expect(existing_task.description).must_equal updated_task_data[:task][:description]
-      expect(existing_task.completed).must_equal updated_task_data[:task][:completed]
+      updated_task = Task.find_by(id: existing_task.id)
+      expect(updated_task.name).must_equal updated_task_data[:task][:name]
+      expect(updated_task.description).must_equal updated_task_data[:task][:description]
+      expect(updated_task.completed).must_be_nil updated_task_data[:task][:completed]
 
       must_respond_with :redirect
-      must_redirect_to task_path(existing_task.id)
+      must_redirect_to task_path(updated_task.id)
     end
 
     it "will redirect to the root page if given an invalid id" do
