@@ -32,10 +32,17 @@ class TasksController < ApplicationController
 
   def edit
     @task = Task.find_by(id: params[:id])
+    if !@task
+      redirect_to edit_task_path
+    end
   end
 
   def update
     @task = Task.find_by(id: params[:id])
+    if !@task
+      redirect_to edit_task_path
+      return
+    end
     @task.name = params[:task][:name]
     @task.description = params[:task][:description]
     @task.completed = params[:task][:description]
@@ -44,6 +51,18 @@ class TasksController < ApplicationController
       redirect_to task_path(@task.id)
     else
       render new_task_path
+    end
+  end
+
+  def destroy
+    task_to_delete = Task.find_by(id: params[:id])
+    if task_to_delete.nil?
+      redirect_to tasks_path
+      return
+    else
+      task_to_delete.destroy
+      redirect_to root_path
+      return
     end
   end
 end

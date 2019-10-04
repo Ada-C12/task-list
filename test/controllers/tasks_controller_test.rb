@@ -85,14 +85,26 @@ describe TasksController do
 
   # Unskip and complete these tests for Wave 3
   describe "edit" do
+    let (:task) {
+      Task.create name: "sample task", description: "this is an example for a test",
+                  completed: Time.now + 5.days
+    }
     it "can get the edit page for an existing task" do
-      skip
-      # Your code here
+
+      # Act
+      get edit_task_path(task.id)
+
+      # Assert
+      must_respond_with :success
     end
 
     it "will respond with redirect when attempting to edit a nonexistant task" do
-      skip
-      # Your code here
+
+      # Act
+      get edit_task_path(-200)
+
+      # Assert
+      must_respond_with :redirect
     end
   end
 
@@ -100,19 +112,38 @@ describe TasksController do
   describe "update" do
     # Note:  If there was a way to fail to save the changes to a task, that would be a great
     #        thing to test.
+
+    let (:task) {
+      Task.create name: "sample task", description: "this is an example for a test",
+                  completed: Time.now + 5.days
+    }
+
     it "can update an existing task" do
-      # Your code here
+      get update_task_path(task.id)
+
+      must_respond_with :success
     end
 
     it "will redirect to the root page if given an invalid id" do
-      # Your code here
+      get update_task_path(-200)
+
+      # Assert
+      must_respond_with :redirect
     end
   end
 
   # Complete these tests for Wave 4
   describe "destroy" do
-    # Your tests go here
+    let (:task) {
+      Task.create name: "sample task", description: "this is an example for a test",
+                  completed: Time.now + 5.days
+    }
 
+    it "decreases the task list count by one" do
+      # arrange create a book then find the newly created book's id
+      #Act-assert: expect differ: the book count goes down by one after we do delete book_path(the newly created book's )
+      expect { delete task_path(task) }.must_differ "Task.count", -1
+    end
   end
 
   # Complete for Wave 4
