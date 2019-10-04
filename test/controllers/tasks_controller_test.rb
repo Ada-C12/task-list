@@ -109,13 +109,13 @@ describe TasksController do
   # Wave 3
   describe "edit" do
     it "can get the edit page for an existing task" do
-      get edit_path(task[:id])
+      get edit_task_path(task[:id])
       
       must_respond_with :success
     end
     
     it "will respond with redirect when attempting to edit a nonexistant task" do
-      get edit_path(-1)
+      get edit_task_path(-1)
       
       must_respond_with :redirect
     end
@@ -190,7 +190,7 @@ describe TasksController do
         patch task_path(Task.first.id), params: task_hash    
 
         must_respond_with :redirect
-        must_redirect_to edit_path(Task.all.first[:id])
+        must_redirect_to edit_task_path(Task.all.first[:id])
       end
     end
   end

@@ -17,14 +17,8 @@ class TasksController < ApplicationController
         @task = Task.new
     end
     
-    def create
-        hash_info = {
-            name: params[:task][:name],
-            description: params[:task][:description],
-            completion_date: params[:task][:completion_date]
-        }
-        
-        @task = Task.new(hash_info)
+    def create    
+        @task = Task.new(task_params)
         begin
             @task.save!
         rescue ActiveRecord::RecordInvalid
@@ -54,10 +48,10 @@ class TasksController < ApplicationController
             begin
                 @task.save!
             rescue ActiveRecord::RecordInvalid
-                redirect_to edit_path(@task.id)
+                redirect_to edit_task_path(@task.id)
                 return
             end 
-
+            
             redirect_to task_path(@task.id)
             return
         else
@@ -77,5 +71,10 @@ class TasksController < ApplicationController
             redirect_to tasks_path
             return
         end
+    end
+  
+    private
+    def task_params
+        return params.require(:task).permit(:name, :description, :completion_date)
     end
 end
