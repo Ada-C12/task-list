@@ -1,9 +1,10 @@
 require "test_helper"
+require 'pry'
 
 describe TasksController do
   let (:task) {
     Task.create name: "sample task", description: "this is an example for a test",
-                completion_date: Time.now + 5.days
+                completed: Time.now + 5.days
   }
 
   # Tests for Wave 1
@@ -68,7 +69,7 @@ describe TasksController do
         task: {
           name: "new task",
           description: "new task description",
-          completion_date: nil,
+          completed: nil,
         },
       }
 
@@ -79,7 +80,6 @@ describe TasksController do
 
       new_task = Task.find_by(name: task_hash[:task][:name])
       expect(new_task.description).must_equal task_hash[:task][:description]
-      expect(new_task.due_date.to_time.to_i).must_equal task_hash[:task][:due_date].to_i
       expect(new_task.completed).must_equal task_hash[:task][:completed]
 
       must_respond_with :redirect
@@ -101,6 +101,10 @@ describe TasksController do
     it "will respond with redirect when attempting to edit a nonexistant task" do
       # skip
       # Your code here
+      get edit_task_path(-1)
+
+      # Assert
+      must_respond_with :redirect
     end
   end
 
@@ -110,31 +114,55 @@ describe TasksController do
     #        thing to test.
     it "can update an existing task" do
       # Your code here
-      existing_task = Task.first
+      # Instead of Task.first, do Task.create
+      existing_task = Task.create
       update_task_from_date = {
         task:{
-          name: "Cook Dinner",
-          description: "Make my favorite food",
-          completion_date: ""
+          name: "Watch TV",
+          description: "Descripton for tv",
+          completed: ""
         }
       }
-
       # Act
-      post task_path, params: update_task_from_date
-      must_redirect_to root_path
+      patch task_update_path(existing_task.id)
+      # must_redirect_to root_path
 
-      #Assert
-      expect(Task.find_by(id: existing_task.id).name).must_equal
+      # Assert
+      expect( Task.find_by(id: existing_task.id).name ).must_equal "Watch TV"
     end
 
     it "will redirect to the root page if given an invalid id" do
       # Your code here
+      # patch task_update_path, params: {id: -1}
+
+      # Assert
+      # must_respond_with :redirect
     end
   end
 
   # Complete these tests for Wave 4
   describe "destroy" do
     # Your tests go here
+    it "Deleting is successful!" do
+      # Arrange:
+      # Create a Book... then find the newly created book's id
+      new_task = Task.new(
+        name: 'New task',
+        description: 'Test'
+      )
+      id = new_task.id
+
+      # expect {
+      #   delete task_delete_path, params[id: id]
+      # }.must_change "Task.count", 1
+
+    # Act-Assert:
+      # Expect Differ: The book count goes 
+      # down by one after we do "delete book_path( the newly created book's id )
+    # Assert:
+      # Must redirect to the root page
+
+    end
 
   end
 

@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
     def index
-        @tasks = Task.all
+        @tasks = Task.all.order(:id)
     end
 
     def show
@@ -24,6 +24,10 @@ class TasksController < ApplicationController
     end
 
     def create
+
+        @task = Task.new(task_params) #instantiate a new task using strong params
+            
+            # this code is the same
         # task_name = params[:name]
         # task_description = params[:description]
         # task = Task.create(
@@ -33,26 +37,36 @@ class TasksController < ApplicationController
 
         # redirect_to :controller => 'tasks', :action => 'index'
         
-    
-        @task = Task.new( 
-            name: params[:task][:name], 
-            description: params[:task][:description]
-        )
+        
+        # @task = Task.new( 
+        #     name: params[:task][:name], 
+        #     description: params[:task][:description],
+        #     completed: params[:task][:completed]
+        # )
 
-        if @task.save
-            redirect_to task_path(@task.id)
-    
-        else
-            render new_task_path
-        end
+            if @task.save
+                redirect_to task_path(@task.id)
+        
+            else
+                render new_task_path
+            end
     end
     
     def edit
-        @task = Task.find_by(id: params[:id] )
+        id = params[:id].to_i
+        if id < 0
+            redirect_to tasks_path
+        end
+        @task = Task.find_by(id: id )
+        
     end
         
     def update
-        @task = Task.find_by(id: params[:id])
+        id = params[:id].to_i
+        if id < 0
+            redirect_to tasks_path
+        end
+        @task = Task.find_by(id)
         @task[:name] = params[:task][:name]
         @task[:description] = params[:task][:description]
                 
@@ -75,6 +89,28 @@ class TasksController < ApplicationController
         end
     end
     
+
+    def toggle_complete 
+        id = params[:id]
+        @task = Task.find_by(id: id)
+        if @task.completed == nil
+            @task[:completed] = "yes"
+        else
+            @task[:completed] = nil
+        end
+
+        if @task.save
+            redirect_to root_path
+    
+        end
+    end
+
+    private
+
+    def task_params
+        return params.require(:task).permit(:name, :description, :completed)
+    end
 end
+
     
 

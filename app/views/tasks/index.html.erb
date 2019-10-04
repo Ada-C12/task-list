@@ -8,12 +8,25 @@
   <ol>
     <% @tasks.each do |task| %>
       <li>
-        <%= link_to task.name, task_path( task.id ), class: 'task-name' %>
-        <%= link_to "Delete", task_path( task.id ),method: :delete, data: { confirm: "Are you sure to delete the task permanently"} %>
 
-        <p><%= task.description %> | <%= link_to "Edit", edit_task_path( task.id )%></p>
-        <p><%= task.completion_date %> | <%= link_to "Edit", edit_task_path( task.id )%> </p>
+       
+        <p class="<%= 'complete' if task.completed %>"><%= link_to task.name, task_path( task.id ), class: 'task-name' %> | 
+
+         
+         <%= link_to task.completed ? 'Mark as Incomplete' : 'Mark as complete', complete_task_path( task.id ), class: ''%>
+         
+
+        <%# <%= form_tag(complete_task_path(23), method: :put)  do %>
+        <%# <%=check_box_tag('completed', value = task.completed, checked = task.completed,
+        options = {:class=>'class_name'})%>
+         <%# <%= submit_tag 'Mark as Complete' %>
+        <%# <% end %> 
+        </p>
+        <p><%= task.description %></p>        
+        <%= link_to "Edit", edit_task_path( task.id )%> | <%= link_to "Delete", task_delete_path( task.id ),method: :delete, data: { confirm: "Are you sure you want to delete the task permanently"} %>
       </li>
     <% end %>
+
+  
   </ol>
 </section>
