@@ -9,11 +9,24 @@ class TasksController < ApplicationController
  def show
   task_id = params[:id].to_i
   @task = Task.find_by(id: task_id)
-  if @task.nil?
-   head :not_found
-   return
-  end
+  # if @task.nil?
+  #  head :not_found
+  #  return
+  # end
+ end
+ 
+ def new
+  @task = Task.new
+ end
+ 
+ def create
+  @task = Task.new( name: params[:task][:name], description: params[:task][:description], progress: params[:task][:progress], completion_date: params[:task][:completion_date])
+  @task.progress = "not started"
+  @task.completion_date = "N/A"
   
+  
+  
+  @task.save
  end
  
 end
