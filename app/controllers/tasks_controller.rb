@@ -15,7 +15,7 @@ class TasksController < ApplicationController
     @task = Task.find_by(id:task_id)
     
     if @task.nil?
-      redirect_to tasks_path
+      head :not_found
       return
     end
   end
@@ -25,22 +25,36 @@ class TasksController < ApplicationController
   end
   
   def create
-    task_params = params[:task]
-    task = Task.new(name: task_params[:name], description: task_params[:description])
-    task.save
-    #^instance variables?
-    
-    redirect_to task_path(task)
+    @task = Task.new(name: params[:task][:name], description: params[:task][:description]) #instantiate a new book
+    if @task.save # save returns true if the database insert succeeds
+      redirect_to root_path # go to the index so we can see the book in the list
+      return
+    else # save failed :(
+      render :new # show the new book form view again
+      return
+    end
   end
   
   def edit
     @task = Task.find_by(id: params[:id])
     
-    if @tasks.nil?
-      head :not_found
+    if @task.nil?
+      redirect_to root_path
       return
     end
   end
+  
+  def update
+    @task = Task.find_by(id: params[:id])
+    if @task.update(task_params)
+      redirect_to root_path(@task) # go to the index so we can see the book in the list
+      return
+    else # save failed :(
+      render :edit # show the new book form view again
+      return
+    end
+  end
+  
   
   def destroy
     task_id = params[:id]
@@ -53,31 +67,25 @@ class TasksController < ApplicationController
     
     @task.destroy
     
-    redirect_to tasks_path
+    redirect_to root_path
     return
   end
+  # def toggle_complete
+  #   # list = Task.find(params[:id])
+  #   # list.tasks.each do |task|
+  #   #   task.update_attributes(completion_date: DateTime.now)
+  #   # end
   
-  def toggle_complete
-    # list = Task.find(params[:id])
-    # list.tasks.each do |task|
-    #   task.update_attributes(completion_date: DateTime.now)
-    # end
-    
-    task = Task.create(:completion_date => DateTime.now)
-    
-    
-    redirect_to tasks_path
-    return
+  #   task = Task.create(:completion_date => DateTime.now)
+  
+  
+  #   redirect_to tasks_path
+  #   return
+  # end
+  private
+  
+  
+  def task_params
+    return params.require(:task).permit(:name, :description)
   end
 end
-
-# def create
-#   @book = Book.new(author: params[:book][:author], title: params[:book][:title], description: params[:book][:description]) #instantiate a new book
-#   if @book.save # save returns true if the database insert succeeds
-#     redirect_to books_path # go to the index so we can see the book in the list
-#     return
-#   else # save failed :(
-#     render :new # show the new book form view again
-#     return
-#   end
-# end

@@ -1,16 +1,27 @@
+# Rails.application.routes.draw do
+#   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+#   # verb 'path', to: 'controller#action'
+#   root to: 'tasks#index'
+
+
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  # verb 'path', to: 'controller#action'
-  root 'tasks#index'
+  # only generate the specified routes
+  root to: 'tasks#index'
   
-  get '/tasks', to: 'tasks#index', as: "tasks"
-  post '/tasks', to: 'tasks#create'
-  get '/tasks/new', to: 'tasks#new', as: 'new_task'
+  resources :tasks
   
-  get '/tasks/:id', to: 'tasks#show', as: 'task'
-  patch '/tasks/:id', to: 'tasks#update'
-  delete '/tasks/:id', to: 'tasks#destroy'
+  # :toggle_complete
   
-  get '/tasks/:id/edit', to: 'tasks#edit', as:'edit_task'
-  patch '/tasks/:id/complete', to: 'tasks#toggle_complete', as:'complete_task'
 end
+
+
+# get '/tasks', to: 'tasks#index', as: "tasks"
+# get '/tasks/new', to: 'tasks#new', as: 'new_task'
+# post '/tasks', to: 'tasks#create'
+
+# get '/tasks/:id', to: 'tasks#show', as: 'task'
+# get '/tasks/:id/edit', to: 'tasks#edit', as:'edit_task'
+# patch '/tasks/:id', to: 'tasks#update'
+# delete '/tasks/:id', to: 'tasks#destroy'
+
+# patch '/tasks/:id/complete', to: 'tasks#toggle_complete', as:'complete_task'
