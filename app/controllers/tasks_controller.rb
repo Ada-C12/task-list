@@ -68,7 +68,7 @@ class TasksController < ApplicationController
     if @task.nil?
       redirect_to tasks_path
       return
-    else @task.update(completed: Time.now)
+    else @task.update(completed: Time.now)      
       redirect_to tasks_path
       return
     end
