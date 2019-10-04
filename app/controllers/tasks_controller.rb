@@ -7,10 +7,9 @@ class TasksController < ApplicationController
   def show
     @task = Task.find_by(id: params[:id])
     if @task.nil?
-      
-      # return
       flash[:error] = "Could not find task with id: -1"
-      redirect_to tasks_path #:flash => { :notice => "Could not find task with id: -1" } 
+      redirect_to tasks_path
+      return
     end
   end
   
@@ -19,14 +18,11 @@ class TasksController < ApplicationController
     @task = Task.new
   end
   
-  # **Consider adding return after each action ?
   # submit and save the new task
   def create
-    @task = Task.new(task_params)
+    @task = Task.new(create_task_params)
     
     if @task.save
-      # DELETE COMMENT ONCE INSTRUCTOR PROVIDES CLARIFICATION
-      # redirect_to tasks_path
       redirect_to @task
       return
     else
@@ -39,13 +35,25 @@ class TasksController < ApplicationController
     @task = Task.find_by(id: params[:id])
     if @task.nil?
       redirect_to tasks_path
+      return
     end
   end
   
   def update
-    @task = Task.find(params[:id])
-    @task.update(name: params[:task][:name], description: params[:task][:description])
-    redirect_to task_path(@task)
+    @task = Task.find_by(id: params[:id])
+    
+    if @task
+      # Do something
+      if @task.update_attributes(update_task_params)
+        redirect_to task_path(@task)
+        flash[:success] = "Your task has successfully been updated." 
+      else 
+        flash[:error] = "Uh Oh! Something went wrong."
+        render :edit
+      end
+    else 
+      redirect_to tasks_path
+    end
   end
   
   def destroy
@@ -53,13 +61,28 @@ class TasksController < ApplicationController
     @task.destroy
     flash[:notice] = "Are you sure you want to delete?"
     redirect_to tasks_path
+    return
   end
   
-  
+  def complete
+    task = Task.find_by(id: params[:id])
+    
+    if task.update_attribute(:completed_at, Time.now)
+      flash[:success] = "Your task has successfully been marked as completed." 
+    else
+      flash[:error] = "Uh Oh! Something went wrong."
+    end
+    
+    redirect_to task_path(task)
+  end
   
   private
   
-  def task_params
-    params.require(:task).permit(:id, :name, :description, :completed_at)
+  def create_task_params
+    params.require(:task).permit(:name, :description)
+  end
+  
+  def update_task_params
+    params.require(:task).permit(:name, :description)
   end
 end
