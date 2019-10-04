@@ -8,6 +8,7 @@ class TasksController < ApplicationController
     @task = Task.find_by(id: task_id)
     
     if @task.nil?
+      flash[:error] = "Could not find task with id: #{task_id}"
       redirect_to tasks_path
       return
     end
@@ -21,6 +22,7 @@ class TasksController < ApplicationController
     @task = Task.new(name: params[:task][:name], description: params[:task][:description], completion_date: params[:task][:completion_date])
     if @task.save
       redirect_to task_path(@task)
+      return
     else
       render :new
       return
@@ -47,7 +49,7 @@ class TasksController < ApplicationController
     @task.update(name: params[:task][:name], description: params[:task][:description])
     
     redirect_to task_path(@task)
-    
+    return
   end
   
   def destroy
@@ -60,6 +62,7 @@ class TasksController < ApplicationController
     
     @task.destroy
     redirect_to tasks_path
+    return
   end
   
 end
