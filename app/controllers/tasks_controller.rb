@@ -88,10 +88,10 @@ class TasksController < ApplicationController
     end
     
     if @task.save
-      redirect_to task_path(@task.id)
+      redirect_back(fallback_location: root_path)
       return
     else
-      redirect_to tasks_path, flash: { error: "Could not save completion date" }
+      redirect_back(fallback_location: root_path, flash: { error: "Could not save completion date" })
       return
     end
     
