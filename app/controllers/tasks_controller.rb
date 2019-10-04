@@ -18,7 +18,7 @@ class TasksController < ApplicationController
   end
   
   def create
-    @task = Task.new(name: params[:task][:name], description: params[:task][:description], completion_date: params[:task][:completion_date])
+    @task = Task.new(name: params[:task][:name], description: params[:task][:description], completion_date: nil)
     
     if @task.save
       redirect_to task_path(@task.id)
@@ -62,17 +62,17 @@ class TasksController < ApplicationController
     redirect_to root_path
   end
   
-  # def mark_complete
-  #   @task = Task.find_by(id: params[:id])
-  
-  #   if @task.update(completion_date: Time.now)
-  #     redirect_to task_path(@task.id)
-  #     return
-  #   else
-  #     redirect_to root_path
-  #     return
-  #   end
-  # end
-  
-  
+  def mark_complete
+    @task = Task.find_by(id: params[:id])
+    
+    if @task.completion_date.nil?
+      @task.update(completion_date: Time.now)
+      redirect_to task_path(@task.id)
+      return
+    else
+      @task.update(completion_date: nil)
+      redirect_to task_path(@task.id)
+      return
+    end
+  end
 end

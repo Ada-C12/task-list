@@ -7,7 +7,11 @@
       <%= link_to 'View', task_path(task.id) %>
       <%= link_to 'Edit', edit_task_path(task.id) %>
       <%= link_to 'Delete', task_path(task.id), method: :delete, data: {confirm: "Delete task?"} %>
-      <%# <%= link_to 'Mark Complete', task_path(task.id), method: :update, data: {confirm: "Delete task?"} %> %>
+      <% if task.completion_date == nil %>
+        <%= link_to 'Mark Complete', mark_complete_path(task.id), method: :patch %>
+      <% else %>
+        <%= link_to 'Unmark Complete', mark_complete_path(task.id), method: :patch %>
+      <% end %>
     </li>
   <% end %>
 </ul>
