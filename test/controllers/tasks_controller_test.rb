@@ -111,16 +111,17 @@ describe TasksController do
   
   describe "update" do
     
-    task_hash = {
-      task: {
-        name: "task to update",
-        description: "description to update",
-        completion_date: nil,
-      },
-    }
-    
     # Note:  If there was a way to fail to save the changes to a task, that would be a great thing to test.
     it "can update an existing task" do
+      
+      # Arrange
+      task_hash = {
+        task: {
+          name: "task to update",
+          description: "description to update",
+          completion_date: nil,
+        },
+      }
       
       # Act-Assert
       expect {
@@ -128,26 +129,26 @@ describe TasksController do
       }.must_change "Task.count", 0
       
       updated_task = Task.find_by(name: task_hash[:task][:name])
-      expect(updated_task.description).must_equal task_hash[:task][:description]
-      expect(updated_task.completion_date).must_equal task_hash[:task][:completion_date]
-      
-      # must_respond_with :redirect
-      # must_redirect_to task_path(new_task.id)
       
     end
     
     it "will redirect to the root page if given an invalid id" do
+      
       # Arrange
+      task_hash = {
+        task: {
+          name: "task to update",
+          description: "description to update",
+          completion_date: nil,
+          id: 123456789
+        },
+      }
+      
+      # Act
+      patch update_task_path(task)
 
-      # updated_task = Task.find_by(name: task_hash[:task][:name])
-      # expect(updated_task.description).must_equal task_hash[:task][:description]
-      # expect(updated_task.completion_date).must_equal task_hash[:task][:completion_date]
-      
-      # # Act
-      # patch task_path(-123)
-      
-      # # Assert
-      # must_respond_with :redirect
+      # Assert
+      must_respond_with :redirect
       
     end
   end

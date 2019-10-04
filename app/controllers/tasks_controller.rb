@@ -18,7 +18,7 @@ class TasksController < ApplicationController
     @task = Task.new
   end
   
-
+  
   def create
     @task = Task.new(name: params[:task][:name], description: params[:task][:description], completion_date: params[:task][:completion_date])
     #instantiate a new task
@@ -31,23 +31,23 @@ class TasksController < ApplicationController
       return
     end
   end
-
+  
   def edit
-      @task = Task.find_by(id: params[:id])
-
+    @task = Task.find_by(id: params[:id])
+    
     if @task.nil?
-      redirect_to tasks_path
+      redirect_to root_path
       return
     end
   end
-
+  
   def update
     @task = Task.find_by(id: params[:id])
-    if @task.update(
-      name: params[:task][:name], 
-      description: params[:task][:description], 
-      completion_date: params[:task][:completion_date]
-    )
+    
+    if @task.nil?
+      redirect_to root_path
+      return
+    elsif @task.update(name: params[:task][:name], description: params[:task][:description], completion_date: params[:task][:completion_date])
       redirect_to task_path # go to the task show page so we can see the updates in place
       return
     else # save failed :(
@@ -55,5 +55,5 @@ class TasksController < ApplicationController
       return
     end
   end
-
+  
 end
