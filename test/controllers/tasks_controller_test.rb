@@ -64,7 +64,6 @@ describe TasksController do
           completed: nil,
         },
       }
-
       # Act-Assert
       expect {
         post tasks_path, params: task_hash
@@ -99,15 +98,32 @@ describe TasksController do
   end
 
   # Uncomment and complete these tests for Wave 3
+
   describe "update" do
     # Note:  If there was a way to fail to save the changes to a task, that would be a great
     #        thing to test.
     it "can update an existing task" do
       # Your code here
+      existing_task = Task.create(name: "task_90", description: "prepare my lunch", completed: nil)
+      updated_task_form_data = {
+        task: {
+          name: "task_80",
+          description: "prepare my lunch",
+          completed: nil,
+        }
+      }
+      
+      patch task_path(existing_task.id), params: updated_task_form_data
+
+      expect(Task.find_by(id: existing_task.id).name).must_equal "task_80"
     end
 
     it "will redirect to the root page if given an invalid id" do
-      # Your code here
+      # Act
+      patch task_path(-1)
+
+      # Assert
+      must_respond_with :redirect
     end
   end
 

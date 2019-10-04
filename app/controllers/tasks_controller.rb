@@ -39,6 +39,11 @@ class TasksController < ApplicationController
 
   def update
     @task = Task.find_by(id: params[:id])
+    if @task.nil?
+      redirect_to task_path
+      return
+    end
+    
     if @task.update(
       name: params[:task][:name], 
       description: params[:task][:description], 
@@ -50,5 +55,20 @@ class TasksController < ApplicationController
       render :edit 
       return
     end
+  end
+
+  def destroy
+    task_id = params[:id]
+    @task = Book.find_by(id: task_id)
+
+    if @task.nil?
+      head :not_found
+      return
+    end
+
+    @book.destroy
+
+    redirect_to books_path
+    return
   end
 end
