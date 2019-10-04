@@ -78,10 +78,12 @@ class TasksController < ApplicationController
   end
   
   def incomplete
-    # task = Task.find_by(id: params[:id])
-    # if task.completed_at.nil? == false
-    # task.update_attribute()
-    # th
+    task = Task.find_by(id: params[:id])
+    if task.completed_at.nil? == false
+      task.update_attribute(:completed_at, nil)
+    end
+    
+    redirect_to task_path(task)
   end
   
   private
