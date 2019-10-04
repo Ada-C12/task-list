@@ -59,14 +59,13 @@ class TasksController < ApplicationController
     if @task.nil?
       flash[:error] = "Error, could not delete task."
       redirect_to root_path
-      
       return
     end
     @task.destroy
     redirect_to root_path
   end
   
-  def toggle_complete
+  def toggle
   end
   
 end

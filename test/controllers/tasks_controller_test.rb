@@ -3,7 +3,7 @@ require "test_helper"
 describe TasksController do
   let (:task) {
     Task.create name: "sample task", description: "this is an example for a test",
-    completion_date: Time.now + 5.days
+    completed: Time.now + 5.days
   }
   
   # Tests for Wave 1
@@ -45,7 +45,7 @@ describe TasksController do
         task: {
           name: "new task",
           description: "new task description",
-          completion_date: nil,
+          completed: nil,
         },
       }
       
@@ -55,7 +55,7 @@ describe TasksController do
       
       new_task = Task.find_by(name: task_hash[:task][:name])
       expect(new_task.description).must_equal task_hash[:task][:description]
-      expect(new_task.completion_date).must_equal task_hash[:task][:completion_date]
+      expect(new_task.completed).must_equal task_hash[:task][:completed]
       
       must_respond_with :redirect
       must_redirect_to tasks_path
@@ -115,7 +115,7 @@ describe TasksController do
     it "should delete a task when prompted to" do
       count = Task.count
       new_task = Task.create name: "sample task", description: "this is an example for a test",
-      completion_date: Time.now + 5.days
+      completed: Time.now + 5.days
       
       # make sure that the new task is created 
       expect(Task.count).must_equal (count + 1)
