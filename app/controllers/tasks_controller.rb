@@ -33,13 +33,18 @@ class TasksController < ApplicationController
     @task = Task.find_by(id: params[:id])
     
     if @task.nil?
-      redirect_to task_path
+      redirect_to root_path
       return
     end
   end
   
   def update
     @task = Task.find_by(id: params[:id])
+    
+    if @task.nil?
+      redirect_to root_path
+      return
+    end
     
     if @task.update(name: params[:task][:name], description: params[:task][:description])
       redirect_to task_path

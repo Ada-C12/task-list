@@ -126,12 +126,21 @@ describe TasksController do
       patch task_path(original_task.id), params: updated_task
       
       expect(Task.find_by(id: original_task.id).description).must_equal "updated description"
-      
     end
     
     
     it "will redirect to the root page if given an invalid id" do
-      # Your code here
+      updated_task = {
+        task: {
+          name: "test name",
+          description: "updated description",
+          completion_date: nil,
+        },
+      }
+      
+      patch task_path(-1), params: updated_task
+      
+      must_redirect_to root_path
     end
   end
   
