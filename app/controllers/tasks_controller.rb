@@ -19,8 +19,7 @@ class TasksController < ApplicationController
   end
   
   def create
-    task_params = params[:task]
-    task = Task.new(name: task_params[:name], description: task_params[:description])
+    task = Task.new(task_params)
     task.save
     
     redirect_to tasks_path
@@ -79,6 +78,13 @@ class TasksController < ApplicationController
   end
   
   def un_check
+  end
+  
+  
+  private
+  def task_params
+    return params.require(:task).permit(:name, :description, :id)
+    
   end
   
 end
