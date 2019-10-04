@@ -8,7 +8,7 @@ describe TasksController do
   }
 
   # Wave 1
-  describe "index" do
+  describe "index action" do
     it "can get the index path" do
       get tasks_path
       must_respond_with :success
@@ -21,7 +21,7 @@ describe TasksController do
   end
 
   # Wave 2
-  describe "show" do
+  describe "show action" do
     it "can get a valid task" do
       get task_path(task.id)
       must_respond_with :success
@@ -33,14 +33,14 @@ describe TasksController do
     end
   end
 
-  describe "new" do
+  describe "new action" do
     it "can get the new task page" do
       get new_task_path
       must_respond_with :success
     end
   end
 
-  describe "create" do
+  describe "create action" do
     it "can create a new task" do
       task_hash = {
         task: {
@@ -64,7 +64,7 @@ describe TasksController do
   end
 
   # Wave 3
-  describe "edit" do
+  describe "edit action" do
     it "can get the edit page for an existing task" do
       get edit_task_path(task.id)
       must_respond_with :success 
@@ -76,7 +76,7 @@ describe TasksController do
     end
   end
 
-  describe "update" do
+  describe "update action" do
     # Note:  If there was a way to fail to save the changes to a task, that would be a great
     #        thing to test.
     it "can update an existing task" do
@@ -88,7 +88,7 @@ describe TasksController do
           completed: nil
         }
       }
-      
+
       expect {
         patch task_path(existing_task.id), params: updated_task_data
       }.must_change "Task.count", 0
@@ -108,12 +108,44 @@ describe TasksController do
   end
 
   # Wave 4
-  describe "destroy" do
-    # Your tests go here
+  describe "destroy action" do
+    it "successfully deletes an existing Task and then redirects to home page" do
+      Task.create(name: "Cuddle with Kaya", description: "She hates cuddles but do it anyways hehehehehe", completed: nil)
+      existing_task_id = Task.find_by(name: "Cuddle with Kaya").id
+
+      expect {
+        delete task_path(existing_task_id)
+      }.must_differ "Task.count", -1
+
+      must_redirect_to root_path
+    end
+
+    # ADD THIS TEST AFTER ADDING A REMOVAL ALL TASKS BUTTON
+    # it "redirects to books index page and deletes no books if no books exist" do
+    #   Book.destroy_all
+    #   invalid_book_id = 1
+
+    #   expect {
+    #     delete book_path( invalid_book_id )
+    #   }.must_differ "Book.count", 0
+
+    #   must_redirect_to books_path
+    # end
+
+    it "redirects to tasks index page if selected task has alreayd been deleted and doesn't delete any other tasks" do
+      Task.create(name: "Cuddle with Kaya", description: "She hates cuddles but do it anyways hehehehehe", completed: nil)
+      task_id = Task.find_by(name: "Cuddle with Kaya").id
+      Task.destroy_all
+
+      expect {
+        delete task_path(task_id)
+      }.must_differ "Task.count", 0
+
+      must_redirect_to tasks_path
+    end
 
   end
 
-  # Complete for Wave 4
   describe "toggle_complete" do
     # Your tests go here
   end
