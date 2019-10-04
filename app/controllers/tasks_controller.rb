@@ -1,4 +1,5 @@
 class TasksController < ApplicationController
+  # before_action will execute the private find_by_task method before each controller action
   before_action :find_by_task, only: [:show, :edit, :update, :destroy, :toggle_complete, :toggle_incomplete]
 
   def index
