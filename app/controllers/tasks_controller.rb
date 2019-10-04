@@ -60,7 +60,7 @@ class TasksController < ApplicationController
     @task = Task.find_by(id: params[:id])
     
     if @task.nil?
-      head :not_found
+      redirect_to root_path
       return
     end
     

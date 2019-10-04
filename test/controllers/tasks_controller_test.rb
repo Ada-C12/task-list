@@ -121,10 +121,11 @@ describe TasksController do
     # Note:  If there was a way to fail to save the changes to a task, that would be a great
     #        thing to test.
     it "can update an existing task" do
-      patch task_path(@original_task.id), params: @updated_task
+      expect { patch task_path(@original_task.id), params: @updated_task }.wont_change "Task.count"
       
       expect(Task.find_by(id: @original_task.id).description).must_equal "updated description"
       expect(Task.find_by(id: @original_task.id).name).must_equal "test name"
+      expect(Task.find_by(id: @original_task.id).completion_date).must_equal nil
     end
     
     it "will redirect to the root page if given an invalid id" do
@@ -136,11 +137,22 @@ describe TasksController do
   
   # Complete these tests for Wave 4
   describe "destroy" do
+    before do
+      @another_task = Task.create name: "test name", description: "test description"
+    end
+    
     # Your tests go here
     it "can remove an existing task" do
+      expect { delete task_path(@another_task.id)}.must_change "Task.count"
+      
+      # expect(Task.find_by(id: @another_task.id).name).must_equal nil
+      
     end
     
     it "will redirect to the root page if given an invalid id" do
+      delete task_path(-1)
+      
+      must_redirect_to root_path
     end
     
   end
