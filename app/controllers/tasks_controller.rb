@@ -70,8 +70,7 @@ class TasksController < ApplicationController
   end
   
   def complete
-    task_id = params[:id]
-    @task = Task.find_by(id: task_id)
+    @task = Task.find_by(id: params[:id])
     
     if @task.nil?
       redirect_to tasks_path
@@ -80,11 +79,14 @@ class TasksController < ApplicationController
     
     if @task.completion_date == nil
       @task.completion_date = Time.now
-      @task.save
     else
       @task.completion_date = nil
-      @task.save
     end
+    
+    unless @task.save 
+      redirect_to tasks_path
+    end
+    
     
     redirect_to tasks_path
     return 
