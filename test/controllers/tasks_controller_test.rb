@@ -4,7 +4,7 @@ require "test_helper"
 describe TasksController do
   let (:task) {
     Task.create name: "sample task", description: "this is an example for a test",
-                completion_date: Time.now + 5.days
+    completion_date: Time.now + 5.days
   }
 
   # Tests for Wave 1
@@ -62,69 +62,60 @@ describe TasksController do
   end
 
   # Tests for Wave 3
-  describe "edit" do
-    it "can get the edit page for an existing task" do
-      task_hash = {
+  describe "update" do
+    before do
+      @new_task = Task.create(name: "make beds")
+    end
+    it "can update an existing task and redirects to that task's show page" do
+      existing_task = Task.first
+      task_hash_with_new_data = {
         task: {
           name: "edited task",
           description: "edited task description",
-          completion_date: nil,
         },
       }
       expect {
-        patch tasks_hash, params: task_hash
+        patch task_path(existing_task.id), params: task_hash_with_new_data
       }.wont_change "Task.count"
-    end
-
-    describe "update" do
-
-      edit_task = Task.find_by(name: task_hash[:task][:name])
-      expect(edit_task.name).must_equal task_hash[:task][:name]
-      # TKTKTK ended here
-
-    end
-
-    it "will respond with redirect when attempting to edit a nonexistent task" do
-must_respond_with :redirect
-      # Your code here
+      expect(Task.find_by(id: existing_task.id).name).must_equal "edited task"
+      expect(Task.find_by(id: existing_task.id).description).must_equal "edited task description"
+      must_redirect_to task_path
     end
   end
 
-  # Uncomment and complete these tests for Wave 3
-  describe "update" do
-    # Note:  If there was a way to fail to save the changes to a task, that would be a great
-    #        thing to test.
-    let (:new_task_hash) {
-      {
-        task: {
-          name: "sweep front steps",
-          description: "compost leaves",
-          completion_date: nil
-        },
-      }
+  it "will respond with redirect when attempting to edit a nonexistent task" do
+    must_respond_with :redirect
+    # Your code here
+  end
+end
+
+# Uncomment and complete these tests for Wave 3
+describe "update" do
+  # Note:  If there was a way to fail to save the changes to a task, that would be a great
+  #        thing to test.
+  let (:new_task_hash) {
+    {
+      task: {
+        name: "sweep front steps",
+        description: "compost leaves",
+        completion_date: nil
+      },
     }
-    it "can update an existing task" do
-      id = Task.first.id
-      expect {
-        patch task_path(id), params: new_task_hash
-      }.wont_change "Task.count"
+  }
 
-      must_respond_with :redirect
-    end
 
-    it "will redirect to the root page if given an invalid id" do
-      # Your code here
-    end
+  it "will redirect to the root page if given an invalid id" do
+    # Your code here
   end
+end
 
-  # Complete these tests for Wave 4
-  describe "destroy" do
-    # Your tests go here
+# Complete these tests for Wave 4
+describe "destroy" do
+  # Your tests go here
 
-  end
+end
 
-  # Complete for Wave 4
-  describe "toggle_complete" do
-    # Your tests go here
-  end
+# Complete for Wave 4
+describe "toggle_complete" do
+  # Your tests go here
 end
