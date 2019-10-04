@@ -139,11 +139,42 @@ describe TasksController do
     end
   end
 
-  # # Complete these tests for Wave 4
-  # describe "destroy" do
-  #   # Your tests go here
+  # Complete these tests for Wave 4
+  describe "destroy" do
+    it "successfully deletes an existing Task and then redirects to home page" do
+      new_task_to_destroy = Task.create(name: "valid task", description: "this is a valid description")
+      
 
-  # end
+      expect {
+        delete task_path( new_task_to_destroy.id )
+      }.must_differ "Task.count", -1
+
+      must_redirect_to root_path
+    end
+
+    it "redirects to tasks index page and deletes no books if no books exist" do
+      Task.destroy_all
+      invalid_task_id = 1
+
+      expect {
+        delete task_path( invalid_task_id )
+      }.must_differ "Task.count", 0
+
+      must_redirect_to tasks_path
+    end
+
+    it "redirects to tasks index page and delets no tasks if deleting a task with an id that has already been deleted" do
+      new_task = Task.create(name: "task name", description: "task description here")
+      Task.destroy_all
+
+      expect {
+        delete task_path ( new_task.id )
+      }.must_differ "Task.count", 0
+
+      must_redirect_to tasks_path
+    end
+
+  end
 
   # # Complete for Wave 4
   # describe "toggle_complete" do
