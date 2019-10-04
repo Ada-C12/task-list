@@ -24,9 +24,11 @@ class TasksController < ApplicationController
   @task.progress = "not started"
   @task.completion_date = "N/A"
   
-  
-  
-  @task.save
+  if @task.save
+   redirect_to show_path(@task.id)
+  else
+   render new_task_path
+  end
  end
  
 end
