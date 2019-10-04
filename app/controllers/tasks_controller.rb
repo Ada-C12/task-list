@@ -5,6 +5,7 @@
 class TasksController < ApplicationController
   def index
     @tasks = Task.all
+    puts @tasks
   end
   
   def show
@@ -69,6 +70,21 @@ class TasksController < ApplicationController
     else
       the_correct_task.destroy
       redirect_to root_path
+    end
+  end
+  
+  def completed_task
+    @task = Task.find_by( id:params[:id] )
+    if @task.completion_date == nil
+      @task.completion_date = DateTime.now
+      @task.save
+      redirect_to tasks_path
+      return
+    else
+      @task.completion_date = nil
+      @task.save
+      redirect_to tasks_path
+      return
     end
   end
   

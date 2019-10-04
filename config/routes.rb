@@ -4,4 +4,6 @@ Rails.application.routes.draw do
 
   resources :tasks
 
+  patch '/tasks/:id/completed_task', to: 'tasks#completed_task', as: 'completed_task'
+
 end
