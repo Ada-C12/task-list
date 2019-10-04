@@ -82,32 +82,65 @@ describe TasksController do
   # Unskip and complete these tests for Wave 3
   describe "edit" do
     it "can get the edit page for an existing task" do
-      skip
-      # Your code here
+      get edit_task_path(task.id)
+
+      must_respond_with :success, "#{task.id}"
     end
 
     it "will respond with redirect when attempting to edit a nonexistant task" do
-      skip
-      # Your code here
+      get edit_task_path(-1)
+
+      must_respond_with :redirect
     end
   end
 
   # Uncomment and complete these tests for Wave 3
+  # Note:  If there was a way to fail to save the changes to a task, that would be a great
+  #        thing to test.
   describe "update" do
-    # Note:  If there was a way to fail to save the changes to a task, that would be a great
-    #        thing to test.
     it "can update an existing task" do
-      # Your code here
+      updated_task_data = {
+        task: {
+          name: "Walk dog",
+          description: "Walk the dog",
+          completion_date: "10-03-2019",
+        },
+      }
+      task_url = "/tasks/" + "#{task.id}"
+
+      patch task_url, params: updated_task_data
+
+      expect(Task.count).must_equal 1
+      must_redirect_to task_path(id: task.id)
+      expect(Task.find_by(id: task.id).name).must_equal "Walk dog"
+    end
+    
+    it "will redirect to the root page if given an invalid id" do
+      patch '/tasks/0', params: {
+          task: {
+            name: "Walk dog",
+            description: "Walk the dog",
+            completion_date: "10-03-2019",
+          },
+        }
+      must_redirect_to root_path
     end
 
-    it "will redirect to the root page if given an invalid id" do
-      # Your code here
+    it "will render the edit page if saving the changes fails" do
     end
   end
 
   # Complete these tests for Wave 4
   describe "destroy" do
-    # Your tests go here
+    # it 'successfully deletes a task and redirects to ___ page' do
+      # create a book
+
+      # expect-differ, count goes down by 1
+      # assert that redirect to ___ page
+
+    # end
+
+    # 
 
   end
 
