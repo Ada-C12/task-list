@@ -26,7 +26,7 @@ describe TasksController do
     end
   end
 
-  # Unskip these tests for Wave 2
+  # Tests for Wave 2
   describe "show" do
     it "can get a valid task" do
       # Act
@@ -81,11 +81,22 @@ describe TasksController do
     end
   end
 
-  # Unskip and complete these tests for Wave 3
+  # Tests for Wave 3
   describe "edit" do
     it "can get the edit page for an existing task" do
+      task_hash = {
+        task: {
+          name: "edited task",
+          description: "edited task description",
+          completion_date: nil,
+        },
+      }
+      expect {
+        patch tasks_hash, params: task_hash
+      }.must_change "Task.count", 0
 
-      # Your code here
+      edit_task = Task.find_by()
+      # TKTKTKT LEFT OFF HERE
     end
 
     it "will respond with redirect when attempting to edit a nonexistent task" do
