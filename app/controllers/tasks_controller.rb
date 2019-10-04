@@ -22,9 +22,9 @@ class TasksController < ApplicationController
   
   def create 
     @task = Task.new(
-    name: params[:task][:name],
-    description: params[:task][:description],
-    completion_date: nil
+      name: params[:task][:name],
+      description: params[:task][:description],
+      completion_date: nil
     ) #instantiate a new task
     
     if @task.save #save returns true if the database insert succeeds
@@ -75,7 +75,7 @@ class TasksController < ApplicationController
     @task = Task.find_by(id: task_id)
     
     if @task.nil?
-      head :not_found
+      redirect_to tasks_path
       return
     end
     
@@ -84,13 +84,13 @@ class TasksController < ApplicationController
     return
   end
   
-  # Wave 4 - mark task as complete
-  def complete
-    task_id = params[:id]
-    @task = Task.find_by(id: task_id)
-    
-    @task.completed = true
-    @task.save
-    # redirect_to tasks_path
-  end 
+  # # Wave 4 - mark task as complete
+  # def complete
+  #   task_id = params[:id]
+  #   @task = Task.find_by(id: task_id)
+  
+  #   @task.completed = true
+  #   @task.save
+  #   # redirect_to tasks_path
+  # end 
 end
