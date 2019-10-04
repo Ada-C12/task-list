@@ -77,11 +77,10 @@ class TasksController < ApplicationController
     end 
     
     if @task.complete
-      @task.update(complete: false)
+      @task.update(complete: false, completion_date: nil)
     else
-      @task.update(complete: true)
+      @task.update(complete: true, completion_date: Time.now)
     end
-    
     
     redirect_to task_path(@task)
     return
@@ -92,6 +91,4 @@ class TasksController < ApplicationController
   def task_params
     return params.require(:task).permit(:name, :description)
   end
-  
-  
 end
