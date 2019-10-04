@@ -78,7 +78,7 @@ describe TasksController do
       new_task = Task.find_by(name: task_hash[:task][:name])
       expect(new_task.description).must_equal task_hash[:task][:description]
       expect(new_task.completion_date.to_i).must_equal task_hash[:task][:completion_date].to_i
-      # expect(new_task.completed).must_equal task_hash[:task][:completed]
+      
       
       must_respond_with :redirect
       must_redirect_to tasks_path
@@ -189,10 +189,9 @@ describe TasksController do
       end
       
       it "won't change the task count" do
+        
         completed = Task.create name: "task", description: "this is an example for a test",
         completion_date: Date.today
-        
-        
         
         expect {patch toggle_complete_path(completed.id)}.wont_change "Task.count"
       end
