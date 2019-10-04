@@ -111,42 +111,41 @@ describe TasksController do
     # Note:  If there was a way to fail to save the changes to a task, that would be a great
     #        thing to test.
     before do
-      Task.create(name: "Laundry", description: "drop off at John Doe LLC", due_date: 20191015)
+      Task.create(name: "Laundry", description: "drop off at John Doe LLC", due_date: nil)
     end
-
+    
     updated_task_hash = {
-        task: {
-          name: "Dry cleaning",
-          description: "drop off at Jan Doe LLC",
-          due_date: 20191015,
+      task: {
+        name: "Dry cleaning",
+        description: "drop off at Jane Doe LLC",
+        due_date: nil
       },
     }
-
+    
     it "can update an existing task" do
       # Your code here
       id = Task.first.id
       expect {
         patch task_path(id), params: updated_task_hash
       }.wont_change "Task.count"
-
+      
       must_respond_with :redirect
-
+      
       updated_task = Task.find_by(id: id)
       expect(updated_task.name).must_equal "Dry cleaning"
-      expect(updated_task.description).must_equal "drop off at Jan Doe LLC"
-      expect(updated_task.due_date).must_equal Date.parse("15-10-2019")
+      expect(updated_task.description).must_equal "drop off at Jane Doe LLC"
     end
     
     it "will redirect to the root page if given an invalid id" do
       # Your code here
       id = -1
-
+      
       expect {
         patch task_path(id), params: updated_task_hash
       }.wont_change "Task.count"
-
+      
       must_respond_with :redirect
-      must_redirect_to '/tasks'
+      must_redirect_to root_path
     end
   end
   
@@ -154,18 +153,40 @@ describe TasksController do
   describe "destroy" do
     # Your tests go here
     it "will delete an existing task" do
+      Task.create(name: "Meal Prep", description: "Egg salad sandwiches", due_date: nil)
+      existing_task_id = Task.find_by(name: "Meal Prep").id
 
+      expect {
+        delete task_path( existing_task_id )
+      }.must_differ "Task.count", -1
 
+      must_redirect_to root_path
+      
     end
-
+    
     it "will redirect if deleting non-existant task" do
+      Task.destroy_all
+      invalid_task_id = 1
 
+      expect {
+        delete task_path( invalid_task_id )
+      }.must_differ "Task.count", 0
 
+      must_redirect_to tasks_path
+      
     end
+    
+    it "will redirect if deleting the same task twice" do
+      Task.create(name: "Meal Prep", description: "Egg salad sandwiches", due_date: nil)
+      task_id = Task.find_by(name: "Meal Prep").id
+      Task.destroy_all
 
-    it "will redirect if deleting task twice" do
+      expect {
+        delete task_path( task_id )
+      }.must_differ "Task.count", 0
 
-
+      must_redirect_to tasks_path
+      
     end
   end
   

@@ -2,7 +2,7 @@ class TasksController < ApplicationController
   def index
     @tasks = Task.all
   end
-
+  
   def show
     task_id = params[:id].to_i
     @task = Task.find_by(id:task_id)
@@ -11,11 +11,11 @@ class TasksController < ApplicationController
       return
     end
   end
-
+  
   def new
     @task = Task.new
   end
-
+  
   def create
     @task = Task.new(name: params[:task][:name], description: params[:task][:description], due_date: params[:task][:due_date])
     if @task.save
@@ -24,7 +24,7 @@ class TasksController < ApplicationController
       render new_task_path
     end
   end
-
+  
   def edit
     @task = Task.find_by(id: params[:id])
     if @task.nil?
@@ -32,19 +32,27 @@ class TasksController < ApplicationController
       return
     end
   end
-
+  
   def update
     @task = Task.find_by(id: params[:id])
-    @task.name = params[:task][:name]
-    @task.description = params[:task][:description]
-    @task.due_date = params[:task][:due_date]
+    if @task.nil?
+      redirect_to root_path
+      return
+    else
+
+      @task.name = params[:task][:name]
+      @task.description = params[:task][:description]
+      @task.due_date = params[:task][:due_date]
+    end
     if @task.save
       redirect_to task_path(@task.id)
+      return
     else
       render new_task_path
+      return
     end
   end
-
+  
   def destroy
     choosen_task = Task.find_by(id: params[:id])
     if choosen_task.nil?
@@ -56,8 +64,8 @@ class TasksController < ApplicationController
       return
     end
   end
-
+  
   def complete
-
+    
   end
 end
