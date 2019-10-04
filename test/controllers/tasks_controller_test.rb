@@ -152,6 +152,32 @@ describe TasksController do
   
   # Complete for Wave 4
   describe "toggle_complete" do
-    # Your tests go here
+    it "can toggle a task to complete" do
+      # incomplete_task = Task.create name: "task to be destroyed", description: "delete me please",
+      # completion_date: nil
+      
+      # expect {
+      #   patch mark_complete_path(incomplete_task.id)
+      # }.wont_change "Task.count"
+      
+      # expect(completed_task.completion_date).must_be_nil
+    end
+    
+    it "can toggle a completed task to nil" do
+      # completed_task = Task.create name: "completed task", description: "needs to be toggled to incomplete",
+      # completion_date: Time.now
+      
+      # puts "this is ID:"
+      # puts completed_task.id
+      
+      # expect {
+      #   patch mark_complete_path(completed_task.id), params: {id: completed_task.id}
+      # }.wont_change "Task.count"
+      
+      # puts completed_task.name
+      # puts completed_task.completion_date
+      
+      # expect(completed_task.completion_date).must_be_nil
+    end
   end
 end
