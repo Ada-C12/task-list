@@ -8,12 +8,23 @@ class TasksController < ApplicationController
     @task = Task.find_by(id: task_id)
     
     if @task.nil?
-      head :not_found
+      redirect_to task_path
       return
     end
   end
-end
-
-def new
-  @task = Book.new
+  
+  def new
+    @task = Task.new
+  end
+  
+  def create
+    @task = Task.new(name: params[:task][:name], description: params[:task][:description], completed: params[:task][:completed]) #instantiate a new task
+    if @task.save # save returns true if the database insert succeeds
+      redirect_to task_path(@task.id)
+      return
+    else # save failed :(
+      render :new # show the new task form view again
+      return
+    end
+  end
 end
