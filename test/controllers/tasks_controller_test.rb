@@ -28,7 +28,6 @@ describe TasksController do
   # Unskip these tests for Wave 2
   describe "show" do
     it "can get a valid task" do
-      # skip
       # Act
       get task_path(task.id)
       
@@ -37,7 +36,6 @@ describe TasksController do
     end
     
     it "will redirect for an invalid task" do
-      # skip
       # Act
       get task_path(-1)
       
@@ -48,9 +46,7 @@ describe TasksController do
   end
   
   describe "new" do
-    it "can get the new task page" do
-      # skip
-      
+    it "can get the new task page" do      
       # Act
       get new_task_path
       
@@ -61,8 +57,6 @@ describe TasksController do
   
   describe "create" do
     it "can create a new task" do
-      # skip
-      
       # Arrange
       task_hash = {
         task: {
@@ -89,61 +83,51 @@ describe TasksController do
   # Unskip and complete these tests for Wave 3
   describe "edit" do
     it "can get the edit page for an existing task" do
-      # skip
-      
       get edit_task_path(task.id)
       
       must_respond_with :success
-      
     end
     
     it "will respond with redirect when attempting to edit a nonexistant task" do
-      # skip
-      
       get edit_task_path(-1)
       
       must_respond_with :redirect
-      
     end
   end
   
   describe "update" do
-    
     before do
       @updated_task = task
       @task_hash = {
         task: {
           name: @updated_task.name,
-          description: @updated_task.description,
+          description: "updated description",
           completion_date: @updated_task.completion_date
         }
       }
     end
     
     it "can update an existing task" do
-      
       id = @updated_task.id
       
       expect {
         patch task_path(id), params: @task_hash
       }.wont_change "Task.count"
       
+      @updated_task.reload
+      
+      expect(@updated_task.description).must_equal "updated description"
     end
     
     it "will redirect to the root page if given an invalid id" do
-      
-      #it's working now!
-      
       patch task_path(-1)
       
       must_respond_with :redirect
-      
     end
   end
   
   # Complete these tests for Wave 4
   describe "destroy" do
-    
     it "will delete a task" do
       
       new_task = Task.create(name: "sample task", description: "this is an example for a test", completion_date: Time.now + 5.days)
@@ -151,23 +135,17 @@ describe TasksController do
       expect {
         delete task_path(new_task.id)
       }.must_differ "Task.count", -1
-      
     end
     
-    
     it "will redirect to the root page if given an invalid id" do
-      
       id = "bad-id"
       
       delete task_path(id)
       
       must_redirect_to root_path
-      
     end
     
-    
     it "will only delete a task once" do
-      
       new_task = Task.create(name: "sample task", description: "this is an example for a test", completion_date: Time.now + 5.days)
       
       expect {
@@ -179,72 +157,42 @@ describe TasksController do
       }.must_differ "Task.count", 0
       
       must_redirect_to root_path
-    end    
-    
+    end
   end
-  
   
   # Complete for Wave 4
   describe "toggle_complete" do
-    # Your tests go here
-    
     before do
       @new_task = Task.create(name: "sample task", description: "this is an example for a test", completion_date: nil)
-      
-      @id = @new_task.id
-      
-      @task_updates = { 
-        task: {
-          name: @new_task.name,
-          description: @new_task.description,
-          completion_date: Date.today 
-        }
-      }
-      
     end
     
     it "marks a task as completed by updating the completion date" do
-      
-      
-      puts "before anything"
-      puts @new_task.name
-      puts @new_task.completion_date
-      puts @new_task.id
-      puts @id
-      
-      patch complete_task_path(@new_task.id)
+      expect {
+        patch complete_task_path(@new_task.id)
+      }.must_differ "Task.count", 0
       
       @new_task.reload
       
-      puts "before expect"
-      puts @new_task.name
-      puts @new_task.completion_date
-      puts @new_task.id
-      puts @id
-      
-      puts task.name
-      puts task.completion_date
-      
+      expect(@new_task.completion_date).must_equal Date.today 
+    end
+    
+    
+    it "marks a task as incompleted by updating the completion date to nil" do      
+      patch complete_task_path(@new_task.id) # sets completion_date to Date.today
       expect {
-        patch complete_task_path(@id), params: @task_updates
+        patch complete_task_path(@new_task.id) # sets completion_date to nil
       }.must_differ "Task.count", 0
       
+      @new_task.reload
       
-      puts "after expect"
-      puts @new_task.name
-      puts @new_task.completion_date
-      puts task.name
-      puts task.completion_date
-      
-      expect(@new_task.completion_date).must_equal Date.today
-      
-    end
-    
-    it "renders the task page when completed" do
-      
-      
+      expect(@new_task.completion_date).must_equal nil      
     end
     
     
+    it "redirects to the task page when toggled" do
+      patch complete_task_path(@new_task.id)
+      
+      must_redirect_to root_path
+    end
   end
 end
