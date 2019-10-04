@@ -13,3 +13,7 @@ class TasksController < ApplicationController
     end
   end
 end
+
+def new
+  @task = Book.new
+end

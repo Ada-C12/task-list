@@ -16,19 +16,18 @@ describe TasksController do
       must_respond_with :success
     end
 
-    # it "can get the root path" do
-    #   # Act
-    #   get root_path
+    it "can get the root path" do
+      # Act
+      get root_path
 
-    #   # Assert
-    #   must_respond_with :success
-    # end
+      # Assert
+      must_respond_with :success
+    end
   end
 
   # Unskip these tests for Wave 2
   describe "show" do
     it "can get a valid task" do
-      skip
       # Act
       get task_path(task.id)
 
@@ -37,7 +36,6 @@ describe TasksController do
     end
 
     it "will redirect for an invalid task" do
-      skip
       # Act
       get task_path(-1)
 
