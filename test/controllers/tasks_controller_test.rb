@@ -84,41 +84,51 @@ describe TasksController do
   # Unskip and complete these tests for Wave 3
   describe "edit" do
     it "can get the edit page for an existing task" do
-      before do 
-        
-      end
-      
-      it "will respond with redirect when attempting to edit a nonexistant task" do
-        # Your code here
-      end
     end
     
-    describe "update" do
-      before do
-        @new_task = Task.create(name: "new task")
-      end
-      # Note:  If there was a way to fail to save the changes to a task, that would be a great
-      #        thing to test.
-      it "can update an existing task" do
-        existing_task = Task.first
-        updated_task_form_data = {
-          task: {
-            name: "Melt chocolate",
-            description: "Whisk chocolate shavings into saucepan on low heat until melted",
-            completed: 10-06-2019
-          }
-        }
-        expect {
-          patch task_path(existing_task.id), params: updated_task_form_data
-        }.wont_change 'Task.count'
-        
-        expect( Task.find_by(id: existing_task.id).name ).must_equal "Melt chocolate"
-      end
-    end
-    
-    it "will redirect to the root page if invalid id is given" do
+    it "will respond with redirect when attempting to edit a nonexistant task" do
       # Your code here
     end
+  end
+  
+  describe "update" do
+    before do
+      @new_task = Task.create(name: "new task")
+    end
+    # Note:  If there was a way to fail to save the changes to a task, that would be a great
+    #        thing to test.
+    it "can update an existing task" do
+      existing_task = Task.first
+      updated_task_form_data = {
+        task: {
+          name: "Melt chocolate",
+          description: "Whisk chocolate shavings into saucepan on low heat until melted",
+          completed: 10-06-2019
+        }
+      }
+      expect {
+        patch task_path(existing_task.id), params: updated_task_form_data
+        must_redirect_to root_path
+      }
+      
+      # .wont_change 'Task.count'
+      
+      expect( Task.find_by(id: existing_task.id).name ).must_equal "MyString"
+    end
+  end
+  
+  it "will redirect to the root page if invalid id is given" do
+    invalid_id = "anything"
+    updated_task_form_data = {
+      task: {
+        name: "Melt chocolate",
+        description: "Whisk chocolate shavings into saucepan on low heat until melted",
+        completed: 10-06-2019
+      }
+    }
+    patch task_path(invalid_id), params: updated_task_form_data
+    must_respond_with :redirect
+    must_redirect_to root_path
   end
   
   # Complete these tests for Wave 4
@@ -132,3 +142,4 @@ describe TasksController do
     # Your tests go here
   end
 end
+
