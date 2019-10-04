@@ -24,4 +24,13 @@ class TasksController < ApplicationController
       render new_task_path
     end
   end
+
+  def edit 
+    # task_id = params[:id]
+    @task = Task.find_by(id: params[:task])
+  end 
+
+  def update 
+  
+  end 
 end
