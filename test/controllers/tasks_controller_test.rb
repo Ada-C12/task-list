@@ -116,19 +116,25 @@ describe TasksController do
     # Note:  If there was a way to fail to save the changes to a task, that would be a great
     #        thing to test.
     it "can update an existing task" do
-      # existing_task = Task.all.first
-      # Your code here
+      existing_task = Task.create(@task_hash[:task])
+      expect _(Task.count).must_equal 1
 
-      expect { patch task_path(task.id), params: @task_hash}.must_change "Task.count", 0
-      
+      expect { 
+        patch task_path(Task.first.id), params: @task_hash
+      }.must_differ "Task.count", 0
+
+      expect _(Task.first.name).must_equal @task_hash[:task][:name]
+      expect _(Task.first.description).must_equal @task_hash[:task][:description]
+      expect _(Task.first.completion_date).must_equal @task_hash[:task][:completion_date]
       must_respond_with :redirect
       must_redirect_to task_path
       
     end
     
     it "will redirect to the root page if given an invalid id" do
-      # Your code here
-      patch task_path(-1), params: @task_hash
+      expect {
+        patch task_path(-1), params: @task_hash
+      }.must_differ "Task.count", 0
       
       must_respond_with :redirect
       must_redirect_to tasks_path
@@ -137,7 +143,50 @@ describe TasksController do
   
   # Complete these tests for Wave 4
   describe "destroy" do
-    # Your tests go here
+    before do
+      @task_info = {
+        name: "task", 
+        description: "task description", 
+        completion_date: nil
+      }
+    end
+
+    it "can delete an existing task" do
+      existing_task = Task.create(@task_info)
+      existing_task_id = Task.first.id
+      expect _(Task.count).must_equal 1
+
+      expect {
+        delete task_path(existing_task_id)
+      }.must_differ "Task.count", -1
+
+      assert_nil (Task.find_by(id: existing_task_id))
+      must_respond_with :redirect
+      must_redirect_to tasks_path
+    end
+
+    it "will redirect to the index page if given an invalid id" do
+      expect {
+        delete task_path(-1)
+      }.must_differ "Task.count", 0
+  
+      must_respond_with :redirect
+      must_redirect_to tasks_path
+    end
+
+    it "will redirect to the index page if requested on the same task twice" do
+      existing_task = Task.create(@task_info)
+      existing_task_id = Task.first.id
+      delete task_path(existing_task_id)
+      expect _(Task.count).must_equal 0
+
+      expect {
+        delete task_path(existing_task_id)
+      }.must_differ "Task.count", 0
+
+      must_respond_with :redirect
+      must_redirect_to tasks_path
+    end
     
   end
   

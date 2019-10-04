@@ -27,8 +27,10 @@ class TasksController < ApplicationController
         @task = Task.new(hash_info)
         if @task.save
             redirect_to task_path(@task.id)
+            return
         else
             render new_book_path
+            return
         end
     end
     
@@ -49,11 +51,24 @@ class TasksController < ApplicationController
             
             if @task.save
                 redirect_to task_path(@task.id)
-            else
-                render new_task_path
+                return
             end
         else
             redirect_to tasks_path
+            return
         end  
+    end
+
+    def destroy
+        selected_task = Task.find_by(id: params[:id])
+
+        if !selected_task
+            redirect_to tasks_path
+            return
+        else
+            selected_task.destroy
+            redirect_to tasks_path
+            return
+        end
     end
 end
