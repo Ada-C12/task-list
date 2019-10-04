@@ -1,6 +1,9 @@
 Rails.application.routes.draw do
   root "tasks#index"
 
+  patch "/tasks/:id/complete", to: "tasks#toggle_complete", as: "complete_task"
+  patch "/tasks/:id/incomplete", to: "tasks#toggle_incomplete", as: "incomplete_task"
+
   resources :tasks
   # get "/tasks", to: "tasks#index", as: "tasks"
   # post "/tasks", to: "tasks#create"
@@ -10,6 +13,4 @@ Rails.application.routes.draw do
   # delete "/tasks/:id", to: "tasks#destroy"
   # get "/tasks/:id/edit", to: "tasks#edit", as: "edit_task"
 
-  patch "/tasks/:id/complete", to: "tasks#toggle_complete", as: "complete_task"
-  patch "/tasks/:id/incomplete", to: "tasks#toggle_incomplete", as: "incomplete_task"
 end
