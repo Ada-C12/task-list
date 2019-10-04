@@ -17,11 +17,11 @@ class TasksController < ApplicationController
   
   def new
     @task = Task.new
-    @task.completion_date = Date.today + 5
+    @task.completion_date = nil
   end
   
   def create
-    @task = Task.new( name: params[:task][:name], description: params[:task][:description], completion_date: params[:task][:completion_date] )
+    @task = Task.new( task_params )
     
     @task.save
     
@@ -48,18 +48,10 @@ class TasksController < ApplicationController
       redirect_to tasks_path
       return
     end
-    # params_to_update = {
-    #   name: params[:task][:name], 
-    #   description: params[:task][:description], 
-    #   completion_date: params[:task][:description]
-    # }
-    @task.name = params[:task][:name]
-    @task.description = params[:task][:description]
-    @task.completion_date = params[:task][:completion_date]
     
-    @task.save
+    @task.update( task_params )
     
-    if @task.save
+    if @task.update( task_params )
       redirect_to task_path(@task.id)
       return
     else
@@ -104,5 +96,13 @@ class TasksController < ApplicationController
     
   end
   
+  
+  private
+  
+  def task_params
+    
+    return params.require(:task).permit(:name, :description, :completion_date)
+    
+  end
   
 end
