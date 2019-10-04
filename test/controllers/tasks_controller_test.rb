@@ -2,8 +2,9 @@ require "test_helper"
 
 describe TasksController do
   let (:task) {
-  Task.create name: "sample task", description: "this is an example for a test",
-  completed: Time.now + 5.days }
+    Task.create name: "sample task", description: "this is an example for a test",
+    completed: Time.now + 5.days 
+  }
   
   # Tests for Wave 1
   describe "index" do
@@ -137,6 +138,15 @@ describe TasksController do
       
       assert_nil(updated_task)
       must_redirect_to root_path  
+    end
+    
+    it "redirects to root_path if record doesn't exist" do
+      # Act
+      delete task_path(-1)
+      
+      # Assert
+      must_respond_with :redirect
+      must_redirect_to root_path
     end
   end
   

@@ -1,10 +1,12 @@
 <h2><%= @task.name %></h2>
 
-Description: <%= @task.description %><br>
-Completed: <%= @task.completed %><br><br>
+<%= @task.description %><br>
+
   <% if !@task.completed %>
+    Not complete<br><br>
     <%= link_to "Mark complete", complete_task_path(@task.id), method: :patch %>
   <% else %>
+    Completed: <%= @task.completed.in_time_zone("Pacific Time (US & Canada)").strftime("%B %e, %Y at %l:%M %p") %><br><br>
     <%= link_to "Mark not complete", not_complete_task_path(@task.id), method: :patch %>
   <% end %>
 <%= link_to "Edit", edit_task_path %>
