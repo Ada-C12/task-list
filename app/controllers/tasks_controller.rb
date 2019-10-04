@@ -19,7 +19,7 @@ class TasksController < ApplicationController
   end 
 
   def create
-    @task = Task.new( name: params[:task][:name], description: params[:task][:description], completed: params[:task][:completed])
+    @task = Task.new( name: params[:task][:name], description: params[:task][:description], completed: nil)
 
     if @task.save
       redirect_to task_path(@task.id)
@@ -42,7 +42,7 @@ class TasksController < ApplicationController
       redirect_to root_path
       return
     else 
-      @task = Task.find_by(id: params[:id] )
+      @task = Task.find_by(id: params[:id])
       @task.name = params[:task][:name]
       @task.description = params[:task][:description]
       @task.completed = params[:task][:completed]
