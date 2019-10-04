@@ -37,7 +37,7 @@ describe TasksController do
     end
 
     it "will redirect for an invalid task" do
-        #  skip
+        # skip
       # Act
       get task_path(-1)
 
@@ -61,7 +61,7 @@ describe TasksController do
 
   describe "create" do
     it "can create a new task" do
-       skip
+      #  skip
 
       # Arrange
       task_hash = {
@@ -90,12 +90,16 @@ describe TasksController do
   # Unskip and complete these tests for Wave 3
   describe "edit" do
     it "can get the edit page for an existing task" do
-      skip
+      # skip
+
       # Your code here
+      get edit_task_path(task.id)
+
+      must_respond_with :success
     end
 
     it "will respond with redirect when attempting to edit a nonexistant task" do
-      skip
+      # skip
       # Your code here
     end
   end
@@ -106,6 +110,21 @@ describe TasksController do
     #        thing to test.
     it "can update an existing task" do
       # Your code here
+      existing_task = Task.first
+      update_task_from_date = {
+        task:{
+          name: "Cook Dinner",
+          description: "Make my favorite food",
+          completion_date: ""
+        }
+      }
+
+      # Act
+      post task_path, params: update_task_from_date
+      must_redirect_to root_path
+
+      #Assert
+      expect(Task.find_by(id: existing_task.id).name).must_equal
     end
 
     it "will redirect to the root page if given an invalid id" do

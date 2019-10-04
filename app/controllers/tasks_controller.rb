@@ -33,6 +33,7 @@ class TasksController < ApplicationController
 
         # redirect_to :controller => 'tasks', :action => 'index'
         
+    
         @task = Task.new( 
             name: params[:task][:name], 
             description: params[:task][:description]
@@ -40,6 +41,7 @@ class TasksController < ApplicationController
 
         if @task.save
             redirect_to task_path(@task.id)
+    
         else
             render new_task_path
         end
