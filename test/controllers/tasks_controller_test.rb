@@ -10,7 +10,7 @@ describe TasksController do
   describe "index" do
     it "can get the index path" do
       # Act
-      get "/tasks"
+      get tasks_path
       
       # Assert
       must_respond_with :success
@@ -28,7 +28,7 @@ describe TasksController do
   # Unskip these tests for Wave 2
   describe "show" do
     it "can get a valid task" do
-      skip
+      # skip
       # Act
       get task_path(task.id)
       
@@ -37,19 +37,18 @@ describe TasksController do
     end
     
     it "will redirect for an invalid task" do
-      skip
+      # skip
       # Act
       get task_path(-1)
       
       # Assert
       must_respond_with :redirect
-      expect(flash[:error]).must_equal "Could not find task with id: -1"
     end
   end
   
   describe "new" do
     it "can get the new task page" do
-      skip
+      # skip
       
       # Act
       get new_task_path
@@ -61,7 +60,7 @@ describe TasksController do
   
   describe "create" do
     it "can create a new task" do
-      skip
+      # skip
       
       # Arrange
       task_hash = {
@@ -79,8 +78,7 @@ describe TasksController do
       
       new_task = Task.find_by(name: task_hash[:task][:name])
       expect(new_task.description).must_equal task_hash[:task][:description]
-      expect(new_task.due_date.to_time.to_i).must_equal task_hash[:task][:due_date].to_i
-      expect(new_task.completed).must_equal task_hash[:task][:completed]
+      expect(new_task.completion_date).must_equal task_hash[:task][:completion_date]
       
       must_respond_with :redirect
       must_redirect_to task_path(new_task.id)
@@ -90,13 +88,18 @@ describe TasksController do
   # Unskip and complete these tests for Wave 3
   describe "edit" do
     it "can get the edit page for an existing task" do
-      skip
-      # Your code here
+      #skip
+      # Act
+      get new_task_path
+      
+      # Assert
+      must_respond_with :success
     end
     
     it "will respond with redirect when attempting to edit a nonexistant task" do
-      skip
-      # Your code here
+      #skip
+      task = 
+      edit_task = Task.find_by(id:)
     end
   end
   
@@ -113,14 +116,37 @@ describe TasksController do
     end
   end
   
-  # Complete these tests for Wave 4
-  describe "destroy" do
-    # Your tests go here
-    
-  end
   
-  # Complete for Wave 4
-  describe "toggle_complete" do
-    # Your tests go here
-  end
-end
+  
+  
+  describe "create" do
+    it "can create a book!" do
+      # Arrange
+      test_params = {
+        book: {
+          title: "Cat in the Hat",
+          author: "Dr. Seuss",
+          description: "Tricksy cat!"
+        }
+      } 
+      # Act
+      expect {
+        post books_path, params: test_params
+        # Assert
+      }.must_differ 'Book.count', 1
+      
+      new_book = Book.find_by(title: "Cat in the Hat")
+      expect(new_book).wont_be_nil
+      must_redirect_to books_path
+      
+      # Complete these tests for Wave 4
+      describe "destroy" do
+        # Your tests go here
+        
+      end
+      
+      # Complete for Wave 4
+      describe "toggle_complete" do
+        # Your tests go here
+      end
+    end
