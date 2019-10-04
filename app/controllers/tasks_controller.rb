@@ -65,7 +65,20 @@ class TasksController < ApplicationController
     redirect_to root_path
   end
   
-  def toggle
+  def toggle_complete 
+    # task_id = params[:id]
+    # @task = Task.find_by(id: task_id)
+  end
+  
+  def mark_complete
+    # task_id = params[:id]
+    # @task = Task.find_by(id: task_id)
+    # @task.complete = Time.now
+    # @task.save
+    
+  end
+  
+  def un_check
   end
   
 end

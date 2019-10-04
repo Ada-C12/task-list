@@ -9,5 +9,11 @@ Rails.application.routes.draw do
   
   delete '/tasks/:id', to: 'tasks#delete'
   
+  get '/tasks/:id/toggle_complete', to:'tasks#toggle_complete', as: 'task_toggle_complete'
+  
+  
+  # patch '/tasks/:id', to: 'tasks#mark_complete', as: 'mark_complete_task'
+  # patch '/tasks/:id', to: 'tasks#un_check', as: 'un_check_task'
+  
   root 'tasks#index'
 end
