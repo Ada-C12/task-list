@@ -1,4 +1,5 @@
 require "test_helper"
+require 'pry'
 
 describe TasksController do
   let (:task) {
@@ -103,7 +104,7 @@ describe TasksController do
   describe "update" do
     # Note:  If there was a way to fail to save the changes to a task, that would be a great thing to test.
     before do
-      Task.create(name: "NOT washing my hair", description: "SLEEK HAIR", completion_date: Time.now)
+      Task.create(name: "NOT washing my hair", description: "SLEEK HAIR", completion_date: nil)
     end
 
     let (:new_task_hash) {
@@ -111,7 +112,7 @@ describe TasksController do
         task: {
           name: "A wrinkle in time",
           description: "a fabulous adventure",
-          completion_date: (Time.now + 1.days)
+          completion_date: (Time.now)
         }
       }
     }
@@ -127,7 +128,7 @@ describe TasksController do
       task = Task.find_by(id: id)
       expect(task.name).must_equal new_task_hash[:task][:name]
       expect(task.description).must_equal new_task_hash[:task][:description]
-      expect(task.completion_date).must_equal new_task_hash[:task][:completion_date]
+      expect(task.completion_date).wont_be_nil
     end
 
     it "will redirect to the root page if given an invalid id" do
