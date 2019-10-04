@@ -3,7 +3,7 @@ require "test_helper"
 describe TasksController do
   let (:task) {
     Task.create name: "sample task", description: "this is an example for a test",
-    completion_date: Time.now + 5.days
+    completed: Time.now + 5.days
   }
   
   # Tests for Wave 1
@@ -25,6 +25,7 @@ describe TasksController do
     end
   end
   
+  # Tests for Wave 2
   describe "show" do
     it "can get a valid task" do
       # Act
@@ -60,7 +61,7 @@ describe TasksController do
         task: {
           name: "new task",
           description: "new task description",
-          completion_date: nil,
+          completed: nil,
         },
       }
       
@@ -71,13 +72,14 @@ describe TasksController do
       
       new_task = Task.find_by(name: task_hash[:task][:name])
       expect(new_task.description).must_equal task_hash[:task][:description]
-      expect(new_task.completion_date).must_equal task_hash[:task][:completion_date]
+      expect(new_task.completed).must_equal task_hash[:task][:completed]
       
       must_respond_with :redirect
       must_redirect_to task_path(new_task.id)
     end
   end
   
+  # Tests for Wave 3
   describe "edit" do  
     it "can get the edit page for an existing task" do
       # Act
@@ -87,7 +89,7 @@ describe TasksController do
       must_respond_with :success
     end
     
-    it "will respond with redirect when attempting to edit a nonexistant task" do
+    it "will respond with redirect when attempting to edit a non-existant task" do
       # Act
       get edit_task_path(-1)
       
@@ -99,13 +101,12 @@ describe TasksController do
   describe "update" do
     # Note:  If there was a way to fail to save the changes to a task, that would be a great thing to test.
     it "can update an existing task" do
-      
       # Arrange
       task_hash = {
         task: {
           name: "new task",
           description: "new task description",
-          completion_date: nil,
+          completed: nil,
         },
       }
       
@@ -116,7 +117,7 @@ describe TasksController do
       
       expect(updated_task.name).must_equal task_hash[:task][:name]
       expect(updated_task.description).must_equal task_hash[:task][:description]
-      expect(updated_task.completion_date).must_equal task_hash[:task][:completion_date]
+      expect(updated_task.completed).must_equal task_hash[:task][:completed]
       
       must_respond_with :redirect
       must_redirect_to task_path
@@ -128,7 +129,7 @@ describe TasksController do
         task: {
           name: "new task",
           description: "new task description",
-          completion_date: nil,
+          completed: nil,
         },
       }
       
@@ -142,8 +143,21 @@ describe TasksController do
   
   # Complete these tests for Wave 4
   describe "destroy" do
-    # Your tests go here
+    it "reduces the total task count by 1" do  
+      test_task = task
+      expect{
+        delete task_path(test_task.id)
+      }.must_differ "Task.count", -1
+    end
     
+    it "removes the record from the database" do
+      delete task_path(task.id)
+      
+      updated_task = Task.find_by(id: task.id)
+      
+      expect(updated_task).must_equal nil
+      must_redirect_to tasks_path  
+    end
   end
   
   # Complete for Wave 4

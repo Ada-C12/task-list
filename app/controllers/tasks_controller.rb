@@ -17,7 +17,7 @@ class TasksController < ApplicationController
   end
   
   def create
-    @task = Task.new(name: params[:task][:name], description: params[:task][:description], completion_date: params[:task][:completion_date])
+    @task = Task.new(name: params[:task][:name], description: params[:task][:description], completed: params[:task][:completed])
     
     if @task.save
       redirect_to task_path(@task.id)
@@ -42,7 +42,7 @@ class TasksController < ApplicationController
     if @task.nil?
       redirect_to tasks_path
       return
-    elsif @task.update(name: params[:task][:name], description: params[:task][:description], completion_date: params[:task][:completion_date])
+    elsif @task.update(name: params[:task][:name], description: params[:task][:description], completed: params[:task][:completed])
       redirect_to task_path
       return
     else
@@ -51,7 +51,14 @@ class TasksController < ApplicationController
     end
   end
   
-  # def delete
-  # end
+  def destroy
+    @task = Task.find_by(id: params[:id])
+    if @task.nil?
+      redirect_to tasks_path
+      return
+    else @task.destroy
+      redirect_to tasks_path
+      return
+    end
+  end
 end
-
