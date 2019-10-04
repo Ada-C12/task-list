@@ -88,16 +88,21 @@ describe TasksController do
   # Unskip and complete these tests for Wave 3
   describe "edit" do
     it "can get the edit page for an existing task" do
-      skip
-      # Act
-      get new_task_path
+      #Act
+      edit_task = Task.create(name: "dishes", description: "run dishwasher")
+      get edit_task_path(edit_task)
       
       # Assert
       must_respond_with :success
     end
     
     it "will respond with redirect when attempting to edit a nonexistant task" do
-      skip
+      #Act
+      get edit_task_path(1337)
+      
+      #Assert
+      must_respond_with :redirect
+      must_redirect_to tasks_path
     end
   end
   
@@ -106,48 +111,48 @@ describe TasksController do
     # Note:  If there was a way to fail to save the changes to a task, that would be a great
     #        thing to test.
     it "can update an existing task" do
-      # Your code here
+      update_task = Task.create(name: "play with the cat", description: "mouse")
+      
+      # Arrange
+      updated_task_test = {
+        task: {
+          name: "play with the cat",
+          description: "buy new cat toys"
+        }
+      }
+      
+      # Act
+      patch task_path(update_task), params: updated_task_test
+      
+      #Assert 
+      update_task.reload
+      expect(update_task.description).must_equal updated_task_test[:task][:description]
     end
     
     it "will redirect to the root page if given an invalid id" do
-      # Your code here
+      bad_id = {
+        task: {
+          name: "bake",
+          description: "chocolate chip cookies"
+        }
+      }
+      
+      patch task_path(45743895), params: bad_id
+      
+      #Arrange
+      must_respond_with :redirect
+      must_redirect_to tasks_path 
     end
   end
   
+  # Complete these tests for Wave 4
+  describe "destroy" do
+    # Your tests go here
+    
+  end
   
-  
-  
-  describe "create" do
-    it "can create a book!" do
-      skip
-      # Arrange
-      test_params = {
-        book: {
-          title: "Cat in the Hat",
-          author: "Dr. Seuss",
-          description: "Tricksy cat!"
-        }
-      } 
-      # Act
-      expect {
-        post books_path, params: test_params
-        # Assert
-      }.must_differ 'Book.count', 1
-      
-      new_book = Book.find_by(title: "Cat in the Hat")
-      expect(new_book).wont_be_nil
-      must_redirect_to books_path
-      
-      # Complete these tests for Wave 4
-      describe "destroy" do
-        # Your tests go here
-        
-      end
-      
-      # Complete for Wave 4
-      describe "toggle_complete" do
-        # Your tests go here
-      end
-    end
+  # Complete for Wave 4
+  describe "toggle_complete" do
+    # Your tests go here
   end
 end
