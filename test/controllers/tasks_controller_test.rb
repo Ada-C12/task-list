@@ -112,6 +112,8 @@ describe TasksController do
     it "can update an existing task" do
       # Your code here
       
+      existing_task = Task.create name: "test task", description: "task description", completion_date: Time.now
+      
       updated_task_hash = {
         task: {
           name: "new task",
@@ -120,15 +122,17 @@ describe TasksController do
         },
       }
       
-      patch task_path(task), params: updated_task_hash
+      expect {
+        patch task_path(existing_task.id), params: updated_task_hash
+      }.wont_change 'Task.count'
       
-      updated_task = Task.find_by(id: task.id)
+      updated_task = Task.find_by(id: existing_task.id)
       
       expect(updated_task.name).must_equal updated_task_hash[:task][:name]
       expect(updated_task.description).must_equal updated_task_hash[:task][:description]
       
       must_respond_with :redirect
-      must_redirect_to task_path(task)
+      must_redirect_to task_path(updated_task)
       
     end
     

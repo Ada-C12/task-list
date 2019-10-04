@@ -19,7 +19,10 @@ class TasksController < ApplicationController
   end
   
   def create
-    @task = Task.new(name: params[:task][:name], description: params[:task][:description], completion_date: nil)
+    @task = Task.new(task_params)
+    @task.completion_date = nil
+    @task.complete = false
+    
     if @task.save
       redirect_to task_path(@task)
       return
@@ -46,7 +49,7 @@ class TasksController < ApplicationController
       return
     end 
     
-    @task.update(name: params[:task][:name], description: params[:task][:description])
+    @task.update(task_params)
     
     redirect_to task_path(@task)
     return
@@ -64,5 +67,31 @@ class TasksController < ApplicationController
     redirect_to tasks_path
     return
   end
+  
+  def toggle_complete
+    @task = Task.find_by(id: params[:id])
+    
+    if @task.nil?
+      redirect_to tasks_path
+      return
+    end 
+    
+    if @task.complete
+      @task.update(complete: false)
+    else
+      @task.update(complete: true)
+    end
+    
+    
+    redirect_to task_path(@task)
+    return
+  end
+  
+  private
+  
+  def task_params
+    return params.require(:task).permit(:name, :description)
+  end
+  
   
 end
