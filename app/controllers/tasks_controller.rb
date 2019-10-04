@@ -24,7 +24,7 @@ class TasksController < ApplicationController
     @task = Task.new(
     name: params[:task][:name],
     description: params[:task][:description],
-    completion_date: params[:task][:completion_date]
+    completion_date: nil
     ) #instantiate a new task
     
     if @task.save #save returns true if the database insert succeeds
@@ -51,16 +51,21 @@ class TasksController < ApplicationController
   # Wave 3 - update task
   def update
     @task = Task.find_by(id: params[:id])
-    if @task.update(
-      name: params[:task][:name],
-      description: params[:task][:description],
-      completion_date: params[:task][:completion_date]
-      )
-      redirect_to tasks_path # go to the index so we can see the book in the list
+    
+    if @task.nil?
+      # head :not_found
+      redirect_to tasks_path
       return
-    else # save failed :(
-      render :edit # show the new book form view again
-      return
+    end
+    
+    @task.name = params[:task][:name]
+    @task.description = params[:task][:description]
+    @task.completion_date = params[:task][:completion_date]
+    
+    if @task.save
+      redirect_to task_path(@task.id)
+    else
+      render new_task_path
     end
   end
   
@@ -75,9 +80,17 @@ class TasksController < ApplicationController
     end
     
     @task.destroy
-    
     redirect_to tasks_path
     return
   end
   
-end 
+  # Wave 4 - mark task as complete
+  def complete
+    task_id = params[:id]
+    @task = Task.find_by(id: task_id)
+    
+    @task.completed = true
+    @task.save
+    # redirect_to tasks_path
+  end 
+end
