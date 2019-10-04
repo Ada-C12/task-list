@@ -193,5 +193,8 @@ describe TasksController do
   # Complete for Wave 4
   describe "toggle_complete" do
     # Your tests go here
+    it "will mark task as completed by filling in completed column" do
+      
+    end
   end
 end

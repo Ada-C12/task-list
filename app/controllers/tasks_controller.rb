@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
   def index
-    @tasks = Task.all
+    @tasks = Task.all.order(:id)
   end
   
   def show
@@ -38,12 +38,9 @@ class TasksController < ApplicationController
     if @task.nil?
       redirect_to root_path
       return
-    else
-
-      @task.name = params[:task][:name]
-      @task.description = params[:task][:description]
-      @task.completed = params[:task][:completed]
     end
+    @task.name = params[:task][:name]
+    @task.description = params[:task][:description]
     if @task.save
       redirect_to task_path(@task.id)
       return
@@ -65,7 +62,35 @@ class TasksController < ApplicationController
     end
   end
   
-  def complete
+  def completed
+    @task = Task.find_by(id: params[:id])
+    if @task.nil?
+      redirect_to task_path
+      return
+    end
+    if @task.completed == nil
+      @task.completed = Date.today
+      @task.save
+      redirect_to root_path
+    else
+      @task.completed = nil
+      @task.save
+    redirect_to root_path
+    end
+
+    # @task.update_attribute(:completed, Time.now)
+    # if @task.nil?
+    #   redirect_to root_path
+    #   return
+    # if @task.completed?
+    #   @task.toggle!(:completed)
+    #   @task.completed.save = Time.now
+    #   redirect_to root_path
+    #   return
+    # else
+    #   @task.completed = nil
+    #   redirect_to root_path
+    # end
     
   end
 end
