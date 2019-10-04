@@ -162,7 +162,6 @@ describe TasksController do
       
       current_task = Task.find_by(id: incomplete_task.id)
       
-      # Is there a better way to do not equal to nil??
       expect(current_task.completion_date).wont_equal nil
     end
     

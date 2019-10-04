@@ -8,7 +8,7 @@ class TasksController < ApplicationController
     @task = Task.find_by(id: task_id)
     
     if @task.nil?
-      redirect_to tasks_path, :flash => { :error => "Could not find task with id: #{task_id}" }
+      redirect_to root_path, :flash => { :error => "Could not find task with id: #{task_id}" }
       return
     end
   end
@@ -70,6 +70,11 @@ class TasksController < ApplicationController
   def toggle_complete
     @task = Task.find_by(id: params[:id])
     
+    if @task.nil?
+      redirect_to root_path
+      return
+    end
+    
     if @task.completion_date.nil?
       @task.update(completion_date: Time.now)
       redirect_to task_path(@task.id)
@@ -79,5 +84,11 @@ class TasksController < ApplicationController
       redirect_to task_path(@task.id)
       return
     end
+  end
+  
+  private
+  
+  def book_params
+    return params.require(:task).permit(:name, :description, :completion_date)
   end
 end
