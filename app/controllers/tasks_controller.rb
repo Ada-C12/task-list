@@ -19,7 +19,7 @@ class TasksController < ApplicationController
   
   def create
     # instantiate a new Task based on form input
-    @task = Task.new(name: params[:task][:name], description: params[:task][:description], completion_date: params[:task][:completion_date])
+    @task = Task.new(task_params)
     
     # if the task can be saved to the database,
     if @task.save
@@ -52,7 +52,7 @@ class TasksController < ApplicationController
     elsif params.nil? || params.empty? || params[:task].nil? || params[:task].empty?
       head :bad_request
       return
-    elsif @task.update(name: params[:task][:name], description: params[:task][:description], completion_date: params[:task][:completion_date])
+    elsif @task.update(task_params)
       # go to that task's page
       redirect_to task_path(@task.id)
       return
@@ -95,6 +95,12 @@ class TasksController < ApplicationController
       return
     end
     
+  end
+  
+  private
+  
+  def task_params
+    return params.require(:task).permit(:name, :description, :completion_date)
   end
   
 end
