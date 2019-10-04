@@ -1,5 +1,7 @@
 require "test_helper"
 
+#two types of testing: 1. does the path work, 2. does the method work
+
 describe TasksController do
   let (:task) {
     Task.create name: "sample task", description: "this is an example for a test",
@@ -82,15 +84,9 @@ describe TasksController do
   # Unskip and complete these tests for Wave 3
   describe "edit" do
     it "can get the edit page for an existing task" do
-      task_hash = {
-          name: "new task",
-          description: "new task description"
-        }
-      task1 = Task.create(task_hash)
-      task1_id = task1.id
-      
+
       # Act
-      get edit_task_path(task1_id)
+      get edit_task_path(task.id)
       
       # Assert
       must_respond_with :success
@@ -106,29 +102,45 @@ describe TasksController do
   end
   
   # Uncomment and complete these tests for Wave 3
-  # describe "update" do
-  #   # Note:  If there was a way to fail to save the changes to a task, that would be a great
-  #   #        thing to test.
-  #   it "can update an existing task" do
-  #     # Your code here
-  #it "can update an existing task" do
-  # task.description = "new desc"
-  # task vs. Task.find(task.id)
-  #   end
+  describe "update" do
+    before do 
+      task_2 = Task.create(name: "original_name", description: "original description", completed: nil)
+    end 
+    it "can update an existing task" do
+      updated_task_hash = {
+        task: {
+          name: "updated task",
+          description: "updated description",
+          completed: nil,
+        },
+      }
+      expect { 
+        patch task_path(task_2.id), params: updated_task_hash
+      }.wont_change 'Task.count'
+
+      expect(task_2.name).must_equal updated_task_hash[:task][:name]
+      
+      expect(task_2.description).must_equal updated_task_hash[:task][:description]
+    end 
+    
+    # it "can update an existing task" do
+    #   task.description = "new desc"
+    #   task vs. Task.find(task.id)
+    # end
+    
+    it "will redirect to the root page if given an invalid id" do
+      # Your code here
+    end
+  end
   
-  #   it "will redirect to the root page if given an invalid id" do
-  #     # Your code here
-  #   end
-  # end
+  # Complete these tests for Wave 4
+  describe "destroy" do
+    # Your tests go here
+    
+  end
   
-  # # Complete these tests for Wave 4
-  # describe "destroy" do
-  #   # Your tests go here
-  
-  # end
-  
-  # # Complete for Wave 4
-  # describe "toggle_complete" do
-  #   # Your tests go here
-  # end
+  # Complete for Wave 4
+  describe "toggle_complete" do
+    # Your tests go here
+  end
 end
