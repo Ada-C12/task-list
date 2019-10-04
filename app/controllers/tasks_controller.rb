@@ -67,7 +67,7 @@ class TasksController < ApplicationController
     redirect_to root_path
   end
   
-  def mark_complete
+  def toggle_complete
     @task = Task.find_by(id: params[:id])
     
     if @task.completion_date.nil?
