@@ -145,7 +145,7 @@ describe TasksController do
     end
     
     
-    it "will redirect to the root page If given an invalid id" do
+    it "will redirect to the root page if given an invalid id" do
       
       # Arrange
       invalid_id = -5
@@ -162,20 +162,36 @@ describe TasksController do
   
   describe "destroy" do
     
-    it "removes a task from the task list" do
+    it "removes a task from the task list and redirects to tasks list" do
       # Arrange: make sure our task list has at least one object ... 
       new_task = Task.create(name: "New task")
       
       # ... and designate an existing task to be deleted
       to_be_deleted = Task.first
-
+      
       # Act/Assert: delete the task and confirm that the task list is one object shorter
       
       expect{
         delete task_path(to_be_deleted.id)
       }.must_differ 'Task.count', -1
+
+      must_redirect_to tasks_path
       
     end
+
+    it "will redirect to the root page if given an invalid id" do
+      
+      # Arrange
+      invalid_id = -5
+      
+      # Act
+      delete task_path(invalid_id)
+      
+      # Assert
+      must_redirect_to root_path
+      
+    end
+    
     
   end
   
