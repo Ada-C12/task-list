@@ -1,11 +1,11 @@
 class TasksController < ApplicationController
-
+  
   def index
     @tasks = Task.all
   end
   
   def show
-    task_id = params[:id].to_i
+    task_id = params[:id]
     @task = Task.find_by(id: task_id)
     if @task.nil?
       redirect_to tasks_path
@@ -26,6 +26,24 @@ class TasksController < ApplicationController
       redirect_to task_path(@task.id)
     else
       render new_task_path
+    end
+  end
+  
+  def edit
+    @task = Task.find_by(id: params[:id])
+    if @task.nil?
+      redirect_to tasks_path
+      return
+    end
+  end
+  
+  def update
+    @task = Task.find_by(id: params[:id])
+
+    if @task.update(name: params[:task][:name], description: params[:task][:description])
+      redirect_to task_path(@task.id)
+    else
+      render edit_task_path
     end
   end
 end
