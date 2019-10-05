@@ -2,26 +2,24 @@
 
 <ul>
 <% @tasks.each do |task| %>
-  <li>
+  <li><h3><%= link_to task.name, task_path(task) %></h3>
   
-  <%= link_to task.name, task_path(task) %>
   <p>
-  <%# <%= task.description%>  <%# Due: <%= task.completion_date %>
   <%= link_to "Edit", edit_task_path(task) %>
-  <%= link_to "Create", new_task_path(task) %>
-  <%= link_to "Delete", task_path(task), method: :delete, data: {confirm: "Are you sure?"}%>
+  <%= link_to "Delete", task_path(task), method: :delete, data: {confirm: "Do you want to delete this task?"}%>
   </p>
   
-  <input type="checkbox">
-  <%= link_to "Complete", complete_task_path(task)%>
-  </input>
+  <%= form_with model: @task, class: 'complete-task', url: complete_task_path(task) do |f| %>
+    <% f.submit "Completed" %>
+  <% end %>
+  
+  Completion date: <%= task.completion_date%>
 
-<%# <%= form_with model: @task, class: 'complete-task' do |f| %>
-<%# <%= f.label :completed %>
-<%# <%= f.check_box :completed %>
-<%# <% end %>  
   </li>
   </br>
   <% end %>
 </ul>
 
+<p>
+  <%= link_to "Create new task", new_task_path %>
+</p>

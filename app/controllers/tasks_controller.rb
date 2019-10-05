@@ -84,13 +84,13 @@ class TasksController < ApplicationController
     return
   end
   
-  # # Wave 4 - mark task as complete
-  # def complete
-  #   task_id = params[:id]
-  #   @task = Task.find_by(id: task_id)
-  
-  #   @task.completed = true
-  #   @task.save
-  #   # redirect_to tasks_path
-  # end 
+  # Wave 4 - mark task as complete
+  def complete
+    task_id = params[:id]
+    @task = Task.find_by(id: task_id)
+    
+    @task.completion_date = DateTime.now.to_date
+    @task.save
+    redirect_to tasks_path
+  end 
 end

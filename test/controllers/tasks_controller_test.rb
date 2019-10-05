@@ -58,7 +58,7 @@ describe TasksController do
       
       new_task = Task.find_by(name: task_hash[:task][:name])
       expect(new_task.description).must_equal task_hash[:task][:description]
-      # expect(new_task.completion_date).must_equal task_hash[:task][:completion_date]
+      expect(new_task.completion_date).must_equal task_hash[:task][:completion_date]
       
       must_respond_with :redirect
       must_redirect_to task_path(new_task.id)
@@ -103,6 +103,7 @@ describe TasksController do
       
       expect(Task.find_by(id: existing_task.id).name).must_equal "updated task"
       expect(Task.find_by(id: existing_task.id).description).must_equal "updated task description"
+      expect(Task.find_by(id: existing_task.id).completion_date).must_equal nil 
     end
     
     it "will redirect to the root page if given an invalid id" do
@@ -129,9 +130,30 @@ describe TasksController do
       get task_path(-1)
       must_respond_with :redirect
     end
+  end 
+  
+  describe "toggle_complete" do   
+    before do
+      @new_task = Task.create(name: "completed task", completion_date: nil )
+    end
     
-    # describe "toggle_complete" do
-    #   # Your tests go here
-    # end
+    it "changes completion date from nil to today's date when clicked" do 
+      existing_task = Task.last
+      
+      completed_task_form_data = {
+        task: {
+          name: "completed task",
+          description: "completed description",
+          completion_date: DateTime.now.to_date,
+        },
+      }      
+      
+      expect {
+        post complete_task_path(existing_task.id)
+      }.wont_change "Task.count"
+      
+      expect(Task.find_by(id: existing_task.id).name).must_equal "completed task"
+      expect(Task.find_by(id: existing_task.id).completion_date).must_equal completed_task_form_data[:task][:completion_date]
+    end
   end
-end 
+end
