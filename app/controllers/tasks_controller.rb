@@ -42,6 +42,21 @@ class TasksController < ApplicationController
     redirect_to tasks_path
   end
 
+  def complete
+    task = Task.find_by(id: params[:id])
+    return redirect_to tasks_path unless task
+
+    if task.completed
+      task.completed = nil
+    else
+      task.completed = Time.zone.now
+    end
+    
+    task.save
+
+    return redirect_to tasks_path
+  end
+
   private
 
   def task_params

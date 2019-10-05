@@ -3,7 +3,7 @@ require "test_helper"
 describe TasksController do
   let (:task) {
     Task.create name: "sample task", description: "this is an example for a test",
-                completed: Time.now + 5.days
+                completed: Time.zone.now + 5.days
   }
 
   # Tests for Wave 1
@@ -101,8 +101,8 @@ describe TasksController do
         task: {
           name: task.name,
           description: "updated task description",
-          completed: task.completed,
           id: task.id,
+          completed: task.completed
         },
       }     
     end
@@ -148,6 +148,31 @@ describe TasksController do
 
   # Complete for Wave 4
   describe "toggle_complete" do
-    # Your tests go here
+    it "can mark a task as completed" do
+      task = Task.create
+      assert_nil task.completed
+      patch complete_task_path(task.id)
+
+      task = Task.find(task.id)
+      expect(task.completed).must_be_instance_of ActiveSupport::TimeWithZone
+      must_respond_with :redirect
+    end
+
+    it "can unmark a task" do
+      task = Task.create(completed: Time.now)
+      expect(task.completed).must_be_instance_of ActiveSupport::TimeWithZone
+      
+      patch complete_task_path(task.id)
+      
+      task = Task.find(task.id)
+      assert_nil task.completed
+      
+      must_respond_with :redirect
+    end
+
+    it "redirects for an invalid id" do
+      patch complete_task_path(-1)
+      must_respond_with :redirect
+    end
   end
 end
