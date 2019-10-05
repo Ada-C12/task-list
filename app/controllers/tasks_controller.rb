@@ -44,10 +44,14 @@ class TasksController < ApplicationController
   
   def update
     @task = Task.find_by(id: params[:id])
-    if params[:completed] == 1
+    if params[:task][:completed] == "1"
       update_completed = Time.now 
     else 
       update_completed = nil
+    end 
+    if @task.nil?
+      redirect_to root_path
+      return 
     end 
     if @task.update(
       name: params[:task][:name],
@@ -72,9 +76,13 @@ def destroy
   end 
   
   @task.destroy 
-  
   redirect_to tasks_path
   return 
 end 
 
+private
+
+def task_params
+  return params.require(:task).permit(:name, :description, :completed)
+end 
 end

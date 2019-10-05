@@ -84,7 +84,7 @@ describe TasksController do
   # Unskip and complete these tests for Wave 3
   describe "edit" do
     it "can get the edit page for an existing task" do
-
+      
       # Act
       get edit_task_path(task.id)
       
@@ -98,45 +98,58 @@ describe TasksController do
       must_respond_with :redirect
       must_redirect_to tasks_path
       # Your code here
+      end
     end
-  end
   
   # Uncomment and complete these tests for Wave 3
   describe "update" do
     before do 
-      task_2 = Task.create(name: "original_name", description: "original description", completed: nil)
+      @task_2 = Task.create(name: "original name", description: "original description", completed: nil)
     end 
     it "can update an existing task" do
       updated_task_hash = {
         task: {
-          name: "updated task",
+          name: "updated name",
           description: "updated description",
           completed: nil,
         },
       }
-      expect { 
-        patch task_path(task_2.id), params: updated_task_hash
-      }.wont_change 'Task.count'
-
-      expect(task_2.name).must_equal updated_task_hash[:task][:name]
       
-      expect(task_2.description).must_equal updated_task_hash[:task][:description]
+      expect { 
+        patch task_path(@task_2.id), params: updated_task_hash
+      }.wont_change 'Task.count'
+      
+      @task_2.reload 
+      
+      expect(@task_2.name).must_equal updated_task_hash[:task][:name]
+      expect(@task_2.description).must_equal updated_task_hash[:task][:description]
+
+      #add redirect to tasks path 
     end 
     
-    # it "can update an existing task" do
-    #   task.description = "new desc"
-    #   task vs. Task.find(task.id)
-    # end
     
     it "will redirect to the root page if given an invalid id" do
-      # Your code here
+      patch task_path(959685)
+      must_respond_with :redirect
+      must_redirect_to root_path
     end
   end
   
   # Complete these tests for Wave 4
   describe "destroy" do
-    # Your tests go here
-    
+    before do 
+      @this_task_is_toast = Task.create(name: "goodbye", description: "so long", completed: nil)
+    end 
+
+    it "can destroy a task" do 
+      expect { 
+        delete task_path(@this_task_is_toast.id)
+      }.must_change 'Task.count' 
+      must_respond_with :redirect 
+
+    get task_path(@this_task_is_toast.id)
+    must_respond_with :redirect
+    end 
   end
   
   # Complete for Wave 4

@@ -1,9 +1,30 @@
-<h1>Tasks</h1>
+<link href="https://fonts.googleapis.com/css?family=Slabo+27px&display=swap" rel="stylesheet">
+
+<h1 class="head">Taskmaster 3000</h1>
+<h2>To Do</h2>
 <ul>
-  <% @tasks.each do |task|  %>
-    <li>
-      Reminder: do <%= task[:name] %>, which will require <%= task[:description] %>, by <%= task[:completed] %>
-      <%= link_to "Edit", edit_task_path(task) %> <%= link_to "Delete", task_path(task), method: :delete, data: {confirm: "Are you sure?"} %>
-    </li>
+  <% @tasks.each do |task|  
+      if task.completed == nil %>
+      <li>
+        <%= task[:name].upcase %>: <%= task[:description] %>
+      <%= link_to "Edit", edit_task_path(task) %> 
+      <%= link_to "Delete", task_path(task), method: :delete, data: {confirm: "Are you sure?"} %>
+      </li>
+      <% end %>
   <% end %>
 </ul>
+<h2>Completed Tasks</h2>
+<ul>
+  <% @tasks.each do |task| 
+    if task.completed != nil %>
+    <li>
+    <%= task[:name].upcase %>: <%= task[:description] %>, completed on <%= task[:completed] %>
+    <%= link_to "Edit", edit_task_path(task) %> 
+    <%= link_to "Delete", task_path(task), method: :delete, data: {confirm: "Are you sure?"} %>
+    </li>
+    <% end %>
+    <% end %>
+  </ul>
+  
+
+  <%= button_to "New Task", new_task_path, method: :get, class: "task-button" %>
