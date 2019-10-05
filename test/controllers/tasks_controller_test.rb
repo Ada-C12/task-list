@@ -28,7 +28,7 @@ describe TasksController do
   # Unskip these tests for Wave 2
   describe "show" do
     it "can get a valid task" do
-     
+
       # Act
       get task_path(task.id)
 
@@ -37,7 +37,7 @@ describe TasksController do
     end
 
     it "will redirect for an invalid task" do
-      
+
       # Act
       get task_path(-1)
 
@@ -48,7 +48,6 @@ describe TasksController do
 
   describe "new" do
     it "can get the new task page" do
-    
 
       # Act
       get new_task_path
@@ -60,7 +59,6 @@ describe TasksController do
 
   describe "create" do
     it "can create a new task" do
-   
 
       # Arrange
       task_hash = {
@@ -95,11 +93,10 @@ describe TasksController do
     end
 
     it "will respond with redirect when attempting to edit a nonexistant task" do
-  
 
       # Your code here
       get edit_task_path(-1)
-      must_respond_with :redirect 
+      must_respond_with :redirect
     end
   end
 
@@ -109,24 +106,44 @@ describe TasksController do
     #        thing to test.
     it "can update an existing task" do
       # Your code here
-      
+      old_task = task
+      updated_task = {
+        task: {
+          name: "Watch Schoology Lecture",
+          description: "need to review concepts learned to get better understanding",
+          completion_date: nil,
 
+        },
+
+      }
+
+      patch task_path(old_task.id), params: updated_task
+      expect(Task.find_by(id: old_task.id).name).must_equal "Watch Schoology Lecture"
     end
 
     it "will redirect to the root page if given an invalid id" do
       # Your code here
+      updated_task = {
+        task: {
+          name: "Watch Schoology Lecture",
+          description: "need to review concepts learned to get better understanding",
+          completion_date: nil,
 
-      # must_respond_with :redirect 
-      # must_redirect_to :root_path 
+        },
 
+      }
+
+      patch task_path(-1), params: updated_task
+      must_respond_with :redirect
+      must_redirect_to root_path
     end
   end
 
   # Complete these tests for Wave 4
   describe "destroy" do
-    # Your tests go here
 
-  end
+    # Your tests go here
+    
 
   # Complete for Wave 4
   describe "toggle_complete" do
