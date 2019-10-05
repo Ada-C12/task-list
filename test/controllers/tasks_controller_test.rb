@@ -167,4 +167,32 @@ describe TasksController do
       must_redirect_to root_path
     end
   end
+  
+  
+  describe "toggle_incomplete" do
+    let (:task) {
+      Task.create name: "sample task", description: "this is an example for a test",
+      completed: Time.new
+    }
+    
+    it "can toggle_incomplete a task (populate :completed with Time.now)" do
+      expect(task.completed).must_be_instance_of ActiveSupport::TimeWithZone
+      patch toggle_incomplete_path(task)
+      
+      must_respond_with :redirect
+      must_redirect_to root_path
+      
+      testing_task_id = task[:id]
+      completed_task = Task.find_by(id: testing_task_id)
+      
+      expect(completed_task[:completed]).must_equal nil
+      
+    end
+    it "will redirect to the root page if given an invalid id" do
+      
+      patch toggle_incomplete_path(-1)
+      must_respond_with :redirect
+      must_redirect_to root_path
+    end
+  end
 end

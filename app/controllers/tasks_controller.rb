@@ -80,7 +80,18 @@ class TasksController < ApplicationController
   end
   
   def toggle_incomplete
+    task_id = params[:id]
+    @task = Task.find_by(id: task_id)
     
+    if @task.nil?
+      flash[:error] = "Error, task not found."
+      redirect_to root_path
+      return
+    end
+    
+    @task.completed = nil
+    @task.save
+    redirect_to root_path
   end
   
   
