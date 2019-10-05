@@ -164,12 +164,12 @@ describe TasksController do
     it "successfully deletes an existing task and then redirects to home page" do
 
     created_task = task
-
     expect{
       delete task_path(created_task.id)
     }.must_differ "Task.count", -1
 
     must_redirect_to root_path
+  
   end
     
   end
