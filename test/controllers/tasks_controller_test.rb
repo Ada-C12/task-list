@@ -147,8 +147,23 @@ describe TasksController do
   
   # Complete these tests for Wave 4
   describe "destroy" do
-    # Your tests go here
+    it "can delete a task" do 
+      task_count = Task.count
+      remove_task = Task.create(name: "watch lectures", description: "panopto")
+      expect(Task.count).must_equal (task_count + 1)
+      delete task_path(remove_task)
+      
+      #Assert
+      expect(Task.count).must_equal task_count 
+    end
     
+    it "gives a 404 error if invalid " do 
+      
+      # Assert
+      get tasks_path
+      
+      
+    end
   end
   
   # Complete for Wave 4
