@@ -88,26 +88,61 @@ describe TasksController do
   # Unskip and complete these tests for Wave 3
   describe "edit" do
     it "can get the edit page for an existing task" do
-      skip
-      # Your code here
+      # skip
+      # Act
+      get edit_task_path(task.id)
+
+      # Assert
+      must_respond_with :success
     end
 
     it "will respond with redirect when attempting to edit a nonexistant task" do
-      skip
-      # Your code here
+      # skip
+      # Act
+      get edit_task_path(-1)
+
+      # Assert
+      must_respond_with :redirect
     end
   end
 
-  # Uncomment and complete these tests for Wave 3
   describe "update" do
     # Note:  If there was a way to fail to save the changes to a task, that would be a great
     #        thing to test.
     it "can update an existing task" do
-      # Your code here
+      # Arrange
+      existing_task = Task.create(name: "crochet lobster", description: "mainly just need to finish up them arms!")
+      update_params = {
+        task: {
+          name: "rock lobster",
+          description: "make a lobster out of rock, instead!"
+        }
+      }
+
+      # Act
+      patch task_path(existing_task.id), params: update_params 
+
+      # Assert
+      expect(Task.find_by(id: existing_task.id).name).must_equal "rock lobster"
     end
 
+
+
     it "will redirect to the root page if given an invalid id" do
-      # Your code here
+      # Arrange
+      existing_task = Task.create(name: "crochet lobster", description: "mainly just need to finish up them arms!")
+      update_params = {
+        task: {
+          name: "rock lobster",
+          description: "make a lobster out of rock, instead!"
+        }
+      }
+
+      # Act
+      patch task_path(-1), params: update_params 
+
+      # Assert
+      must_respond_with :redirect  
     end
   end
 
