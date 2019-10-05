@@ -1,6 +1,21 @@
 <h1><%= @greeting %></h1>
 <section class="task-list-container">
   <ul class="task-list">
+    <li>
+    <span>
+    Task Name
+    </span>
+    <span>
+      Completed
+    </span>
+    <span>
+      Edit
+    </span>
+    <span>
+      Destroy
+    </span>
+
+    </li>
     <% @tasks.sort.each do |task| %>
       <li> 
       <%= link_to task[:name], task_path(task.id) %>
@@ -8,12 +23,14 @@
 
 
       <% if task.completion_date.nil? %>
-        <%= image_tag("toggle_off-24px.svg", class: 'icon toggle', alt: "toggle-on") %>
+        <%= link_to (image_tag("toggle_off-24px.svg", class: 'icon toggle', alt: "toggle-on")), complete_task_path(task.id), method: :patch %>
+        <!--
         <%= link_to 'Mark Complete', complete_task_path(task.id), method: :patch %>
+      -->
       <% else %>
-        <%= image_tag("toggle_on-24px.svg", class: 'icon toggle', alt: "toggle-on") %>
-        <%= link_to 'Completed!', complete_task_path(task.id), method: :patch %>
+        <%= link_to (image_tag("toggle_on-24px.svg", class: 'icon toggle', alt: "toggle-on")), complete_task_path(task.id), method: :patch %>
   <!--
+        <%= link_to 'Completed!', complete_task_path(task.id), method: :patch %>
         <span class="task-completion-date">
           <%= task.completion_date %>
         </span>
