@@ -7,7 +7,12 @@
       <li>
         <%= link_to task.description, task_path(task.id) %> by <%= task.name %>
         <%= button_to "(Delete)", task_path(task.id), method: :delete, data: { confirm: "Are YOU sure?" } %>
-        <%= button_to "(Mark Complete)", task_path(task.id), method: :patch%>
+        <%if task[:completion_date] == nil%>
+          <%= button_to "(Mark Complete)", complete_task_path(task.id), method: :patch%>
+        <%else%>
+          <%= button_to "(Mark Incomplete)", complete_task_path(task.id), method: :patch%>
+        <%end%>
+        
       </li>
     <% end %>
   </ul>

@@ -67,15 +67,19 @@ class TasksController < ApplicationController
     end
   end
 
-  # def toggle_complete(completion_status)
-  #   # @task = Task.find_by(id: params[:id])
-  #   if completion_status == nil
-  #     #change the completion status to Time.now
-  #     return completion_status = Time.now
-  #   else
-  #     return completion_status = nil
-  #   end
-  # end
+  def toggle_complete
+    @task = Task.find_by(id: params[:id])
+    if @task.completion_date == nil
+      #change the completion status to Time.now
+      @task.completion_date = Time.now
+    else
+      @task.completion_date = nil
+    end
+
+    if @task.save
+      redirect_to tasks_path
+    end
+  end
 
   private
 
