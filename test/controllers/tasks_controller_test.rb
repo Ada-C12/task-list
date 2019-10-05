@@ -123,9 +123,14 @@ describe TasksController do
     it "can update an existing task" do
       expect { patch task_path(@original_task.id), params: @updated_task }.wont_change "Task.count"
       
-      expect(Task.find_by(id: @original_task.id).description).must_equal "updated description"
-      expect(Task.find_by(id: @original_task.id).name).must_equal "test name"
-      expect(Task.find_by(id: @original_task.id).completion_date).must_equal nil
+      update_task = Task.find_by(id: @original_task.id)
+      expect(update_task.description).must_equal "updated description"
+      expect(update_task.name).must_equal "test name"
+      expect(update_task.completion_date).must_equal nil
+      
+      # expect(Task.find_by(id: @original_task.id).description).must_equal "updated description"
+      # expect(Task.find_by(id: @original_task.id).name).must_equal "test name"
+      # expect(Task.find_by(id: @original_task.id).completion_date).must_equal nil
     end
     
     it "will redirect to the root page if given an invalid id" do
@@ -141,12 +146,8 @@ describe TasksController do
       @another_task = Task.create name: "test name", description: "test description"
     end
     
-    # Your tests go here
     it "can remove an existing task" do
       expect { delete task_path(@another_task.id)}.must_change "Task.count"
-      
-      # expect(Task.find_by(id: @another_task.id).name).must_equal nil
-      
     end
     
     it "will redirect to the root page if given an invalid id" do
@@ -154,11 +155,16 @@ describe TasksController do
       
       must_redirect_to root_path
     end
-    
   end
   
   # Complete for Wave 4
   describe "toggle_complete" do
-    # Your tests go here
+    #   before do
+    #     @task2 = Task.create name: "test name", description: "test description"
+    #   end
+    
+    #   it "Can update a task from nil to completed" do
+    #     expect { patch completed_path(@task2.id) }.wont_change "Task.count"
+    #   end
   end
 end

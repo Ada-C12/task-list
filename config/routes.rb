@@ -4,7 +4,9 @@ Rails.application.routes.draw do
   
   resources :tasks, except: [:update]
   patch 'tasks/:id', to: 'tasks#toggle_complete', as: 'completed' 
-  patch 'tasks/:id', to: 'tasks#update' 
+  patch 'tasks/:id', to: 'tasks#update', as: 'update_task'
+  #patch 'tasks/:id', to: 'tasks#toggle_complete', as: 'completed' 
+  
   
   
   # get '/tasks', to: 'tasks#index', as: 'tasks'
@@ -16,6 +18,5 @@ Rails.application.routes.draw do
   # patch 'tasks/:id', to: 'tasks#update' 
   # delete '/tasks/:id', to: 'tasks#destroy'
   
-  #NEED A TOGGLE COMPLETE ROUTE FOR CHECKBOX
 end
 

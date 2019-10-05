@@ -2,6 +2,7 @@
 class TasksController < ApplicationController
   def index
     @tasks = Task.all
+    @ordered_tasks = @tasks.order(:name)
   end
   
   def show
@@ -86,7 +87,7 @@ class TasksController < ApplicationController
   private
   
   def task_params
-    return params.permit(:name, :description, :completion_date)
+    params.require(:task).permit(:name, :description, :completion_date)
   end
   
 end
