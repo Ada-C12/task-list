@@ -56,7 +56,7 @@ class TasksController < ApplicationController
     if @task.nil?
       redirect_to tasks_path
     else
-      @task.completion_date = Time.current
+      @task.completion_date = DateTime.current
       @task.save
       redirect_to tasks_path
     end
