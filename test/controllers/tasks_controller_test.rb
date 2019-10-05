@@ -111,8 +111,6 @@ describe TasksController do
         must_redirect_to root_path
       }
       
-      # .wont_change 'Task.count'
-      
       expect( Task.find_by(id: existing_task.id).name ).must_equal "MyString"
     end
   end

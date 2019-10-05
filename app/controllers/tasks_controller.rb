@@ -75,6 +75,26 @@ class TasksController < ApplicationController
     return params.require(:task).permit(:name, :description, :completed)
   end
   
-  
-end 
+  def toggle_complete 
+    @task = Task.find_by(id: params[:id])
+    
+    if @task.nil?
+      head :not_found
+      return
+    end
+    
+    if @task.completed == nil
+      @task.update(completed: Time.now)
+      redirect_to tasks_path
+      return 
+    else
+      @task.update(completed: nil)
+      redirect_to tasks_path
+      return
+    end 
+  end 
+end
+
+
+# make button on page
 
