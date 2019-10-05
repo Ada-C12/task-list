@@ -45,9 +45,9 @@ class TasksController < ApplicationController
     end
     @task.name = params[:task][:name]
     @task.description = params[:task][:description]
-    @task.completed = params[:task][:description]
+    @task.completed = params[:task][:completed]
 
-    if new_task.save
+    if @task.save
       redirect_to task_path(@task.id)
     else
       render new_task_path
@@ -63,6 +63,15 @@ class TasksController < ApplicationController
       task_to_delete.destroy
       redirect_to root_path
       return
+    end
+  end
+
+  def toggle_completed
+    task_to_toggle = Task.find_by(id: params[:id])
+    if @task.completed?
+      @task.incomplete!
+    elsif @task.incomplete?
+      @task.completed!
     end
   end
 end
