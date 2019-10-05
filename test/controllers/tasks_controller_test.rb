@@ -150,8 +150,20 @@ describe TasksController do
       patch task_path(invalid_id), params: new_task_details
       
       must_redirect_to root_path
+    end
+    
+    it "won't update if the params are invalid" do
+      test_id = Task.first.id
+      unchanged_task = Task.find_by(id: test_id)
       
+      expect {
+        patch task_path(test_id), params: {}
+      }.must_raise
       
+      updated_task = Task.find_by(id: test_id)
+      expect(updated_task.name).must_equal unchanged_task.name
+      expect(updated_task.description).must_equal unchanged_task.description
+      expect(updated_task.completion_date).must_equal unchanged_task.completion_date
     end
   end
   
