@@ -40,7 +40,7 @@ class TasksController < ApplicationController
       redirect_to root_path
       return
     end    
-  end
+  end  
   
   def update
     @task = Task.find_by(id: params[:id])
@@ -59,6 +59,7 @@ class TasksController < ApplicationController
     end
     
   end
+  
   
   def destroy
     @task = Task.find_by(id: params[:id])
