@@ -11,6 +11,7 @@ Rails.application.routes.draw do
   resources :tasks 
   
   patch '/tasks/:id', to: 'tasks#toggle_complete', as:'complete_task'
+  patch '/tasks/:id', to: 'tasks#toggle_incomplete', as:'incomplete_task'
   
 end
 
