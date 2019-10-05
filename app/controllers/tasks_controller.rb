@@ -72,7 +72,17 @@ class TasksController < ApplicationController
             return
         end
     end
-  
+    
+    def mark_complete
+        @task = Task.find_by(id: params[:id])
+        if @task
+            @task.completion_date = (@task.completion_date) ? nil : Date.current()
+            @task.save
+        end 
+        redirect_to tasks_path
+        return
+    end
+    
     private
     def task_params
         return params.require(:task).permit(:name, :description, :completion_date)

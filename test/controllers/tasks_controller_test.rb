@@ -236,7 +236,45 @@ describe TasksController do
   
   # Complete for Wave 4
   describe "toggle_complete" do
-    # Your tests go here
-    # Complete for Wave 4
+    before do 
+      @task_hash = {
+        task: {
+          name: "updated task",
+          description: "updated task description",
+          completion_date: nil
+        }
+      }
+    end
+
+    it "marks a uncompleted task as completed" do
+      post tasks_path, params: @task_hash
+      expect _(Task.count).must_equal 1
+      assert_nil (Task.all.first.completion_date)
+
+      existing_task_id = Task.all.first.id
+      expect {
+        patch complete_path(existing_task_id)
+      }.must_differ "Task.count", 0
+
+      expect _(Task.all.first.completion_date).wont_be_nil
+      must_respond_with :redirect
+      must_redirect_to tasks_path
+    end
+
+    it "marks a completed task as uncompleted" do
+      post tasks_path, params: @task_hash
+      existing_task_id = Task.all.first.id
+      expect _(Task.count).must_equal 1
+
+      patch complete_path(existing_task_id)
+      expect _(Task.all.first.completion_date).wont_be_nil
+
+      expect {
+        patch complete_path(existing_task_id)
+      }.must_differ "Task.count", 0   
+      assert_nil (Task.all.first.completion_date)
+      must_respond_with :redirect
+      must_redirect_to tasks_path
+    end
   end
 end

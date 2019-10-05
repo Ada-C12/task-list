@@ -1,13 +1,17 @@
 <section>
-    <h2>To do list</h2>
+    <h2>Your tasks</h2>
     <ul>
         <% @tasks.each do |task| %>
             <li>
-            <%= task.name %> -- <%= task.description %>  
+            <%= task.name %> -- <%= task.description %> 
+            
+            <% label = (task.completion_date) ? "Unmark complete" : "Mark complete" %> 
+            <%= link_to(label, complete_path(task.id), method: :patch) %>
+
             <%= link_to("Edit", edit_task_path(task.id)) %>
             <%= link_to("Delete", task_path(task.id), method: :delete, data: {confirm: "Delete this task!"}) %>
             </li>
         <%end%>
     </ul>
-        <%= link_to("Add new task!", new_task_path) %>
+        <%= link_to("Add task!", new_task_path) %>
 </section>
