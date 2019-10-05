@@ -1,4 +1,6 @@
 class TasksController < ApplicationController
+  before_action :set_task, except: [:create]
+  
   def index
     @tasks = Task.all
   end
@@ -68,15 +70,25 @@ class TasksController < ApplicationController
     @task.destroy
     
     redirect_to tasks_path
+
     return
   end
   
+  def complete
+    @task.update_attribute(:completed_at, Time.now)
+    redirect_to tasks_path, notice: "Task completed"
+   end
   
   private 
   
   def task_params
-    return params.require(:task).permit(:name, :description, :completion_date)
+    return params.require(:task).permit(:name, :description, :completed_at)
   end
   
+
+  def set_task
+    @task = Task.find_by(id: task_id)
+   end
+
 end
 
