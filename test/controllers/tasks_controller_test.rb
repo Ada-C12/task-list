@@ -2,9 +2,8 @@ require "test_helper"
 
 describe TasksController do
   let (:task) {
-    Task.create name: "sample task", description: "this is an example for a test",
-    completed: Time.now + 5.days 
-  }
+  Task.create name: "sample task", description: "this is an example for a test",
+  completed: Time.now + 5.days }
   
   # Tests for Wave 1
   describe "index" do
@@ -120,6 +119,16 @@ describe TasksController do
       
       must_respond_with :redirect
       must_redirect_to root_path
+    end
+    
+    it "won't update if the params are invalid" do
+      expect { patch task_path(task.id), params: {} }.must_raise
+      
+      updated_task = Task.find_by(id: task.id)
+      
+      expect(updated_task.name).wont_equal nil
+      expect(updated_task.description).wont_equal nil
+      expect(updated_task.completed).wont_equal nil
     end
   end
   
