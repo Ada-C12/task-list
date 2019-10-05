@@ -8,10 +8,11 @@ Rails.application.routes.draw do
   # only generate the specified routes
   root to: 'tasks#index'
   
+  patch '/tasks/:id/toggle_complete', to: 'tasks#toggle_complete', as:'complete_task'
+  patch '/tasks/:id/toggle_incomplete', to: 'tasks#toggle_incomplete', as:'incomplete_task'
+  
   resources :tasks 
   
-  patch '/tasks/:id', to: 'tasks#toggle_complete', as:'complete_task'
-  patch '/tasks/:id', to: 'tasks#toggle_incomplete', as:'incomplete_task'
   
 end
 

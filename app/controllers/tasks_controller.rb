@@ -97,8 +97,16 @@ class TasksController < ApplicationController
     # list.tasks.each do |task|
     #   task.update_attributes(completion_date: DateTime.now)
     # end
-    if @task.nil?
+    task_id = params[:id]
+    @task = Task.find_by(id: task_id)
+    
+    if @task.nil? 
       redirect_to root_path
+    else
+      @task.completion_date = nil
+      @task.save
+      redirect_to task_path(@task)
+      return
     end
     
   end
@@ -107,6 +115,6 @@ class TasksController < ApplicationController
   
   
   def task_params
-    return params.permit(:name, :description)
+    return params.permit(:name, :description, :completion_date)
   end
 end
