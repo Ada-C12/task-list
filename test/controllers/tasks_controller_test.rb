@@ -105,17 +105,22 @@ describe TasksController do
       }
     }
     
-    it "can update an existing task" do
-      existing_task = Task.create name: "sample task", description: "this is an example for a test",
+    before do
+      @existing_task = Task.create name: "sample task", description: "this is an example for a test",
       completion_date: nil
+    end
+    
+    it "can update an existing task" do 
+      # existing_task = Task.create name: "sample task", description: "this is an example for a test",
+      # completion_date: nil
       
       expect {
-        patch task_path(existing_task.id), params: changes_hash
+        patch task_path(@existing_task.id), params: changes_hash
       }.wont_change "Task.count"
       
       must_respond_with :redirect
       
-      task = Task.find_by(id: existing_task.id)
+      task = Task.find_by(id: @existing_task.id)
       
       expect(task.name).must_equal changes_hash[:task][:name]
       expect(task.description).must_equal changes_hash[:task][:description]
@@ -130,6 +135,35 @@ describe TasksController do
       }.wont_change "Task.count"
       
       must_redirect_to root_path
+    end
+    
+    it "will not update if params hash do not include changes" do
+      # Source: Michaela's slack post with some adjustments made by myself 
+      
+      expect {
+        patch task_path(@existing_task.id), params: {}
+      }.must_raise
+      
+      updated_task = Task.find_by(id: @existing_task.id)
+      expect(updated_task.name).must_equal @existing_task.name
+      expect(updated_task.description).must_equal @existing_task.description
+      expect(updated_task.completion_date).must_be_nil
+    end
+    
+    it "strong params will prevent updates to completion_date to be passed in" do 
+      illegal_params = {
+        task: {
+          completion_date: Time.now
+        },
+      }
+      
+      patch task_path(@existing_task.id), params: illegal_params
+      
+      updated_task = Task.find_by(id: @existing_task.id)
+      
+      expect(updated_task.name).must_equal @existing_task.name
+      expect(updated_task.description).must_equal @existing_task.description
+      expect(updated_task.completion_date).must_be_nil
     end
   end
   
