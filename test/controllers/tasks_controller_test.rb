@@ -95,9 +95,11 @@ describe TasksController do
     end
 
     it "will respond with redirect when attempting to edit a nonexistant task" do
-      skip
+  
+
       # Your code here
-      
+      get edit_task_path(-1)
+      must_respond_with :redirect 
     end
   end
 
@@ -107,10 +109,16 @@ describe TasksController do
     #        thing to test.
     it "can update an existing task" do
       # Your code here
+      
+
     end
 
     it "will redirect to the root page if given an invalid id" do
       # Your code here
+
+      # must_respond_with :redirect 
+      # must_redirect_to :root_path 
+
     end
   end
 
