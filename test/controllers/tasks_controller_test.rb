@@ -147,6 +147,20 @@ describe TasksController do
       must_respond_with :redirect
       must_redirect_to root_path
     end
+
+    it "won't update if the params are invalid" do
+      id = Task.first.id
+      unchanged_task = Task.find_by(id: id)
+          
+      expect {
+        patch task_path(id), params: {}
+      }.must_raise
+          
+      updated_task = Task.find_by(id: id)
+      expect(updated_task.name).must_equal unchanged_task.name
+      expect(updated_task.description).must_equal unchanged_task.description
+      expect(updated_task.completed).must_equal unchanged_task.completed
+    end
   end
   
   # Complete these tests for Wave 4
