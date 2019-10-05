@@ -85,39 +85,70 @@ describe TasksController do
   
   # Unskip and complete these tests for Wave 3
   # I Interpret this to be the form coming up to ENTER the information that's going to be edited. 
-
+  # Tests are borrowed from 
   describe "edit" do
     it "can get the edit page for an existing task" do
-      # Your code here
+      #Act
+      get edit_task_path(task.id)
+      
+      #Assert
+      must_respond_with :success
     end
     
     it "will respond with redirect when attempting to edit a nonexistant task" do
-      # Your code here
+      #Act
+      get edit_task_path(-1)
+      
+      #Assert
+      must_respond with :redirect
     end
-    
-    
-    
- 
-    
   end
   
   # Uncomment and complete these tests for Wave 3
   # I interpret this as POSTING  
+  # Tests borrowed from create
   describe "update" do
-    # Note:  If there was a way to fail to save the changes to a task, that would be a great
-    #        thing to test.
-    it "can update an existing task" do
-      # Your code here
+    # Note:  If there was a way to fail to save the changes to a task, that would be a great thing to test.
+    
+    # This creates a task that will be edited
+    before do
+      new_task = Task.new
+      new_task.name = "ln 115 sample task"
+      new_task.description = "this is an example for a test"
+      new_task.completion_date = Time.now + 5.days
+      new_task.save
+      
+    end
+    
+    it "can update an existing task and total number of tasks is unaffected" do
+      #Arrange
+      revising_task_description = "edited new task"
+      
+      #Expect
+      # new_task = Task.find_by(name:"ln 115 sample task")
+      test_task = Task.find_by(name:"ln 115 sample task")
+      test_task.description = revising_task_description
+
+      
+      #Assert
+      expect { patch test_task
+      }.must_change "Task.count", 0
+
+      expect(Task.find_by(name:"ln 115 sample task").description).must_equal revising_task_description
+
+      
     end
     
     it "will redirect to the root page if given an invalid id" do
-      # Your code here
+      #Act
+      get edit_task_path(-1)
+      
+      #Assert
+      must_respond_with :redirect
     end
 
-    it "will verify that the count does not change after editing an existing task" do
-    end
   end
-  
+
   # Complete these tests for Wave 4
   describe "destroy" do
     # Your tests go here
