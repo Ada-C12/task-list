@@ -140,20 +140,20 @@ describe TasksController do
       must_redirect_to root_path
     end
     
-    it "throws an error for empty params" do
-      # arrange
-      task_hash = {}
+    it "won't update if the params are invalid" do
+      test_id = task.id
+      unchanged_task = Task.find_by(id: test_id)
       
-      # act-assert
-      
-      # expect {
-      #   patch task_path(task.id), params: task_hash
-      # }.wont_change "Task.count"
-      
-      patch task_path(task.id), params: task_hash
+      patch task_path(test_id), params: {}
       
       must_respond_with :bad_request
+      
+      updated_task = Task.find_by(id: test_id)
+      expect(updated_task.name).must_equal unchanged_task.name
+      expect(updated_task.description).must_equal unchanged_task.description
+      expect(updated_task.completion_date).must_equal unchanged_task.completion_date
     end
+    
   end
   
   # Complete these tests for Wave 4
