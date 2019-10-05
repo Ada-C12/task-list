@@ -35,6 +35,7 @@ class TasksController < ApplicationController
   def edit
     task_id = params[:id].to_i
     @edit_task = Task.find_by(id: task_id)
+    session[:return_to] = request.referer
     
     if @edit_task.nil?
       redirect_to root_path
@@ -48,11 +49,10 @@ class TasksController < ApplicationController
       redirect_to root_path
       return
     end
-    
     @task.update( task_params )
     
     if @task.update( task_params )
-      redirect_to task_path(@task.id)
+      redirect_to session.delete(:return_to)
       return
     else
       render new_task_path
