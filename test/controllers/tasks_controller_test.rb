@@ -195,4 +195,21 @@ describe TasksController do
       must_redirect_to root_path
     end
   end
+  
+  describe "Strong Params" do
+    # Michaela's strong params test
+    it "won't update if the params are invalid" do
+      unchanged_task = task
+      
+      expect {
+        patch task_path(unchanged_task.id), params: {}
+      }.must_raise
+      
+      updated_task = Task.find_by(id: unchanged_task.id)
+      expect(updated_task.name).must_equal unchanged_task.name
+      expect(updated_task.description).must_equal unchanged_task.description
+      expect(updated_task.completion_date).must_equal unchanged_task.completion_date
+    end
+  end
+  
 end
