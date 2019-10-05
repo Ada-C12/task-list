@@ -121,7 +121,7 @@ describe TasksController do
       expect(edited_task.description).must_equal @updated_task[:task][:description]
     end
 
-    it "will redirect to the list of tasks if given an invalid id" do
+    it "will redirect to the list of tasks if given an invalid ID" do
       # Your code here
       task_id = -1
       patch task_path(task_id), params: @updated_task
