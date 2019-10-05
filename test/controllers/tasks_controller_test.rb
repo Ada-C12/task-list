@@ -1,5 +1,6 @@
 require "test_helper"
 require "pry"
+require "time"
 
 describe TasksController do
   let (:task) {
@@ -129,13 +130,13 @@ describe TasksController do
     #   must_redirect_to books_path
     # end
 
-    it "redirects to tasks index page if selected task has alreayd been deleted and doesn't delete any other tasks" do
-      Task.create(name: "Cuddle with Kaya", description: "She hates cuddles but do it anyways hehehehehe", completed: nil)
-      task_id = Task.find_by(name: "Cuddle with Kaya").id
+    it "redirects to tasks index page if selected task has already been deleted and doesn't delete any other tasks" do
+      my_task = Task.create(name: "Cuddle with Kaya", description: "She hates cuddles but do it anyways hehehehehe", completed: nil)
+      
       Task.destroy_all
 
       expect {
-        delete task_path(task_id)
+        delete task_path(my_task.id)
       }.must_differ "Task.count", 0
 
       must_redirect_to tasks_path
@@ -144,6 +145,24 @@ describe TasksController do
   end
 
   describe "toggle_complete" do
-    # Your tests go here
+    it "should be marked with today's date for attribute completed and redirects to tasks_path" do
+      my_task = Task.create(name: "Cuddle with Kaya", description: "She hates cuddles but do it anyways hehehehehe", completed: nil)
+
+      updated_task_data = {
+        task: {
+          completed: Time.now
+        }
+      }
+
+      patch completed_task_path(my_task.id), params: updated_task_data
+
+      completed_task = Task.find_by(id:my_task.id)
+      expect(completed_task.completed).must_be_kind_of Time 
+      must_redirect_to tasks_path
+    end 
+
+    it "should have a strikethrough" do 
+
+    end 
   end
 end

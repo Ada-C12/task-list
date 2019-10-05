@@ -1,3 +1,5 @@
+require "time"
+
 class TasksController < ApplicationController
   
   def index 
@@ -67,4 +69,21 @@ class TasksController < ApplicationController
       return
     end
   end
+
+  def completed 
+    @task = Task.find_by(id: params[:id])
+
+    if @task.nil?
+      redirect_to tasks_path
+      return
+    else
+      if @task.completed == nil 
+        @task.completed = Time.now
+        @task.save
+        redirect_to tasks_path
+        return
+        #then cross out the task with a strikethrough
+      end
+    end
+  end 
 end
