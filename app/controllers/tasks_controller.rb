@@ -19,7 +19,7 @@ class TasksController < ApplicationController
   end
 
   def create
-    @task = Task.new(name: params[:task][:name], description: params[:task][:description], completion_date: params[:task][:completion_date] )
+    @task = Task.new(task_params)
 
     if @task.save
       redirect_to task_path(@task.id)
@@ -27,18 +27,62 @@ class TasksController < ApplicationController
       render new_task_path
     end
   end
+
+  def edit
+    @task = Task.find_by(id: params[:id])
+    if @task == nil
+      redirect_to tasks_path
+    end
+  end
+
+  def update
+    @task = Task.find_by(id: params[:id])
+
+    if @task == nil
+      redirect_to tasks_path
+      return
+    end
+
+    @task.name = params[:task][:name]
+    @task.description = params[:task][:description]
+    @task.completion_date = params[:task][:completion_date]
+
+    if @task.save
+      redirect_to task_path(@task.id)
+    end
+  end
+
+  def destroy
+    the_correct_task = Task.find_by( id: params[:id] )
+
+    if the_correct_task.nil?
+      # Then the task was not found!
+      redirect_to tasks_path
+      return
+    else
+      # Then we did find it!
+      the_correct_task.destroy
+      redirect_to root_path
+      return
+    end
+  end
+
+  # def toggle_complete(completion_status)
+  #   # @task = Task.find_by(id: params[:id])
+  #   if completion_status == nil
+  #     #change the completion status to Time.now
+  #     return completion_status = Time.now
+  #   else
+  #     return completion_status = nil
+  #   end
+  # end
+
+  private
+
+  def task_params
+    #the responsibility of this method is to return strong params
+    #.require is used when we use form_with a model, and therefore our expected form data has the "task" hash inside of it
+    #.permit takes in a list of names of attributes to allow... tasks have name, description, completion_date
+    return params.require(:task).permit(:name, :description, :completion_date)
+  end
 end
-
-# notes from lecture
-
-# it "updates ane xisting task successfully and reidrects to home" do
-#   #find an existing task and its id
-#   book_to_update_id = Book.last.id
-
-#   #Act
-#   #update teh book data
-
-#   #assert
-#   updated_book = Book.find_by(id: book_to_update_id)
-#   expect(updated_book.title).must_equal "updated value"
-# end
