@@ -157,11 +157,22 @@ describe TasksController do
     end
   end
   
-  # #   # Complete these tests for Wave 4
-  # #   describe "destroy" do
-  # #     # Your tests go here
+   # Complete these tests for Wave 4
+    describe "destroy" do
+    # Your tests go here
+    it "can delete an existing task" do
+      # Your code here
+      existing_task = Task.create(name: "new", description: "something")
   
-  # #   end
+      #Act
+      delete task_path(existing_task.id)
+      must_redirect_to root_path
+      
+      #Assert
+      expect( Task.find_by(id: existing_task.id) ).must_be_nil
+    end
+  
+ end
   
   # #   # Complete for Wave 4
   # #   describe "toggle_complete" do
