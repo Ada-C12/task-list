@@ -3,8 +3,9 @@ Rails.application.routes.draw do
   root 'tasks#index'
   
   resources :tasks, except: [:update]
-  patch 'tasks/:id', to: 'tasks#toggle_complete', as: 'completed' 
-  patch 'tasks/:id', to: 'tasks#update', as: 'update_task'
+  patch 'tasks/:id', to: 'tasks#update'
+  patch 'tasks/:id/completion', to: 'tasks#toggle_complete', as: 'completed' 
+  #patch 'tasks/:id', to: 'tasks#update'
   #patch 'tasks/:id', to: 'tasks#toggle_complete', as: 'completed' 
   
   
