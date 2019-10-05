@@ -72,14 +72,21 @@ class TasksController < ApplicationController
   def toggle_complete
     @task = Task.find_by(id: params[:id])
     
-    
-    
+    if @task.completion_date == nil
+      @task.update(completion_date: Time.now)
+      redirect_to root_path
+      return
+    else
+      @task.update(completion_date: nil)
+      redirect_to root_path
+      return
+    end
   end
   
   private
   
   def task_params
-    return params.require(:task).permit(:name, :description)
+    return params.permit(:name, :description, :completion_date)
   end
   
 end
