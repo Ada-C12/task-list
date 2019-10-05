@@ -3,4 +3,6 @@ Rails.application.routes.draw do
 
   resources :tasks
   # will neeed a marked complete route
+  patch '/tasks/:id/completed', to: 'tasks#mark_completed', as: :mark_complete
+  
 end

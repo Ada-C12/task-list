@@ -54,21 +54,32 @@ class TasksController < ApplicationController
     end
   end
   
-  # def destroy
-  #   task = Task.find_by(id: params[:id])
+  def destroy
+    task = Task.find_by(id: params[:id])
   
-  #   if task.nil?
-  #     redirect_to tasks_path
-  #     return
-  #   else
-  #     task.destroy
-  #     redirect_to root_path
-  #     return
-  #   end
-  # end
+    if task.nil?
+      redirect_to tasks_path
+      return
+    else
+      task.destroy
+      redirect_to root_path
+      return
+    end
+  end
   
-  # def mark_completed
-  # end
+  def mark_completed
+    # update completion_date to Date.today
+    task = Task.find_by(id: params[:id])
+
+    if task.completion_date.nil?
+      task.update(completion_date: Date.today)
+    else
+      task.update(completion_date: nil)
+    end
+
+    redirect_to tasks_path
+    return
+  end
   
   private
   
