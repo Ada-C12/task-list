@@ -175,7 +175,25 @@ describe TasksController do
  end
   
   # #   # Complete for Wave 4
-  # #   describe "toggle_complete" do
+   describe "toggle_complete" do
   # #     # Your tests go here
-  # #   end
+    # Note:  If there was a way to fail to save the changes to a task, that would be a great thing to test.
+    it "can mark tasks as completed " do
+      # Your code here
+      existing_task = Task.create(name: "new", description: "something")
+      update_task_form_data = {
+        task:{
+          name: "Cleaning",
+          description: "Cleaning Home",
+          date: "10-04-2019"
+        }
+      }
+      #Act
+      patch task_path(existing_task.id, params: update_task_form_data)
+      must_redirect_to root_path
+      
+      #Assert
+      expect( Task.find_by(id: existing_task.id).date).wont_equal nil
+    end
+  end
 end

@@ -1,7 +1,7 @@
 
 class TasksController < ApplicationController
   def index
-    @tasks = Task.all
+    @tasks = Task.all.order(:id)
   end
   
   # create a controller action
@@ -91,8 +91,8 @@ class TasksController < ApplicationController
     
   end
   
-  
   private
+
   def task_params 
     return params.require(:task).permit(:name, :description, :date)
   end
