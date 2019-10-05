@@ -177,18 +177,17 @@ describe TasksController do
     end
   end
 
-  #Complete for Wave 4
-  # describe "toggle_complete" do
-  #   it "updates a task by changing completion_date from nil to a timestamp when a user clicks on the 'complete task' button" do
-  #     # Your tests go here
-  #     updated_task = Task.create(name: "A test task", description: "This is how you do it", completion_date: nil)
-  #     # task_id = Task.find_by(name: "A test task").id
+  # Complete for Wave 4
+  describe "toggle_complete" do
+    it "updates a task by changing completion_date from nil to a timestamp when a user clicks on the 'complete task' button" do
+      # Your tests go here
+      updated_task = Task.create(name: "A test task", description: "This is how you do it", completion_date: nil)
 
-  #     expect {
-  #       patch complete_task_path(task_id)
-  #     }.must_differ "Task.count", 0
+      expect {
+        patch complete_task_path(updated_task.id)
+      }.must_differ "Task.count", 0
 
-  #     must_redirect_to tasks_path
-  #   end
-  # end
+      must_redirect_to tasks_path
+    end
+  end
 end
