@@ -142,9 +142,29 @@ describe TasksController do
   
   # Complete for Wave 4
   describe "toggle_complete" do
-    # Your tests go here
-    it "must instantiate with toggle_complete set to false" do
+    let (:task) {
+      Task.create name: "sample task", description: "this is an example for a test",
+      completed: nil
+    }
+    
+    it "can toggle_complete a task (populate :completed with Time.now)" do
+      expect(task.completed).must_equal nil
+      patch toggle_complete_path(task)
       
+      must_respond_with :redirect
+      must_redirect_to root_path
+      
+      testing_task_id = task[:id]
+      completed_task = Task.find_by(id: testing_task_id)
+      
+      expect(completed_task[:completed]).must_be_instance_of ActiveSupport::TimeWithZone
+      
+    end
+    it "will redirect to the root page if given an invalid id" do
+      
+      patch toggle_complete_path(-1)
+      must_respond_with :redirect
+      must_redirect_to root_path
     end
   end
 end

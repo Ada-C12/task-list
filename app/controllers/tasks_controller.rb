@@ -67,29 +67,21 @@ class TasksController < ApplicationController
   def toggle_complete
     task_id = params[:id]
     @task = Task.find_by(id: task_id)
-    @task[:completed] = Time.now
     
+    if @task.nil?
+      flash[:error] = "Error, task not found."
+      redirect_to root_path
+      return
+    end
+    
+    @task.completed = Time.new
+    @task.save
     redirect_to root_path
-    
   end
   
   def toggle_incomplete
-    # ask_id = params[:id]
-    # @task = Task.find_by(:id task_id)
     
-    # if @task.nil?
-    #   flash[:error] = "Error, not a task."
-    #   redirect_to root_path
-    #   return
-    # end
-    # @task[:completed] = nil
-    # redirect_to root_path
   end
-  #   toggle complete is 
-  # it is two patch requests 
-  # if `complete` is set to nil, then patch request complete to "time-now"
-  # Time: right now 
-  # or time nil
   
   
   private
