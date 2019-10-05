@@ -191,7 +191,7 @@ describe TasksController do
   end
   
   # Complete for Wave 4
-  describe "toggle_complete" do
+  describe "complete" do
     before do
       Task.create(name: "Laundry", description: "drop off at John Doe LLC", completed: nil)
     end
