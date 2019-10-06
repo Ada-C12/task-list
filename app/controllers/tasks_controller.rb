@@ -67,17 +67,20 @@ class TasksController < ApplicationController
   end
   
   def toggle_complete
-    # update completion_date to Date.today
     task = Task.find_by(id: params[:id])
-    
-    if task.completion_date.nil?
-      task.update(completion_date: Date.today)
+
+    if task.nil?
+      redirect_to root_path
+      return
     else
-      task.update(completion_date: nil)
+      if task.completion_date.nil?
+        task.update(completion_date: Date.today)
+      else
+        task.update(completion_date: nil)
+      end
+      redirect_to tasks_path
+      return
     end
-    
-    redirect_to tasks_path
-    return
   end
   
   private

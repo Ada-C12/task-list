@@ -101,7 +101,7 @@ describe TasksController do
         task: {
           name: "Walk dog",
           description: "Walk the dog",
-          completion_date: "10-03-2019",
+          completion_date: nil,
         },
       }
       task_url = "/tasks/" + "#{task.id}"
@@ -118,7 +118,7 @@ describe TasksController do
         task: {
           name: "Walk dog",
           description: "Walk the dog",
-          completion_date: "10-03-2019",
+          completion_date: nil,
         },
       }
       must_redirect_to root_path
@@ -127,7 +127,7 @@ describe TasksController do
     it "will not update if given invalid params" do
       new_task = Task.create(
         name: "Make dinner", 
-        description: "figure out something edible from the fridge",
+        description: "Find something edible in the fridge",
         completion_date: nil
       )
       
@@ -135,7 +135,7 @@ describe TasksController do
         patch task_path(new_task_id), params: {}
       }.must_raise 
       expect(new_task.name).must_equal "Make dinner"
-      expect(new_task.description).must_equal "figure out something edible from the fridge"
+      expect(new_task.description).must_equal "Find something edible in the fridge"
       expect(new_task.completion_date).must_be_nil
     end
   end
@@ -145,7 +145,7 @@ describe TasksController do
     it 'successfully deletes a task and redirects to the root path' do
       new_task = Task.create(
         name: "Make dinner", 
-        description: "figure out something edible from the fridge",
+        description: "Find something edible in the fridge",
         completion_date: nil
       )
       new_task_id = new_task.id
@@ -161,7 +161,7 @@ describe TasksController do
       Task.destroy_all
       new_task = Task.create(
         name: "Make dinner", 
-        description: "figure out something edible from the fridge",
+        description: "Find something edible in the fridge",
         completion_date: nil
       )
       invalid_task_id = 600
@@ -177,7 +177,7 @@ describe TasksController do
     it "redirects to the tasks path and does not delete any tasks if the task has already been deleted" do
       new_task = Task.create(
         name: "Make dinner", 
-        description: "figure out something edible from the fridge",
+        description: "Find something edible in the fridge",
         completion_date: nil
       )
       new_task_id = new_task.id
@@ -193,6 +193,51 @@ describe TasksController do
 
   # Complete for Wave 4
   describe "toggle_complete" do
-    # Your tests go here
+    it "successfully updates completion_date to today's date if nil and redirects to the tasks path" do
+      new_task = Task.create(
+        name: "Finish homework", 
+        description: "Complete Exercism assignment",
+        completion_date: nil
+      )
+      new_task_id = new_task.id
+      today = Date.today
+
+      patch toggle_complete_path(new_task_id)
+
+      expect(Task.find_by(id: new_task.id).completion_date).wont_be_nil
+      must_redirect_to tasks_path
+      expect(Task.find_by(id: new_task.id).completion_date).must_equal today
+    end
+
+    it "updates completion_date to nil if completion_date is not nil and redirects to the tasks path" do
+      today = Date.today
+      new_task = Task.create(
+        name: "Water plante", 
+        description: "Water all the plants",
+        completion_date: today
+      )
+      new_task_id = new_task.id 
+
+      patch toggle_complete_path(new_task_id)
+
+      expect(Task.find_by(id: new_task.id).completion_date).must_be_nil
+      must_redirect_to tasks_path
+    end
+
+    
+    it "won't change the completion_date of any tasks if given an invalid task id and redirects to the root path" do
+      new_task = Task.create(
+        name: "Clean living room", 
+        description: "Straighten up and vacuum",
+        completion_date: nil
+      )
+      new_task_id = new_task.id
+      invalid_task_id = 0
+
+      patch toggle_complete_path(invalid_task_id)
+      
+      expect(Task.find_by(id: new_task_id).completion_date).must_be_nil
+      must_redirect_to root_path
+    end
   end
 end
