@@ -6,7 +6,7 @@ class TasksController < ApplicationController
   
   def show
     task_id = params[:id]
-    @task = Task.find_by(id: task_id)
+    @task = Task.where(id: task_id)
     
     if @task.nil?
       head :not_found
@@ -19,7 +19,8 @@ class TasksController < ApplicationController
   end
   
   def create
-    @task = Task.new(name: params[:task][:description], description: params[:task][:description], completion_date: params[:task][:completion_date]) #instantiate a new task
+    @task = Task.new(
+      name: params[:task][:description], description: params[:task][:description], completion_date: params[:task][:completion_date]) #instantiate a new task
     if @task.save # save returns true if the database insert succeeds
       redirect_to tasks_path # go to the index so we can see the task in the list
       return
@@ -51,6 +52,19 @@ class TasksController < ApplicationController
     render :edit # show the new task form view again
     return
   end
-end
-
+  
+  def destroy
+    book_id = params[:id]
+    @book = Book.find_by(id: book_id)
+    if @book.nil?
+      head :not_found
+      return
+    end
+    @book.destroy
+    redirect_to books_path
+    return
+  end
+  
+  
+  
 end
