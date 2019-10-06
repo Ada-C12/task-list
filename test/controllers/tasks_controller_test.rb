@@ -1,126 +1,174 @@
 require "test_helper"
 
+#two types of testing: 1. does the path work, 2. does the method work
+
 describe TasksController do
   let (:task) {
-    Task.create name: "sample task", description: "this is an example for a test",
-                completion_date: Time.now + 5.days
-  }
+  Task.create name: "sample task", description: "this is an example for a test"}
 
-  # Tests for Wave 1
-  describe "index" do
-    it "can get the index path" do
-      # Act
-      get tasks_path
-
-      # Assert
-      must_respond_with :success
-    end
-
-    it "can get the root path" do
-      # Act
-      get root_path
-
-      # Assert
-      must_respond_with :success
-    end
+# Tests for Wave 1
+describe "index" do
+  it "can get the index path" do
+    # Act
+    get root_path
+    
+    # Assert
+    must_respond_with :success
   end
-
-  # Unskip these tests for Wave 2
-  describe "show" do
-    it "can get a valid task" do
-      skip
-      # Act
-      get task_path(task.id)
-
-      # Assert
-      must_respond_with :success
-    end
-
-    it "will redirect for an invalid task" do
-      skip
-      # Act
-      get task_path(-1)
-
-      # Assert
-      must_respond_with :redirect
-      expect(flash[:error]).must_equal "Could not find task with id: -1"
-    end
-  end
-
-  describe "new" do
-    it "can get the new task page" do
-      skip
-
-      # Act
-      get new_task_path
-
-      # Assert
-      must_respond_with :success
-    end
-  end
-
-  describe "create" do
-    it "can create a new task" do
-      skip
-
-      # Arrange
-      task_hash = {
-        task: {
-          name: "new task",
-          description: "new task description",
-          completion_date: nil,
-        },
-      }
-
-      # Act-Assert
-      expect {
-        post tasks_path, params: task_hash
-      }.must_change "Task.count", 1
-
-      new_task = Task.find_by(name: task_hash[:task][:name])
-      expect(new_task.description).must_equal task_hash[:task][:description]
-      expect(new_task.due_date.to_time.to_i).must_equal task_hash[:task][:due_date].to_i
-      expect(new_task.completed).must_equal task_hash[:task][:completed]
-
-      must_respond_with :redirect
-      must_redirect_to task_path(new_task.id)
-    end
-  end
-
-  # Unskip and complete these tests for Wave 3
-  describe "edit" do
-    it "can get the edit page for an existing task" do
-      skip
-      # Your code here
-    end
-
-    it "will respond with redirect when attempting to edit a nonexistant task" do
-      skip
-      # Your code here
-    end
-  end
-
-  # Uncomment and complete these tests for Wave 3
-  describe "update" do
-    # Note:  If there was a way to fail to save the changes to a task, that would be a great
-    #        thing to test.
-    it "can update an existing task" do
-      # Your code here
-    end
-
-    it "will redirect to the root page if given an invalid id" do
-      # Your code here
-    end
-  end
-
-  # Complete these tests for Wave 4
-  describe "destroy" do
-    # Your tests go here
-
-  end
-
-  # Complete for Wave 4
-  describe "toggle_complete" do
-    # Your tests go here
+  
+  it "can get the root path" do
+    # Act
+    get root_path
+    
+    # Assert
+    must_respond_with :success
   end
 end
+
+# Unskip these tests for Wave 2
+describe "show" do
+  it "can get a valid task" do
+    # Act
+    get task_path(task.id)
+    
+    # Assert
+    must_respond_with :success
+  end
+  
+  it "will redirect for an invalid task" do
+    # Act
+    get task_path(-1)
+    
+    # Assert
+    must_respond_with :redirect
+  end
+end
+
+describe "new" do
+  it "can get the new task page" do
+    # Act
+    get new_task_path
+    
+    # Assert
+    must_respond_with :success
+  end
+end
+
+describe "create" do
+  it "can create a new task" do
+    # Arrange
+    task_hash = {
+    task: {
+    name: "new task",
+    description: "new task description",
+    completed: nil,
+  },
+}
+
+# Act-Assert
+expect {
+post tasks_path, params: task_hash
+}.must_change "Task.count", 1
+
+new_task = Task.find_by(name: task_hash[:task][:name])
+expect(new_task.description).must_equal task_hash[:task][:description]
+#changed below to assert_nil at the insistence of minitest 
+assert_nil(new_task.completed)
+must_respond_with :redirect
+must_redirect_to task_path(new_task.id)
+end
+end
+
+# Unskip and complete these tests for Wave 3
+describe "edit" do
+  it "can get the edit page for an existing task" do
+    
+    # Act
+    get edit_task_path(task.id)
+    
+    # Assert
+    must_respond_with :success
+  end
+  
+  
+  it "will respond with redirect when attempting to edit a nonexistant task" do
+    get edit_task_path("394857")
+    must_respond_with :redirect
+    must_redirect_to tasks_path
+    # Your code here
+  end
+end
+
+# Uncomment and complete these tests for Wave 3
+describe "update" do
+  before do 
+    @task_2 = Task.create(name: "original name", description: "original description", completed: nil)
+  end 
+  it "can update an existing task" do
+    updated_task_hash = {
+    task: {
+    name: "updated name",
+    description: "updated description",
+    completed: nil,
+  },
+}
+
+expect { 
+patch task_path(@task_2.id), params: updated_task_hash
+}.wont_change 'Task.count'
+
+@task_2.reload 
+
+expect(@task_2.name).must_equal updated_task_hash[:task][:name]
+expect(@task_2.description).must_equal updated_task_hash[:task][:description]
+
+#add redirect to tasks path 
+end 
+
+
+it "will redirect to the root page if given an invalid id" do
+  patch task_path(959685)
+  must_respond_with :redirect
+  must_redirect_to root_path
+end
+end
+
+# Complete these tests for Wave 4
+describe "destroy" do
+  before do 
+    @this_task_is_toast = Task.create(name: "goodbye", description: "so long", completed: nil)
+  end 
+  
+  it "can destroy a task" do 
+    expect { 
+    delete task_path(@this_task_is_toast.id)
+  }.must_change 'Task.count' 
+    must_respond_with :redirect 
+  
+    get task_path(@this_task_is_toast.id)
+    must_respond_with :redirect
+  end 
+end 
+
+# Complete for Wave 4
+describe "toggle_complete" do
+  before do 
+    @task_3 = Task.create(name: "original name", description: "original description", completed: Time.now)
+  end 
+  
+  it "will mark an incomplete task as complete with a Time object" do 
+    patch complete_task_path(task.id)
+    task.reload 
+    refute_nil(task.completed)
+    expect(task.completed).must_be_kind_of Time
+  end
+
+  it "will mark completed tasks as incomplete" do 
+    task_id = @task_3.id 
+    patch complete_task_path(task_id)
+    @task_3.reload
+    assert_nil(@task_3.completed)
+  end
+end 
+
+end 
