@@ -142,7 +142,7 @@ describe TasksController do
     
     it "will redirect to the root page if given an invalid id" do
       # Arrange:
-   
+      
       updated_task_form_data = {
         task: {
           name: "cs fun",
@@ -150,46 +150,47 @@ describe TasksController do
           completed: Date.today
         }
       }
-    
+      
       patch task_path(-1), params: updated_task_form_data
       # Assert:
-     must_respond_with :redirect
-     must_redirect_to root_path
+      must_respond_with :redirect
+      must_redirect_to root_path
     end
   end
   
   # Complete these tests for Wave 4
   describe "destroy" do
-   
-    it "successfully deletes an existing task and then redirects to home page" do
-
-    created_task = task
-    expect{
-      delete task_path(created_task.id)
-    }.must_differ "Task.count", -1
-    must_redirect_to root_path
     
+    it "successfully deletes an existing task and then redirects to home page" do
+      
+      created_task = task
+      expect{
+        delete task_path(created_task.id)
+      }.must_differ "Task.count", -1
+      must_redirect_to root_path
+      
     end
   end
-    
+  
   # Complete for Wave 4
   describe "toggle_complete" do
-    # Your tests go here
-
+    
     it "successfully marks a task as complete with completed date" do
       #Arrange
       #when the user clicks on the complete button, the program will go back into the data base and
       #change the completed date from nil and set it to the current date.
-
+      
       existing_task =  Task.create(name: "cs fun", description: "recursion practice", completed: nil)
       patch complete_path(existing_task)
-    
       expect(Task.find_by(id: existing_task.id).completed).must_be_instance_of  ActiveSupport::TimeWithZone
-
     end
     it "marks can mark an task incomplete by changing complete date to nil" do
-    end
-    it "successfully redirect back to the rootpage once marked complete" do
+      new_task =  Task.create(name: "cs fun", description: "recursion practice", completed: Time.now + 2)
+      patch complete_path(new_task)
+      expect(Task.find_by(id: new_task.id).completed).must_equal nil
+      #expect(Task.find_by(id: new_task.id).completed).must_respond_with :redirect
+      must_respond_with :redirect 
+      must_redirect_to root_path
     end
   end
 end
