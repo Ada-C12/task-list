@@ -43,15 +43,15 @@ class TasksController < ApplicationController
   end
   
   def update
-    @task = Task.find_by(id: params[:id])
+    @task = Task.find_by(id: params[:id]) 
+    if @task.nil?
+      redirect_to root_path
+      return 
+    end
     if params[:task][:completed] == "1"
       update_completed = Time.now 
     else 
       update_completed = nil
-    end 
-    if @task.nil?
-      redirect_to root_path
-      return 
     end 
     if @task.update(
       name: params[:task][:name],
