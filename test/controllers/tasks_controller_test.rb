@@ -183,11 +183,11 @@ describe TasksController do
       must_redirect_to tasks_path
     end 
 
-    it 
+    it "will respond with an error if invalid id is given" do
+      patch complete_task_path('150')
 
-
-
-
+      must_respond_with :not_found
+    end 
   end
 end
 

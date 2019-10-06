@@ -90,9 +90,12 @@ class TasksController < ApplicationController
     # Update the database with the task's completed date
     task_id = params[:id]
 
-    @task = Task.find(task_id)
+    @task = Task.find_by(id: task_id)
+    if @task.nil?
+      head :not_found
+      return
 
-    if @task.completed == nil
+    elsif @task.completed == nil
       @task.completed = Time.now
       @task.save
       redirect_to tasks_path
@@ -104,7 +107,7 @@ class TasksController < ApplicationController
       redirect_to tasks_path
       return
     end 
-    puts @task.completed
+    
   end 
 
   private
