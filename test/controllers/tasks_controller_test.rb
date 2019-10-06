@@ -163,10 +163,10 @@ describe TasksController do
 
       gmsb_task = Task.create(task_hash[:task])
 
-        patch task_path(gmsb_task.id) + "/complete"
+        patch complete_task_path(gmsb_task.id)
 
       expect(Task.find_by(id: gmsb_task.id).completed).wont_equal nil
-  end
+    end
 
   end
 end
