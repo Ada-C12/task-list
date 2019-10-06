@@ -1,17 +1,26 @@
-
+<header>
 <h1>Task List</h1>
-<h3>Click Here to create a new task ---><%= link_to " New Task", new_task_path %></h3>
+<button>
+ <%= link_to "Add Task", new_task_path %></button>
 
-  <ul class="task-list">
+<ul class="task-list">
   <% @tasks.each do |task| %>
     <li>
-    <p><strong>Task:</strong> <%= link_to "#{task.name}", task_path(task)%> 
-     <p> <strong>Description:</strong> <%="#{task.description}"%>
-     <p> <strong>Date:</strong> <%= "#{task.date}" %></p>   
-     <p> Click Here ---><%= link_to  " To Edit", edit_task_path(task) %> <%= link_to  " OR Delete", task_path(task), method: :delete, data: {confirm: "Are you sure you want to delete?"}%> <%= link_to "Click here to complete the task", completed_path(task), method: :patch %></p>
+      <strong>Task:</strong> <%= link_to "#{task.name}", task_path(task)%>
+      <strong>Description:</strong> <%="#{task.description}"%>
+      <strong>Date:</strong> <%= "#{task.date}" %> 
+
+      <div><br>
+      <%= link_to  "Edit Task | ", edit_task_path(task) %>
+      <%= link_to  "Delete Task | ", task_path(task), method: :delete, data: {confirm: "Are you sure you want to delete?"}%><br>
+      <%= link_to "Task completed | ", completed_path(task), method: :patch %>
+     <%= link_to "Task Not completed | ", completed_path(task), method: :patch %>
+      </div>
     </li>
   <% end %> 
 </ul>
+</header>
+
 <footer>
     <p>2019 Yasmin</p>
     <p>Contact: <a href="mailto:Yasmin@example.com">
