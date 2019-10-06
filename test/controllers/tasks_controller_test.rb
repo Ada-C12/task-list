@@ -38,8 +38,6 @@ describe TasksController do
     it "will redirect for an invalid task" do
       # Act
       get task_path(-1)
-      
-      # 
       must_respond_with :redirect
     end
   end
