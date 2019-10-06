@@ -12,7 +12,7 @@ class TasksController < ApplicationController
   
   def show
     task_id = params[:id]
-    @task = Task.find_by(id:task_id)
+    @task = Task.find_by(id: task_id)
     
     if @task.nil?
       head :not_found
@@ -105,7 +105,8 @@ class TasksController < ApplicationController
     else
       @task.completion_date = nil
       @task.save
-      redirect_to task_path(@task)
+      redirect_to root_path
+      # redirect_to task_path(@task)
       return
     end
     
@@ -118,3 +119,4 @@ class TasksController < ApplicationController
     return params.permit(:name, :description, :completion_date)
   end
 end
+
