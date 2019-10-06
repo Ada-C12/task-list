@@ -46,8 +46,12 @@ class TasksController < ApplicationController
   
   def update
     @task = Task.find_by(id: params[:id])
+    if @task.nil?
+      redirect_to root_path
+      return
+    end
     if @task.update(task_params)
-      redirect_to root_path(@task) # go to the index so we can see the book in the list
+      redirect_to tasks_path # go to the index so we can see the book in the list
       return
     else # save failed :(
       render :edit # show the new book form view again
