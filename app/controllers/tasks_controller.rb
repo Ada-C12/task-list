@@ -1,3 +1,5 @@
+require "pry"
+
 class TasksController < ApplicationController
   def index
     @tasks = Task.all
@@ -73,12 +75,15 @@ class TasksController < ApplicationController
   end
 
   def toggle_complete
+    task_id = params[:id]
     @task = Task.find_by(id: task_id)
     if @task.completed == nil
       @task.completed = Time.now
+    else
+      @task.completed = nil
     end
     @task.save
-    redirect_to current_user
+    redirect_to tasks_path
   end
 
   private
