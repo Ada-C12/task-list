@@ -31,7 +31,12 @@ class TasksController < ApplicationController
  
  #dit and update methods work in congress. Edit gets the information that's going to changed. Update actually uses the informxation from the filled in form to then update the instance information in the db. 
  def edit
-  @task = Task.find_by(id: params[:id])
+  begin
+   @task = Task.find(params[:id])
+  rescue ActiveRecord::RecordNotFound => e
+   redirect_to root_path
+  else @task = Task.find(params[:id])
+  end
  end
  
  def update
@@ -41,10 +46,10 @@ class TasksController < ApplicationController
   @task.progress = params[:task][:progress]
   @task.completion_date = params[:task][:completion_date]
   
-  if @task.save
-   redirect_to root_path
-  else
+  if @task.save(id: params[task.id])
    redirect_to task_path(@task.id)
+  else
+   redirect_to action: 'index', status: 303
   end
  end
  
