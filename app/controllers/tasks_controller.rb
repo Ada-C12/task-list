@@ -33,16 +33,20 @@ class TasksController < ApplicationController
     @task = Task.find_by(id: params[:id])
 
     if @task.nil?
-      head :not_found
+      redirect_to edit_task_path
       return
     end
   end
 
   def update
     @task = Task.find_by(id: params[:id])
-    if @task.update(task_params)
-      redirect_to task_path
+    if @task.nil?
+      redirect_to tasks_path
       return
+    end
+    result = @task.update(task_params)
+    if result
+      redirect_to task_path(@task.id) # or params[:id]
     else
       render :edit
       return

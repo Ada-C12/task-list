@@ -29,7 +29,7 @@ describe TasksController do
 
     it "will redirect for an invalid task" do
       get edit_task_path(-1)
-      must_respond_with :not_found
+      must_respond_with :redirect
     end
   end
 
@@ -65,57 +65,57 @@ describe TasksController do
   describe "update" do
     before do
       @new_task = Task.create(name: "make beds")
-    end
-    it "can update an existing task and redirects to that task's show page" do
-      existing_task = Task.first
-      task_hash_with_new_data = {
+      @task_hash_with_new_data = {
         task: {
           name: "edited task",
           description: "edited task description",
         },
       }
+    end
+    it "can update an existing task and redirects to that task's show page" do
+      existing_task = Task.first
       expect {
-        patch task_path(existing_task.id), params: task_hash_with_new_data
+        patch task_path(existing_task.id), params: @task_hash_with_new_data
       }.wont_change "Task.count"
       expect(Task.find_by(id: existing_task.id).name).must_equal "edited task"
       expect(Task.find_by(id: existing_task.id).description).must_equal "edited task description"
       must_redirect_to task_path
     end
+
+    it "will respond with redirect when attempting to edit a nonexistent task" do
+      patch task_path(5), params: @task_hash_with_new_data
+      must_respond_with :redirect
+    end
   end
 
-  it "will respond with redirect when attempting to edit a nonexistent task" do
-    must_respond_with :redirect
-    # Your code here
-  end
-end
-
-# Uncomment and complete these tests for Wave 3
-describe "update" do
-  # Note:  If there was a way to fail to save the changes to a task, that would be a great
-  #        thing to test.
-  let (:new_task_hash) {
-    {
-      task: {
-        name: "sweep front steps",
-        description: "compost leaves",
-        completion_date: nil
-      },
+  # Uncomment and complete these tests for Wave 3
+  describe "update" do
+    # Note:  If there was a way to fail to save the changes to a task, that would be a great
+    #        thing to test.
+    let (:new_task_hash) {
+      {
+        task: {
+          name: "sweep front steps",
+          description: "compost leaves",
+          completion_date: nil
+        },
+      }
     }
-  }
 
 
-  it "will redirect to the root page if given an invalid id" do
-    # Your code here
+    it "will redirect to the root page if given an invalid id" do
+      # Your code here
+    end
   end
-end
 
-# Complete these tests for Wave 4
-describe "destroy" do
-  # Your tests go here
+  # Complete these tests for Wave 4
+  describe "destroy" do
+    # Your tests go here
 
-end
+  end
 
-# Complete for Wave 4
-describe "toggle_complete" do
-  # Your tests go here
+  # Complete for Wave 4
+  describe "toggle_complete" do
+    # Your tests go here
+  end
 end
