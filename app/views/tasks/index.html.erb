@@ -1,22 +1,32 @@
-<h1>All Tasks</h1>
+<h1>Task List</h1>
 
 <section>
   <ul>
-    <% @tasks.each do |task| %>
-      <li>
-        <% if task.completion_date.nil?%>
-          <%= link_to task.name, task_path(task.id) %>
-        <% else %>
-          <%= task.name %>
-        <% end %>
-
-        <%= link_to "Edit", edit_task_path(task.id) %>
-        <%= link_to "Delete", task_path(task.id), method: :delete, data: {confirm: "Are you sure you want to delete this task?"} %>
-        <%= link_to "Mark Complete", toggle_complete_path(task.id), method: :patch %>
-      </li>
+    <% @tasks.order(:completion_date).reverse_order.each do |task| %>
+      <% if task.completion_date.nil?%>
+        <li>
+          <p class="incomplete-task">
+            <%= link_to task.name, task_path(task.id)%>
+          </p>
+          <%= link_to "Mark Complete", toggle_complete_path(task.id), method: :patch %>
+          <%= link_to "Edit", edit_task_path(task.id) %>
+          <%= link_to "Delete", task_path(task.id), method: :delete, data: {confirm: "Are you sure you want to delete this task?"} %>
+        </li>
+      <% else %>
+        <li>
+          <p class="completed-task">
+            <%= link_to task.name, task_path(task.id)%>
+          </p>
+          <%= link_to "Mark Incomplete", toggle_complete_path(task.id), method: :patch %>
+          <%= link_to "Edit", edit_task_path(task.id) %>
+          <%= link_to "Delete", task_path(task.id), method: :delete, data: {confirm: "Are you sure you want to delete this task?"} %>
+        </li>
+      <% end %>
     <% end %>
   </ul>
 </section>
+
+
 
 
 
