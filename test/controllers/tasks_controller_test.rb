@@ -43,7 +43,6 @@ describe "show" do
     
     # Assert
     must_respond_with :redirect
-    expect(flash[:error]).must_equal "Could not find task with id: -1"
   end
 end
 
@@ -87,13 +86,19 @@ end
 # Unskip and complete these tests for Wave 3
 describe "edit" do
   it "can get the edit page for an existing task" do
-    skip
-    # Your code here
+    
+    get edit_task_path(task.id)
+    
+    must_respond_with :success
   end
   
   it "will respond with redirect when attempting to edit a nonexistant task" do
-    skip
-    # Your code here
+    
+    task = Task.new(id: 10)
+    get edit_task_path(task.id)
+    
+    must_respond_with :redirect
+    must_redirect_to tasks_path
   end
 end
 
