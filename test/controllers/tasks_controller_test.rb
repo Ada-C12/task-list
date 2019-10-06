@@ -161,7 +161,7 @@ describe TasksController do
       current_day = Time.now.day
       
       must_respond_with :redirect
-      must_redirect_to task_path(incomplete_task.id)
+      must_redirect_to tasks_path
       
       newly_completed_task = Task.find_by(id: incomplete_task.id)
       expect(newly_completed_task.complete).must_equal true
@@ -179,7 +179,7 @@ describe TasksController do
       patch "/tasks/#{complete_task.id}/toggle"
       
       must_respond_with :redirect
-      must_redirect_to task_path(complete_task.id)
+      must_redirect_to tasks_path
       
       newly_incomplete_task = Task.find_by(id: complete_task.id)
       expect(newly_incomplete_task.complete).must_equal false
