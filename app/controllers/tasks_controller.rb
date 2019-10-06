@@ -4,11 +4,10 @@ class TasksController < ApplicationController
   end
   
   def show
-    task_id = params[:id]
-    @task = Task.find_by(id: task_id)
+    @task = Task.find_by(id: params[:id])
     
     if @task.nil?
-      redirect_to tasks_path
+      redirect_to root_path
       return
     end
   end
@@ -32,7 +31,7 @@ class TasksController < ApplicationController
     @task = Task.find_by(id: params[:id])
     
     if @task.nil?
-      redirect_to tasks_path
+      redirect_to root_path
       return
     end
   end
@@ -87,8 +86,8 @@ class TasksController < ApplicationController
       redirect_to tasks_path
     end
     
-    
     redirect_to tasks_path
     return 
   end
+  
 end

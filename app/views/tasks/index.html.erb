@@ -10,18 +10,17 @@
       <h2>Your Tasks:</h2>
       <% @tasks.each do |task| %>
         <li>
-          <p> <%if task.completion_date != nil %> 
-            <s><%= link_to task.name, task_path(task.id) %> </s> 
+            <%if task.completion_date != nil %> 
+              <s><%= link_to task.name, task_path(task.id) %> </s> 
             <% else %> <%= link_to task.name, task_path(task.id) %>
-            <% end %>
-          <br></p>
+            <% end %><br>
           
           <%if task.completion_date == nil %>
             <%= link_to "Mark Complete", complete_task_path(task), method: :patch %>
           <% else %>
             <%= link_to "Unmark Complete", complete_task_path(task), method: :patch %>
           <%end%>
-          | <%= link_to "Edit", edit_task_path(task)  %> | <%= link_to "Delete", task_path(task), method: :delete, data: {confirm: "Are you sure you would like to delete the test?"} %>
+          | <%= link_to "Edit", edit_task_path(task)  %> | <%= link_to "Delete", task_path(task), method: :delete, data: {confirm: "Are you sure you would like to delete this task?"} %><br><br>
         
         </li>
       <% end %>
