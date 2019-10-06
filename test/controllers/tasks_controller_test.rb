@@ -92,9 +92,12 @@ describe TasksController do
 
   # Tests for Wave 4
   describe "destroy" do
-    before do
-      @task = Task.create(name: "take out compost")
-
+    it 'decreases Task count by one after deletion' do
+      task = Task.create(name: "take out compost")
+      old = Task.count
+      delete task_path(task.id)
+      expect(Task.count).must_equal (old - 1)
+    end
   end
 
   # Complete for Wave 4
