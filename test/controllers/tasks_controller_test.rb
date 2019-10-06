@@ -48,7 +48,7 @@ describe TasksController do
 
   describe "new" do
     it "can get the new task page" do
-      skip
+      # skip
 
       # Act
       get new_task_path
@@ -60,7 +60,7 @@ describe TasksController do
 
   describe "create" do
     it "can create a new task" do
-      skip
+      # skip
 
       # Arrange
       task_hash = {
@@ -88,13 +88,20 @@ describe TasksController do
   # Unskip and complete these tests for Wave 3
   describe "edit" do
     it "can get the edit page for an existing task" do
-      skip
-      # Your code here
+      # Act
+      get edit_task_path(task.id)
+
+      # Assert
+      must_respond_with :success
     end
 
     it "will respond with redirect when attempting to edit a nonexistant task" do
-      skip
-      # Your code here
+
+      # Act
+      get task_path(id: 150)
+
+      # Assert
+      must_respond_with :redirect
     end
   end
 
@@ -103,22 +110,78 @@ describe TasksController do
     # Note:  If there was a way to fail to save the changes to a task, that would be a great
     #        thing to test.
     it "can update an existing task" do
-      # Your code here
+      # Arrange
+      task_hash = {
+        task: {
+          name: "updated task",
+          description: " update new task description",
+          completed: nil,
+        },
+      }
+
+      # Act-Assert
+        # saving info to server by storing form information in params
+        # hash.
+        patch task_path(id: task.id), params: task_hash
+
+        # finding it in the database and assigning it to new variable
+        updated_task = Task.find_by(id: task.id)
+
+      expect(updated_task.description).must_equal task_hash[:task][:description]
+      expect(updated_task.name).must_equal task_hash[:task][:name]
     end
 
     it "will redirect to the root page if given an invalid id" do
-      # Your code here
+      
+      patch task_path(id: 100)
+
+      must_respond_with :redirect 
     end
   end
 
   # Complete these tests for Wave 4
   describe "destroy" do
-    # Your tests go here
+    it "will delete a task from the database" do
 
-  end
+      task
 
+      expect {
+        delete task_path(id: task.id) 
+      }.must_differ 'Task.count', -1
+    end 
+
+    it "will redirect to the root page once a task is destroyed" do
+      # Act
+      task 
+
+      delete task_path(task.id)
+
+      # Assert
+      must_respond_with :redirect
+    end 
+  end 
+
+  
   # Complete for Wave 4
   describe "toggle_complete" do
-    # Your tests go here
+    it "updates the completed field of a Task instance " do
+      # Act
+      task
+
+      patch complete_task_path(task.id)
+
+      updated_task = Task.find_by(id: task.id)
+
+      expect(updated_task.completed).must_equal nil
+      must_respond_with :redirect
+      must_redirect_to tasks_path
+    end 
+
+    it 
+
+
+
+
   end
 end
+
