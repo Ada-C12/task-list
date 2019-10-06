@@ -126,7 +126,7 @@ describe TasksController do
           names: "task_70",
           description: "clean the house",
           completed: nil,
-        }
+        } 
       }
       
       patch task_path(existing_task.id), params: updated_task_form_data
