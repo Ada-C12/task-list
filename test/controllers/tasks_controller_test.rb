@@ -87,7 +87,7 @@ describe TasksController do
     end
   end
   
-  # Unskip and complete these tests for Wave 3
+ # Tests for Wave 3
   
   describe "edit" do
     it "can get the edit page for an existing task" do
@@ -160,15 +160,12 @@ describe TasksController do
   
   # Complete these tests for Wave 4
   describe "destroy" do
-    
     it "successfully deletes an existing task and then redirects to home page" do
-      
       created_task = task
       expect{
         delete task_path(created_task.id)
       }.must_differ "Task.count", -1
-      must_redirect_to root_path
-      
+      must_redirect_to root_path 
     end
   end
   
