@@ -32,7 +32,7 @@ class TasksController < ApplicationController
     @task = Task.find_by(id: params[:id] )
     
     if @task.nil?
-      redirect_to edit_task_path
+      redirect_to tasks_path
       return
     end
   end
@@ -60,7 +60,19 @@ class TasksController < ApplicationController
       return
     end
   end
-  
+
+  def toggle_complete
+    task_id = params[:id].to_i
+    @task = Task.find_by(id: params[:id] )
+
+    if @task.completed?
+      @task.update(completed: nil)
+    else
+      @task.update(completed: DateTime.now)
+    end
+    redirect_to root_path
+  end
+
   
   private
   # The responsibility of this method is to return "strong params"

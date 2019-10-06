@@ -8,4 +8,5 @@ Rails.application.routes.draw do
   # get '/tasks/:id', to: 'tasks#show', as: 'task'
   # post '/tasks', to: 'tasks#create'
   resources :tasks
+  patch '/tasks/:id/complete', to: 'tasks#toggle_complete', as: 'complete'
 end

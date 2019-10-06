@@ -167,17 +167,29 @@ describe TasksController do
     expect{
       delete task_path(created_task.id)
     }.must_differ "Task.count", -1
-
     must_redirect_to root_path
-
     
-  
+    end
   end
     
-  end
-  
   # Complete for Wave 4
   describe "toggle_complete" do
     # Your tests go here
+
+    it "successfully marks a task as complete with completed date" do
+      #Arrange
+      #when the user clicks on the complete button, the program will go back into the data base and
+      #change the completed date from nil and set it to the current date.
+
+      existing_task =  Task.create(name: "cs fun", description: "recursion practice", completed: nil)
+      patch complete_path(existing_task)
+    
+      expect(Task.find_by(id: existing_task.id).completed).must_be_instance_of  ActiveSupport::TimeWithZone
+
+    end
+    it "marks can mark an task incomplete by changing complete date to nil" do
+    end
+    it "successfully redirect back to the rootpage once marked complete" do
+    end
   end
 end
