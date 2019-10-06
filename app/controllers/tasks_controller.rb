@@ -30,15 +30,28 @@ class TasksController < ApplicationController
   
   def edit
     @task = Task.find(params[:id])
+<<<<<<< HEAD
     
     if @task == nil?
       redirect_to root_path
     end
+=======
+>>>>>>> 8422e7d8fbdad8f1e62c64e1ee6db43e6b58360d
   end
   
   def update
     @task = Task.update(task_params)
+<<<<<<< HEAD
     redirect_to root_path
+=======
+    # if @task.update
+    redirect_to root_path
+    #   return
+    # else
+    #   render :new
+    #   return
+    # end
+>>>>>>> 8422e7d8fbdad8f1e62c64e1ee6db43e6b58360d
   end
   def destroy
     task_id = params[:id]
