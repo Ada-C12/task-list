@@ -129,7 +129,11 @@ it "can update an existing task" do
 end
 
 it "will redirect to the root page if given an invalid id" do
-  # Your code here
+  task = Task.new(id: 10)
+  get edit_task_path(400)
+  
+  must_respond_with :redirect
+  must_redirect_to tasks_path
 end
 end
 
