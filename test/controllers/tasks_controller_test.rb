@@ -177,7 +177,7 @@ describe TasksController do
     end
     
     
-    it "marks a task as incompleted by updating the completion date to nil" do      
+    it "marks a task as incompleted by updating the completion date to nil" do     
       patch complete_task_path(@new_task.id) # sets completion_date to Date.today
       expect {
         patch complete_task_path(@new_task.id) # sets completion_date to nil
