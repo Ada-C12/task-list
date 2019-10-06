@@ -28,6 +28,18 @@ class TasksController < ApplicationController
     end  
   end
   
+  def edit
+    @task = Task.find(params[:id])
+    
+    if @task == nil?
+      redirect_to root_path
+    end
+  end
+  
+  def update
+    @task = Task.update(task_params)
+    redirect_to root_path
+  end
   def destroy
     task_id = params[:id]
     @task = Task.find_by(id: task_id)
@@ -39,5 +51,5 @@ end
 private
 
 def task_params
-  return params.require(:task).permit(:name, :title, :description, :due_date, :completed)
+  return params.require(:task).permit(:name, :title, :description, :completed)
 end
