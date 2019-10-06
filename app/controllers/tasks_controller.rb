@@ -18,9 +18,9 @@ class TasksController < ApplicationController
   end
   
   def create
-    @task = Task.new(name: params[:task][:name], description: params[:task][:description], due_date: params[:task][:due_date])
+    @task = Task.new(task_params)
     if @task.save
-      redirect_to tasks_path
+      redirect_to root_path
       return
     else
       render :new
@@ -32,6 +32,12 @@ class TasksController < ApplicationController
     task_id = params[:id]
     @task = Task.find_by(id: task_id)
     @task.delete
-    redirect_to tasks_path
+    redirect_to root_path
   end
+end
+
+private
+
+def task_params
+  return params.require(:task).permit(:name, :title, :description, :due_date, :completed)
 end
