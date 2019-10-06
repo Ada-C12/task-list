@@ -179,7 +179,7 @@ describe TasksController do
 
   # Complete for Wave 4
   describe "toggle_complete" do
-    it "updates a task by changing completion_date from nil to a timestamp when a user clicks on the 'complete task' button" do
+    it "updates a task by changing completion_date from nil to a time object when a user clicks on the 'complete task' button" do
       # Your tests go here
       test_task = {
         task: {
@@ -207,8 +207,40 @@ describe TasksController do
 
       expect(task_with_time_stamp.completion_date).must_be_instance_of ActiveSupport::TimeWithZone
 
+      must_respond_with :redirect
       must_redirect_to tasks_path
+    end
 
+    it "updates a task by changing completion_date from a time object to nil when a user clicks on the 'complete task' button" do
+      # Your tests go here
+      test_task = {
+        task: {
+          name: "A test task",
+          description: "This is how you do it",
+          completion_date: Time.now
+        }
+      }
+
+      patch task_path(task.id), params: test_task
+
+      updated_task = Task.find_by(id: task.id)
+
+      updated_task = {
+        task: {
+          name: "A test task",
+          description: "This is how you do it",
+            completion_date: nil
+        }
+      }
+
+      patch complete_task_path(task.id), params: updated_task
+
+      task_with_time_stamp = Task.find_by(id: task.id)
+
+      expect(task_with_time_stamp.completion_date).must_be_nil
+      
+      must_respond_with :redirect
+      must_redirect_to tasks_path
     end
   end
 end

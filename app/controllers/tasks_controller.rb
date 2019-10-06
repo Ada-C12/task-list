@@ -70,9 +70,10 @@ class TasksController < ApplicationController
   def toggle_complete
     @task = Task.find_by(id: params[:id])
     if @task.completion_date == nil
-      #change the completion status to Time.now
+      #changes the completion status to Time.now
       @task.completion_date = Time.now
     else
+      #changes the completion status back to nil
       @task.completion_date = nil
     end
 
