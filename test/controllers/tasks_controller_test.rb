@@ -196,15 +196,14 @@ describe TasksController do
         hard_task = Task.create(name: "super hard", description: "not done yet")
         
         # act
-        puts "\n\nSTARTED WITH datetime = < #{hard_task.completion_datetime} >... VS"
         patch toggle_path(id: hard_task.id), params: { destination: "root" }
         now = Time.now
-        puts "YET I GET THIS BACK FROM DB???? datetime = < #{hard_task.completion_datetime} > WHY??\n\n"
-        
+        db_task = Task.find_by(id: hard_task.id)
+                
         #assert
         must_redirect_to root_path
-        assert(hard_task.completion_datetime)
-        expect(hard_task.completion_datetime).must_be_close_to now, 0.1
+        assert(db_task.completion_datetime)
+        expect(db_task.completion_datetime).must_be_close_to now, 0.1
       end
       
     end
@@ -216,13 +215,12 @@ describe TasksController do
         easy_task = Task.create(name: "super easy", description: "finished!", completion_datetime: Time.now - 5.days)
         
         # act
-        puts "\n\nSTARTED WITH datetime = < #{hard_task.completion_datetime} >... VS"
         patch toggle_path, params: {id: easy_task.id, destination: "show" }
-        puts "YET I GET THIS BACK FROM DB???? datetime = < #{hard_task.completion_datetime} > WHY??\n\n"
+        db_task = Task.find_by(id: easy_task.id)
         
         # assert
         must_redirect_to task_path(id: easy_task.id)
-        assert (easy_task.completion_datetime == nil)
+        assert (db_task.completion_datetime == nil)
       end
       
     end

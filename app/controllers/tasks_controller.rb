@@ -102,10 +102,7 @@ class TasksController < ApplicationController
       end
       
       if @task.save
-        puts "\tCONTROLLER says @task saved to db"
         db_task = Task.find_by(id: @task.id)
-        puts "\tCONTROLLER retrieves task from db using id#, and completion_datetime = #{db_task.completion_datetime}"
-        puts "\tCONTROLLER will send u onward to final destination!"
         
         if params[:destination] == "root"
           redirect_to root_path
@@ -114,11 +111,12 @@ class TasksController < ApplicationController
           redirect_to task_path(id: @task.id)
           return
         else
-          puts "OH HELL NO!"
+          # impossible, user can only trigger #toggle via a link from root or show
           head :not_found
           return
         end
       else
+        # probably failed a validation in Model, go investigate!
         head :not_found
         return
       end
