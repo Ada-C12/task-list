@@ -27,16 +27,43 @@ class TasksController < ApplicationController
     end
   end
   
+  def complete
+    params[:task_ids].each do |id|
+      @task = Task.find_by(id: id.to_i )
+      @task.completion_date = Time.now.in_time_zone("Pacific Time (US & Canada)")
+    end
+    # @task = Task.find_by(id: params[:id] )
+    # @task.completion_date = params[:task][:completion_date]
+    
+    if @task.save
+      redirect_to tasks_path
+    else
+      render tasks_path
+    end
+  end
+  
   def update
     @task = Task.find_by(id: params[:id] )
     @task.name = params[:task][:name]
     @task.description = params[:task][:description]
-    @task.completion_date = params[:task][:completion_date]
     
     if @task.save
       redirect_to task_path(@task.id)
     else
       render new_task_path
+    end
+  end
+  
+  def destroy
+    task = Task.find_by( id: params[:id] )
+    
+    if task.nil?
+      redirect_to tasks_path
+      return
+    else
+      task.destroy
+      redirect_to root_path
+      return
     end
   end
   

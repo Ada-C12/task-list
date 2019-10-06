@@ -1,12 +1,16 @@
-<h1>The Index Action: The place where you get all of the tasks!</h1>
+<h1>List of Tasks</h1>
 
- <section>
-   <h2>List of all Tasks</h2>
-   <ul>
-     <% @tasks.each do |task| %>
-       <li>
-         <%= task.name %>: <%= task.description %> by <%= task.completion_date %>
-       </li>
-     <% end %>
-   </ul>
- </section> 
+<section>
+  <%= form_tag complete_tasks_path, :method => :patch do %>
+    <ul>
+    <% @tasks.each do |task| %>
+      <li>
+        <%= check_box_tag "task_ids[]", task.id %>
+        <%= link_to task.name, task_path( task.id ) %>: <%= task.description %>
+        <%= link_to "(Delete)", task_path( task.id ), method: :delete, data: { confirm: "Are you sure you want to delete #{task.name}?" }, class: "index-delete-link" %>
+      </li>
+    <% end %>
+    </ul>
+    <%= submit_tag "Submit" %>
+  <% end %>
+</section>
