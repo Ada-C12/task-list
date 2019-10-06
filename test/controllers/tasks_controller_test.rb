@@ -126,7 +126,7 @@ describe TasksController do
         delete task_path(invalid_id)
       }.must_differ "Task.count", 0
 
-      must_redirect_to tasks_path
+      must_redirect_to root_path
     end
 
     it "redirects to tasks index page if selected task has already been deleted and doesn't delete any other tasks" do
@@ -138,13 +138,13 @@ describe TasksController do
         delete task_path(my_task.id)
       }.must_differ "Task.count", 0
 
-      must_redirect_to tasks_path
+      must_redirect_to root_path
     end
 
   end
 
-  describe "toggle_complete" do
-    it "should be marked with today's date for attribute completed and redirects to tasks_path" do
+  describe "completed action" do
+    it "should be marked with today's date for attribute completed and redirects to root_path" do
       my_task = Task.create(name: "Cuddle with Kaya", description: "She hates cuddles but do it anyways hehehehehe", completed: nil)
 
       updated_task_data = {
@@ -158,7 +158,7 @@ describe TasksController do
       completed_task = Task.find_by(id:my_task.id)
       
       expect(completed_task.completed).must_be_kind_of Time 
-      must_redirect_to tasks_path
+      must_redirect_to root_path
     end 
   end
 end

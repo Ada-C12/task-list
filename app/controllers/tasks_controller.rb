@@ -21,7 +21,7 @@ class TasksController < ApplicationController
   end 
 
   def create
-    @task = Task.new( name: params[:task][:name], description: params[:task][:description], completed: nil)
+    @task = Task.new(task_strong_params)
 
     if @task.save
       redirect_to task_path(@task.id)
@@ -47,7 +47,6 @@ class TasksController < ApplicationController
     else 
       @task.name = params[:task][:name]
       @task.description = params[:task][:description]
-      @task.completed = params[:task][:completed]
     end
 
     if @task.save
@@ -61,7 +60,7 @@ class TasksController < ApplicationController
     selected_task = Task.find_by(id: params[:id])
 
     if selected_task.nil?
-      redirect_to tasks_path
+      redirect_to root_path
       return
     else
       selected_task.destroy
@@ -74,15 +73,20 @@ class TasksController < ApplicationController
     @task = Task.find_by(id: params[:id])
 
     if @task.nil?
-      redirect_to tasks_path
+      redirect_to root_path
       return
     else
       if @task.completed == nil 
         @task.completed = Time.now
         @task.save
-        redirect_to tasks_path
+        redirect_to root_path
         return
       end
     end
+  end 
+
+  private
+  def task_strong_params
+    return params.require(:task).permit(:name, :description, :completed)
   end 
 end
