@@ -78,25 +78,23 @@ describe TasksController do
       must_redirect_to task_path(new_task.id)
     end
   end
-
+  
   # Unskip and complete these tests for Wave 3
   describe "edit" do
     it "can get the edit page for an existing task" do
       get edit_task_path(task.id)
-
+      
       must_respond_with :success, "#{task.id}"
     end
-
+    
     it "will respond with redirect when attempting to edit a nonexistant task" do
       get edit_task_path(-1)
-
+      
       must_respond_with :redirect
     end
   end
-
+  
   # Uncomment and complete these tests for Wave 3
-  # Note:  If there was a way to fail to save the changes to a task, that would be a great
-  #        thing to test.
   describe "update" do
     it "can update an existing task" do
       updated_task_data = {
@@ -107,9 +105,9 @@ describe TasksController do
         },
       }
       task_url = "/tasks/" + "#{task.id}"
-
+      
       patch task_url, params: updated_task_data
-
+      
       expect(Task.count).must_equal 1
       must_redirect_to task_path(id: task.id)
       expect(Task.find_by(id: task.id).name).must_equal "Walk dog"
@@ -117,16 +115,28 @@ describe TasksController do
     
     it "will redirect to the root page if given an invalid id" do
       patch '/tasks/0', params: {
-          task: {
-            name: "Walk dog",
-            description: "Walk the dog",
-            completion_date: "10-03-2019",
-          },
-        }
+        task: {
+          name: "Walk dog",
+          description: "Walk the dog",
+          completion_date: "10-03-2019",
+        },
+      }
       must_redirect_to root_path
     end
-
-    it "will render the edit page if saving the changes fails" do
+    
+    it "will not update if given invalid params" do
+      new_task = Task.create(
+        name: "Make dinner", 
+        description: "figure out something edible from the fridge",
+        completion_date: nil
+      )
+      
+      expect {
+        patch task_path(new_task_id), params: {}
+      }.must_raise 
+      expect(new_task.name).must_equal "Make dinner"
+      expect(new_task.description).must_equal "figure out something edible from the fridge"
+      expect(new_task.completion_date).must_be_nil
     end
   end
 
