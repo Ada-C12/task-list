@@ -80,7 +80,7 @@ describe TasksController do
     it "I ADDED THIS: if bogus args, won't create task and will render form again" do
       expect { post tasks_path, params: bad_hash }.must_differ "Task.count", 0
       # yeah... couldn't figure out how to test for the rendered form, only that it got 200
-      # i think we're not supposed to be able to test for render? idk...
+      # i think we're not supposed to be able to test for render? Can't even test for a must_redirect_to self... idk...
       must_respond_with 200
     end
   end
@@ -182,17 +182,26 @@ describe TasksController do
     describe "If toggling task to complete..." do
       let (:hard_task) { Task.create name: "super hard", description: "not done yet", completion_status: nil, completion_datetime: nil }
       it "Check: completion_status goes from nil to true" do
-        # assert (hard_task.completion_status == nil )
-        # patch toggle_path, params: {id: hard_task.id}
-        # # puts "HARD!!!", hard_task.completion_status
-        # puts hard_task.attributes
-        # # assert (hard_task.completion_status == true )
+        assert (hard_task.completion_status == nil )
+        
+        patch toggle_path, params: {id: hard_task.id }
+        
+        assert (hard_task.completion_status)
       end
       
-      it "Check: complete_datetime goes from nil to datetime obj" do
-
-
+      
+      it "Check: complete_datetime goes from nil to correct datetime obj" do
+        assert (hard_task.completion_datetime == nil)
+        
+        today = Time.now
+        patch toggle_path, params: {id: hard_task.id }
+        
+        assert (hard_task.completion_datetime.year == today.year)
+        assert (hard_task.completion_datetime.month == today.month)
+        assert (hard_task.completion_datetime.day == today.day)
       end
+      
+      
     end
     
     describe "If toggling task back to incomplete..." do
@@ -203,17 +212,20 @@ describe TasksController do
         
         puts "STARTED AS:"
         puts easy_task.completion_status, easy_task.completion_datetime
+        
         puts "TOGGLE HERE!"
-        patch toggle_path, params: {id: easy_task.id}
+        patch toggle_path, params: {id: easy_task.id }
         
         puts easy_task.completion_status, easy_task.completion_datetime
-        expect (easy_task.completion_status ).must_be true
+        assert (easy_task.completion_status == nil )
       end
       
       it "Check: complete_datetime goes from datetime obj to nil" do
-
-
-
+        assert (easy_task.completion_datetime)
+        
+        patch toggle_path, params: {id: easy_task.id }
+        
+        assert (easy_task.completion_datetime == nil )
       end
     end
     
