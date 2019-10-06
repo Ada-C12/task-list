@@ -1,19 +1,30 @@
 <h1>SHOWING Task#<%= @task.id %></h1>
 
 <section class="centered">
-Name: <%= @task.name.capitalize %> <br>
-Description: <%= @task.description.capitalize %> <br>
-
-<% if @task.completion_date %>
-  Completion Date: <%= @task.completion_date %><br>
-<% else %>
-  Completion Date: Pending...
-<% end%>
+<table>
+<tr>
+  <th>ID</th>
+  <th>NAME</th>
+  <th>DESCRIPTION</th>
+  <th>COMPLETED</th>
+  <th>EDIT</th>
+  <th>DELETE</th>
+</tr>
+<tr>
+  <td><%= @task.id %></td>
+  <td><%= @task.name.capitalize %></td>
+  <td><%= @task.description.capitalize %></td>
+  <td>
+    <% if @task.completion_date %>
+      <%= @task.completion_date %><br>
+    <% else %>
+      Pending...
+    <% end%>
+  </td>
+  <td><%= link_to "EDIT", edit_task_path(id: @task.id)%></td>
+  <td><%= link_to "DELETE", task_path(id: @task.id), method: :delete, data: { confirm: "Are you sure?" } %></td>
+</tr>
+</table>
 </section>
 
-<%= render 'msg' %>
-
-<footer>
-<h3>LINKS</h3>
-<%= link_to "HOME", root_path %>
-</footer>
+<%= render 'footer' %>
