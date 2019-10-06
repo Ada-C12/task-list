@@ -13,7 +13,7 @@ class TasksController < ApplicationController
     task_id = params[:id]
     @task = Task.find_by(id: task_id)
     if @task.nil? 
-      redirect_to tasks_path
+      redirect_to root_path
       return
     end 
   end 
@@ -23,12 +23,13 @@ class TasksController < ApplicationController
   end
   
   def create
-    @task = Task.new(name: params[:task][:name], description: params[:task][:description], completed: nil) #instantiate a new task
-    if @task.save # save returns true if the database insert succeeds
-      redirect_to task_path(@task) # go to the new task page
+    @task = Task.new(task_params) 
+    @task.completed = nil
+    if @task.save 
+      redirect_to task_path(@task) 
       return
-    else # save failed :(
-      render :new # show the new task form view again
+    else
+      render :new 
       return
     end
   end
@@ -53,36 +54,34 @@ class TasksController < ApplicationController
     else 
       update_completed = nil
     end 
-    if @task.update(
-      name: params[:task][:name],
-      description: params[:task][:description],
-      completed: update_completed
-    )
-    redirect_to tasks_path
-    return
-  else
-    render :edit
-    return
-  end 
-end
-
-def destroy
-  task_id = params[:id]
-  @task = Task.find_by(id: task_id)
+    if @task.update(task_params)
+      @task.completed = update_completed
+      redirect_to tasks_path
+      return
+    else
+      render :edit
+      return
+    end 
+  end
   
-  if @task.nil? 
-    redirect_to tasks_path
-    return
+  def destroy
+    task_id = params[:id]
+    @task = Task.find_by(id: task_id)
+    
+    if @task.nil? 
+      redirect_to root_path
+      return
+    end 
+    
+    @task.destroy 
+    redirect_to root_path
+    return 
   end 
   
-  @task.destroy 
-  redirect_to tasks_path
-  return 
-end 
-
-private
-
-def task_params
-  return params.require(:task).permit(:name, :description, :completed)
-end 
+  private
+  
+  def task_params
+    return params.require(:task).permit(:name, :description, :completed)
+  end 
+  
 end
