@@ -190,34 +190,42 @@ describe TasksController do
   
   describe "TOGGLE" do
     describe "If toggling task to complete..." do
-      let (:hard_task) { Task.create name: "super hard", description: "not done yet" }
       
-      # it "Check: completion_datetime goes from nil to correct datetime value" do
-      #   assert_nil (hard_task.completion_datetime)
-      
-      #   puts "", hard_task.attributes, "VS"
-      #   patch toggle_path(id: hard_task.id), params: { destination: "root" }
-      #   now = Time.now
-      #   puts hard_task.attributes
-      
-      #   must_redirect_to root_path
-      #   expect (hard_task.completion_datetime).must_be_close_to now, 0.1
-      # end
-      
+      it "Check: completion_datetime goes from nil to correct datetime value, and gets sent to correct place" do
+        # arrange
+        hard_task = Task.create(name: "super hard", description: "not done yet")
+        
+        # act
+        puts "\n\nSTARTED WITH datetime = < #{hard_task.completion_datetime} >... VS"
+        patch toggle_path(id: hard_task.id), params: { destination: "root" }
+        now = Time.now
+        puts "YET I GET THIS BACK FROM DB???? datetime = < #{hard_task.completion_datetime} > WHY??\n\n"
+        
+        #assert
+        must_redirect_to root_path
+        assert(hard_task.completion_datetime)
+        expect(hard_task.completion_datetime).must_be_close_to now, 0.1
+      end
       
     end
     
-    # describe "If toggling task back to incomplete..." do
-    #   let (:easy_task) { Task.create name: "super easy", description: "finished!", completion_datetime: Time.now + 5.days }
-    
-    #   it "Check: completion_datetime goes from datetime obj to nil" do
-    #     assert (easy_task.completion_datetime)
-    
-    #     patch toggle_path, params: {id: easy_task.id }
-    
-    #     assert (easy_task.completion_datetime == nil )
-    #   end
-    # end
+    describe "If toggling task back to incomplete..." do
+      
+      it "Check: completion_datetime goes from datetime value to nil, and gets sent to correct place" do
+        # arrange
+        easy_task = Task.create(name: "super easy", description: "finished!", completion_datetime: Time.now - 5.days)
+        
+        # act
+        puts "\n\nSTARTED WITH datetime = < #{hard_task.completion_datetime} >... VS"
+        patch toggle_path, params: {id: easy_task.id, destination: "show" }
+        puts "YET I GET THIS BACK FROM DB???? datetime = < #{hard_task.completion_datetime} > WHY??\n\n"
+        
+        # assert
+        must_redirect_to task_path(id: easy_task.id)
+        assert (easy_task.completion_datetime == nil)
+      end
+      
+    end
     
     it "Edge case: trying to toggle a nonexistent task will get 404" do
       patch toggle_path, params: {id: -666 }

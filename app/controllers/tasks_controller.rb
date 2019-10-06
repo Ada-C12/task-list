@@ -101,10 +101,9 @@ class TasksController < ApplicationController
         @task.update(completion_datetime: now)
       end
       
-      print "NOW LOOK HERE:\t", @task.completion_datetime, "\n\n"
+      puts "CONTROLLER says @task completed at: #{@task.completion_datetime}"
       
       if params[:destination] == "root"
-        puts "going back to root"
         redirect_to root_path
         return
       elsif params[:destination] == "show"
