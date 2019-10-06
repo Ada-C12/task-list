@@ -1,0 +1,46 @@
+<%# Need to add this to params to pass to Ctrller#TOGGLE so it knows where to send user afterwards %>
+<% if origin == "show" %>
+  <% destination = "show"%>
+<% elsif origin == "root" %>
+  <% destination = "root"%>
+<% else %>
+  <% destination = nil %>
+<%end%>
+
+<%# THIS IS WHAT THE USER SEES %>
+<table>
+  <tr>
+    <th>ID</th>
+    <th>NAME</th>
+    <th>DESCRIPTION</th>
+    <th>COMPLETION DATE</th>
+    <th>STATUS</th>
+    <th>EDIT</th>
+    <th>DELETE</th>
+  </tr>
+
+  <% @tasks.each do |task| %>
+  <tr>
+  <td><%= task.id %></td>
+  <td>
+    <% if origin != "show"%>
+      <%= link_to task.name.capitalize, task_path( task.id ) %>
+    <% else %>  <%# No need to give show link when it's already in the show url %>
+      <%= task.name.capitalize %>
+    <% end %>
+  </td>
+  <td><%= task.description.capitalize %></td>
+  <td>
+    <% if task.completion_status %>  
+      <%= task.completion_datetime.getlocal.strftime("%m-%d-%y") %>
+      <%# REACTIVATE TO SEE FULL UTC DATETIME <br><%=task.completion_datetime.getlocal%>
+    <% else %>
+      Hop to it!
+    <% end%>
+  </td>
+  <td><%= button_to "TOGGLE", toggle_path(id: task.id), method: :patch, params: { destination: destination } %></td>
+  <td><%= link_to "EDIT", edit_task_path(id: task.id) %></td>
+  <td><%= link_to "DELETE", task_path(id: task.id), method: :delete, data: { confirm: "Are you sure?" } %></td>
+  </tr>
+  <% end %>
+</table>

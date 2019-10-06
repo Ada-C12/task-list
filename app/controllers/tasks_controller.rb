@@ -3,7 +3,7 @@ class TasksController < ApplicationController
   include TasksHelper
   
   def index
-    @tasks = Task.all
+    @tasks = Task.all.order(:id)
   end
   
   def new
@@ -44,6 +44,7 @@ class TasksController < ApplicationController
       head :not_found
       return
     end
+    @tasks = [@task]
   end
   
   def edit
@@ -82,10 +83,9 @@ class TasksController < ApplicationController
   
   def destroy
     @task = Task.find_by(id: params[:id])
-    
     @task.destroy if @task
     
-    # whether @task existed or not, it doesn't now
+    # whether @task existed or not, it's gone now
     redirect_to root_path
     return
   end
@@ -100,8 +100,16 @@ class TasksController < ApplicationController
       else
         @task.update(completion_status: nil, completion_datetime: nil)
       end
-      redirect_to root_path
-      return
+      
+      if params[:destination] == "root"
+        redirect_to root_path
+      elsif params[:destination] == "show"
+        redirect_to task_path(id: @task.id)
+      else
+        head :not_found
+        return
+      end
+      
     else
       # user shouldn't be able to click a toggle button to a task that doesn't exist
       head :not_found

@@ -1,36 +1,7 @@
 <h1 class="blinking_border">Tasks#index</h1>
 <h3 class = "centered" >HOT TIP: Do this anytime... $ rails db:seed</h3>
 
-<table>
-  <tr>
-    <th>ID</th>
-    <th>NAME</th>
-    <th>DESCRIPTION</th>
-    <th>COMPLETION DATE</th>
-    <th>STATUS</th>
-    <th>EDIT</th>
-    <th>DELETE</th>
-  </tr>
-
-  <% @tasks.each do |task| %>
-  <tr>
-  <td><%= task.id %></td>
-  <td><%= link_to task.name.capitalize, task_path( task.id ) %></td>
-  <td><%= task.description.capitalize %></td>
-  <td>
-    <% if task.completion_status %>  
-      <%= task.completion_datetime.getlocal.strftime("%m-%d-%y") %>
-      <br>full shebang... <%=task.completion_datetime.getlocal%>
-    <% else %>
-      Pending
-    <% end%>
-  </td>
-  <td><%= button_to "TOGGLE", toggle_path(id: task.id), method: :patch %></td>
-  <td><%= link_to "EDIT", edit_task_path(id: task.id) %></td>
-  <td><%= link_to "DELETE", task_path(id: task.id), method: :delete, data: { confirm: "Are you sure?" } %></td>
-  </tr>
-  <% end %>
-</table>
+<%= render partial: 'display_table', locals: {origin: "root"} %>
 
 <footer>
 <h3>LINKS</h3>
