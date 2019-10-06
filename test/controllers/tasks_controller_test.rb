@@ -80,55 +80,48 @@ describe TasksController do
 
   describe "edit" do
     it "can get the edit page for an existing task" do
-      # Act
-      get edit_task_path(1)
+      get edit_task_path(task.id)
 
-      # Assert
       must_respond_with :success
     end
 
     it "will respond with redirect when attempting to edit a nonexistant task" do
-      # Act
       get edit_task_path(-1)
 
-      # Assert
       must_respond_with :redirect
-      must_redirect_to tasks_path
+      must_redirect_to root_path
     end
   end
 
   describe "update" do
-    # Note:  If there was a way to fail to save the changes to a task, that would be a great
-    #        thing to test.
     it "can update an existing task" do
-      assert Task.count > 0
-      # Arrange
-      existing_task = Task.first
-      updated_task = {
-        task: {
-          name: "updated task",
-          description: "updated task description",
-          completed: nil,
-        },
-      }
+      task_hash = { task: { name: "Updated task", description: "Updated task description", completed: nil }}
 
-      # Act-Assert
-      existing_task.update(updated_task)
-      expect(existing_task.name).must_equal updated_task[:task][:name]
-      expect(existing_task.description).must_equal updated_task[:task][:description]
-      expect(existing_task.completed).must_equal updated_task[:task][:completed]
+      patch task_path(task.id), params: task_hash
 
+      updated_task = Task.find_by(id: task.id)
+
+      expect(updated_task.name).must_equal task_hash[:task][:name]
+      expect(updated_task.description).must_equal task_hash[:task][:description]
+      expect(updated_task.completed).must_equal task_hash[:task][:completed]
 
       must_respond_with :redirect
-      must_redirect_to task_path(updated_task.id)
+      must_redirect_to task_path
     end
 
     it "will redirect to the root page if given an invalid id" do
-      # Act
-      get update_task_path(-1)
-
-      # Assert
+      task_hash = {
+        task: {
+          name: "Updated task",
+          description: "Updated task description",
+          completed: nil,
+        },
+      }
+      
+      patch task_path(-1), params: task_hash
+      
       must_respond_with :redirect
+      must_redirect_to root_path
     end
   end
 
