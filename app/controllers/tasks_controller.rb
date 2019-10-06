@@ -14,7 +14,6 @@ class TasksController < ApplicationController
   end
  end
  
- 
  #new and create methods work in congress. New makes a new instance. Create actually uses the information from the filled in form to then save the instance into the db. 
  def new
   @task = Task.new
@@ -29,6 +28,27 @@ class TasksController < ApplicationController
    render new_task_path
   end
  end
+ 
+ #dit and update methods work in congress. Edit gets the information that's going to changed. Update actually uses the informxation from the filled in form to then update the instance information in the db. 
+ def edit
+  @task = Task.find_by(id: params[:id])
+ end
+ 
+ def update
+  @task = Task.find_by(id: params[:id])
+  @task.name = params[:task][:name]
+  @task.description = params[:task][:description]
+  @task.progress = params[:task][:progress]
+  @task.completion_date = params[:task][:completion_date]
+  
+  if @task.save
+   redirect_to root_path
+  else
+   redirect_to task_path(@task.id)
+  end
+ end
+ 
+ 
  
  
  private
