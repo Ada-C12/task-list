@@ -5,42 +5,30 @@ describe TasksController do
     Task.create name: "sample task", description: "this is an example for a test", completion_date: Time.now + 5.days
   }
   
-  # Tests for Wave 1
   describe "index" do
     it "can get the index path" do
-      # Act
       get tasks_path
       
-      # Assert
       must_respond_with :success
     end
     
     it "can get the root path" do
-      # Act
       get root_path
       
-      # Assert
       must_respond_with :success
     end
   end
   
-  # Unskip these tests for Wave 2
   describe "show" do
     it "can get a valid task" do
-      #skip
-      # Act
       get task_path(task.id)
       
-      # Assert
       must_respond_with :success
     end
     
     it "will redirect for an invalid task" do
-      #skip
-      # Act
       get task_path(-1)
       
-      # Assert
       must_respond_with :redirect
       expect(flash[:error]).must_equal "Could not find task with id: -1"
     end
@@ -48,12 +36,8 @@ describe TasksController do
   
   describe "new" do
     it "can get the new task page" do
-      #skip
-      
-      # Act
       get new_task_path
       
-      # Assert
       must_respond_with :success
     end
   end
@@ -85,19 +69,14 @@ describe TasksController do
     end
   end
   
-  # Unskip and complete these tests for Wave 3
   describe "edit" do
     it "can get the edit page for an existing task" do
-      #skip
-      
       get edit_task_path(task.id)
       
       must_respond_with :success
     end
     
     it "will respond with redirect when attempting to edit a nonexistant task" do
-      #skip
-      
       get edit_task_path(id: -1)
       
       must_respond_with :redirect
@@ -105,13 +84,8 @@ describe TasksController do
     end
   end
   
-  # Uncomment and complete these tests for Wave 3
   describe "update" do
-    # Note:  If there was a way to fail to save the changes to a task, that would be a great
-    #        thing to test.
     it "can update an existing task" do
-      # Your code here
-      
       existing_task = Task.create name: "test task", description: "task description", completion_date: Time.now
       
       updated_task_hash = {
@@ -133,11 +107,9 @@ describe TasksController do
       
       must_respond_with :redirect
       must_redirect_to task_path(updated_task)
-      
     end
     
     it "will redirect to the root page if given an invalid id" do
-      # Your code here
       updated_task_hash = {
         task: {
           name: "new task",
@@ -155,14 +127,76 @@ describe TasksController do
     end
   end
   
-  # Complete these tests for Wave 4
   describe "destroy" do
-    # Your tests go here
+    it "will remove a task given a valid id" do
+      new_task = Task.create name: "task to be deleted", description: "task description", completion_date: nil
+      
+      valid_id = new_task.id
+      
+      expect {
+        delete task_path(valid_id)
+      }.must_change "Task.count", -1
+      
+      must_respond_with :redirect
+      must_redirect_to tasks_path
+    end
+    
+    it "will redirect to home when given invalid id" do
+      invalid_id = -1
+      
+      delete task_path(invalid_id)
+      
+      must_respond_with :redirect
+      must_redirect_to tasks_path
+    end
     
   end
   
-  # Complete for Wave 4
   describe "toggle_complete" do
-    # Your tests go here
+    it "marks an incomplete task as complete" do 
+      incomplete_task = Task.create name: "incomplete_task", description: "task description", completion_date: nil, complete: false
+      patch "/tasks/#{incomplete_task.id}/toggle"
+      
+      current_month = Time.now.month 
+      current_day = Time.now.day
+      
+      must_respond_with :redirect
+      must_redirect_to task_path(incomplete_task.id)
+      
+      newly_completed_task = Task.find_by(id: incomplete_task.id)
+      expect(newly_completed_task.complete).must_equal true
+      expect(newly_completed_task.completion_date.year).must_equal 2019
+      expect(newly_completed_task.completion_date.month).must_equal current_month
+      expect(newly_completed_task.completion_date.day).must_equal current_day
+      
+    end
+    
+    it "marks a complete task as incomplete" do 
+      current_time = Time.now
+      
+      complete_task = Task.create name: "complete_task", description: "task description", completion_date: current_time, complete:true
+      
+      patch "/tasks/#{complete_task.id}/toggle"
+      
+      must_respond_with :redirect
+      must_redirect_to task_path(complete_task.id)
+      
+      newly_incomplete_task = Task.find_by(id: complete_task.id)
+      expect(newly_incomplete_task.complete).must_equal false
+      assert_nil(newly_incomplete_task.completion_date)
+    end
+    
+    it "redirects to home when given invalid id" do
+      invalid_id = -1
+      
+      patch "/tasks/#{invalid_id}/toggle"
+      
+      must_respond_with :redirect
+      must_redirect_to tasks_path
+    end
   end
+  
 end
+
+
+
