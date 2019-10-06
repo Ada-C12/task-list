@@ -18,7 +18,7 @@ class TasksController < ApplicationController
   end
 
   def create
-    @task = Task.new(name: params[:task][:name], description: params[:task][:description], completed: params[:task][:completed])
+    @task = Task.new(task_params, completed: nil)
     if @task.save
       redirect_to task_path(@task.id)
     else
@@ -68,10 +68,21 @@ class TasksController < ApplicationController
 
   def toggle_completed
     task_to_toggle = Task.find_by(id: params[:id])
-    if @task.completed?
-      @task.incomplete!
-    elsif @task.incomplete?
-      @task.completed!
+    if task_to_toggle.completed
+      task_to_toggle.completed = nil
+    else
+      task_to_toggle.completed = DateTime.now
     end
+
+    task_to_toggle.save
+    redirect_to root_path
+  end
+
+  private
+
+  # Every method defined under the word private is going to be a private method
+
+  def task_params
+    return params.require(:task).permit(:name, :description)
   end
 end
