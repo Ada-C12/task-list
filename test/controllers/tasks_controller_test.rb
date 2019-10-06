@@ -138,41 +138,58 @@ describe TasksController do
       
       must_redirect_to tasks_path
     end
-
+    
     it "will remove the deleted task from the database" do
       id_to_delete = task.id
       delete task_path(id_to_delete)
-
+      
       removed_task = Task.find_by(id: task.id)
-
+      
       removed_task.must_be_nil
       must_redirect_to tasks_path
     end
-
+    
     it "will redirect to root path if record does not exist" do
       nonexistent_id = -1
-
+      
       expect {
         delete task_path(nonexistent_id)
       }.must_differ "Task.count", 0
       
       must_redirect_to tasks_path
     end
-
+    
     it "will redirect to task index page if task was already deleted" do
       id_to_delete = task.id
       Task.destroy_all
-
+      
       expect {
         delete task_path(id_to_delete)
       }.must_differ "Task.count", 0
-
+      
       must_redirect_to tasks_path
     end
   end
   
   # Complete for Wave 4
   describe "toggle_complete" do
-    # Your tests go here
+    it "will change a task from not completed to completed with DateTime object" do
+      incomplete_task = Task.create(name: "An incomplete task", description: "Yes, oh so incomplete", completed: nil)
+
+      patch toggle_complete_path(incomplete_task.id)
+
+      completed_task = Task.find_by(name: "An incomplete task")
+      
+      expect (completed_task.completed).must_be_kind_of ActiveSupport::TimeWithZone
+      expect (completed_task.completed).must_be_close_to Time.now, 0.05
+    end
+    
+    it "will change a task from completed with DateTime object to not completed" do
+      patch toggle_complete_path(task.id)
+
+      completed_task = Task.find_by(id: task.id)
+
+      expect (completed_task.completed).must_be_nil
+    end
   end
 end
