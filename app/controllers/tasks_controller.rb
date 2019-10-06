@@ -95,25 +95,34 @@ class TasksController < ApplicationController
     
     if @task
       if @task.completion_datetime
-        @task.update(completion_datetime: nil)
+        @task.completion_datetime = nil
       else
         now = Time.now
-        @task.update(completion_datetime: now)
+        @task.completion_datetime = now
       end
       
-      puts "CONTROLLER says @task completed at: #{@task.completion_datetime}"
-      
-      if params[:destination] == "root"
-        redirect_to root_path
-        return
-      elsif params[:destination] == "show"
-        redirect_to task_path(id: @task.id)
-        return
+      if @task.save
+        puts "\tCONTROLLER says @task saved to db"
+        db_task = Task.find_by(id: @task.id)
+        puts "\tCONTROLLER retrieves task from db using id#, and completion_datetime = #{db_task.completion_datetime}"
+        puts "\tCONTROLLER will send u onward to final destination!"
+        
+        if params[:destination] == "root"
+          redirect_to root_path
+          return
+        elsif params[:destination] == "show"
+          redirect_to task_path(id: @task.id)
+          return
+        else
+          puts "OH HELL NO!"
+          head :not_found
+          return
+        end
       else
-        puts "OH HELL NO!"
         head :not_found
         return
       end
+      
       
     else
       # user shouldn't be able to click a toggle button to a task that doesn't exist
