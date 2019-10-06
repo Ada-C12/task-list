@@ -129,12 +129,45 @@ describe TasksController do
 
   # Complete these tests for Wave 4
   describe "destroy" do
-    # Your tests go here
+    it "can delete a task" do
+      # Arrange
+      task_hash = {
+        task: {
+          name: "new task",
+          description: "new task description",
+          completed: nil
+        }
+      }
 
+      old_task = Task.create(task_hash[:task])
+
+      # Act-Assert
+      expect {
+        delete task_path(old_task.id)
+      }.must_change "Task.count", 1
+
+    end
   end
 
   # Complete for Wave 4
   describe "toggle_complete" do
-    # Your tests go here
+    it "can mark a task as completed" do
+      # Your tests go here
+      task_hash = {
+        task: {
+          name: "new task",
+          description: "new task description",
+          completed: nil
+        }
+      }
+
+      #old_task = Task.create(task_hash[:task])
+
+      # # Act-Assert
+      # expect {
+      #   patch task_path(old_task.id) + "/complete"
+      # }.must_change "old_task.completed", != nil
+  end
+
   end
 end
