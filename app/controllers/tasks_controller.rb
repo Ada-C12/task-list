@@ -96,13 +96,9 @@ class TasksController < ApplicationController
     if @task
       if @task.completion_status == nil
         now = Time.now
-        
-        # IF I WRITE OUT THE STRING HERE, AND STORE IT AS STRING, IT'S OK
-        today_str = display_date(now)
-        
-        @task.update(completion_status: true, completion_datetime: now, display_date: today_str)
+        @task.update(completion_status: true, completion_datetime: now)
       else
-        @task.update(completion_status: nil)
+        @task.update(completion_status: nil, completion_datetime: nil)
       end
       redirect_to root_path
       return
@@ -111,15 +107,6 @@ class TasksController < ApplicationController
       head :not_found
       return
     end
-  end
-  
-  def display_date(time_obj)
-    # HELPER FCN: Takes the Time obj, and returs a string that says "yyyy-mm-dd", like "2019-10-5"
-    yyyy = time_obj.year.to_s
-    mm = time_obj.month.to_s
-    dd = time_obj.day.to_s
-    date_str = yyyy + "-" + mm + "-" + dd
-    return date_str
   end
   
   private
