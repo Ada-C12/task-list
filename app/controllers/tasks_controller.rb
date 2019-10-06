@@ -31,7 +31,7 @@ class TasksController < ApplicationController
   def edit
     @task = Task.find_by(id: params[:id])
 
-    if@book.nil?
+    if@task.nil?
       head :not_found
       return
     end
@@ -51,7 +51,7 @@ class TasksController < ApplicationController
   def destroy
     @task = Task.find_by(id: params[:id])
 
-    if task.nil?
+    if @task.nil?
       head :not_found
       return
     end
@@ -68,7 +68,7 @@ class TasksController < ApplicationController
     return params.require(:task).permit(
       :name, 
       :description, 
-      :due)
+      :completed)
   end
 
 end
