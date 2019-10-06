@@ -89,7 +89,25 @@ describe TasksController do
   describe "edit" do
     it "can get the edit page for an existing task" do
       skip
-      # Your code here
+      
+      # Arrange
+      task_hash = {
+        task: {
+          name: "new task",
+          description: "new task description",
+          completion_date: nil,
+        },
+      }
+      
+      # Act-Assert
+      task = get tasks.find_by(id: 1)
+      task.name = "eat pizza"
+      expect {
+        name = tasks.find_by(id: 1).name
+      }.must_equal "eat pizza"
+      
+      # must_respond_with :redirect
+      # must_redirect_to task_path(new_task.id)
     end
     
     it "will respond with redirect when attempting to edit a nonexistant task" do
