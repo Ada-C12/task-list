@@ -25,6 +25,7 @@ class TasksController < ApplicationController
 
     if @task.save
       redirect_to task_path(@task.id)
+      return
     else
       render new_task_path
     end
@@ -44,13 +45,9 @@ class TasksController < ApplicationController
     if @task.nil?
       redirect_to root_path
       return
-    else 
-      @task.name = params[:task][:name]
-      @task.description = params[:task][:description]
-    end
-
-    if @task.save
+    elsif @task.update(task_strong_params)
       redirect_to task_path(@task.id)
+      return
     else
       render new_task_path
     end
