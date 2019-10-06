@@ -153,11 +153,13 @@ describe TasksController do
     end
 
     it "will delete the task from database" do
-      # Act - Assert
+      # Act 
       expect {
         delete task_path(@new_task)
         delete task_path(@new_task2)
-      }.wont_change 'Task.count'
+      }.must_change 'Task.count'
+      # Assert
+      expect( Task.all ).must_equal []
     end
   end
 
