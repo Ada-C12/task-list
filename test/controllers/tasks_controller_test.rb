@@ -181,13 +181,34 @@ describe TasksController do
   describe "toggle_complete" do
     it "updates a task by changing completion_date from nil to a timestamp when a user clicks on the 'complete task' button" do
       # Your tests go here
-      updated_task = Task.create(name: "A test task", description: "This is how you do it", completion_date: nil)
+      test_task = {
+        task: {
+          name: "A test task",
+          description: "This is how you do it",
+          completion_date: nil
+        }
+      }
 
-      expect {
-        patch complete_task_path(updated_task.id)
-      }.must_differ "Task.count", 0
+      patch task_path(task.id), params: test_task
+
+      updated_task = Task.find_by(id: task.id)
+
+      updated_task = {
+        task: {
+          name: "A test task",
+          description: "This is how you do it",
+            completion_date: Time.now
+        }
+      }
+
+      patch complete_task_path(task.id), params: updated_task
+
+      task_with_time_stamp = Task.find_by(id: task.id)
+
+      expect(task_with_time_stamp.completion_date).must_be_instance_of ActiveSupport::TimeWithZone
 
       must_redirect_to tasks_path
+
     end
   end
 end
