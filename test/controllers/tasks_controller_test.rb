@@ -161,12 +161,11 @@ describe TasksController do
         }
       }
 
-      #old_task = Task.create(task_hash[:task])
+      gmsb_task = Task.create(task_hash[:task])
 
-      # # Act-Assert
-      # expect {
-      #   patch task_path(old_task.id) + "/complete"
-      # }.must_change "old_task.completed", != nil
+        patch task_path(gmsb_task.id) + "/complete"
+
+      expect(Task.find_by(id: gmsb_task.id).completed).wont_equal nil
   end
 
   end
