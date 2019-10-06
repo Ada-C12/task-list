@@ -171,7 +171,6 @@ describe TasksController do
     end
   end
   
-  # Complete for Wave 4
   describe "toggle_complete" do
     it "will change a task from not completed to completed with DateTime object" do
       incomplete_task = Task.create(name: "An incomplete task", description: "Yes, oh so incomplete", completed: nil)
