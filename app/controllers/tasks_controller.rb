@@ -1,12 +1,10 @@
 class TasksController < ApplicationController
   def index
-    @tasks = Task.all
+    @tasks = Task.all.sort_by{ |h | h[:id] }
   end
 
   def show
-    task_id = params[:id].to_i
-    # @task = Task.find(task_id)
-    @task = Task.find_by(id: task_id)
+    @task = Task.find_by(id: params[:id])
     if @task.nil?
       redirect_to tasks_path
       return 
@@ -18,14 +16,65 @@ class TasksController < ApplicationController
   end
 
   def create
-    @task = Task.new(name: params[:task][:name], description: params[:task][:description], completion_date: params[:task][:completion_date]) #instantiate a new book
-    if @task.save # save returns true if the database insert succeeds
-      redirect_to tasks_path # go to the index so we can see the book in the list
+    @task = Task.new(name: params[:task][:name], description: params[:task][:description], completion_date: nil) #instantiate a new book
+    if @task.name != ""
+      @task.save
+      redirect_to task_path(@task.id) 
       return
-    else # save failed :(
-      render :new # show the new book form view again
+    else 
+      render :new 
       return
     end
+  end
+
+  def edit
+    @task = Task.find_by(id: params[:id])
+
+    if @task.nil?
+      redirect_to tasks_path
+      return
+    end
+  end
+
+  def update
+    @task = Task.find_by(id: params[:id])
+
+    if @task.nil?
+      redirect_to tasks_path
+      return
+    elsif @task.update(
+      name: params[:task][:name], 
+      description: params[:task][:description]
+    )
+      redirect_to tasks_path 
+      return
+    else 
+      render :edit 
+      return
+    end
+  end
+
+  def destroy
+    @task = Task.find_by(id: params[:id])
+
+    if @task.nil?
+      head :not_found
+      return
+    end
+
+    @task.destroy
+    redirect_to tasks_path
+    return
+  end
+
+  def complete
+    @task = Task.find_by(id: params[:id])
+    if @task.completion_date == nil
+        @task.update(completion_date: DateTime.now)
+    else
+      @task.update(completion_date: nil)
+    end
+    redirect_to tasks_path
   end
 end
 

@@ -83,13 +83,20 @@ describe TasksController do
   # Unskip and complete these tests for Wave 3
   describe "edit" do
     it "can get the edit page for an existing task" do
-      skip
-      # Your code here
+      # Act
+      get edit_task_path(task.id)
+
+      # Assert
+      must_respond_with :success
     end
 
+
     it "will respond with redirect when attempting to edit a nonexistant task" do
-      skip
-      # Your code here
+      # Act
+      get edit_task_path(-1)
+
+      # Assert
+      must_respond_with :redirect
     end
   end
 
@@ -97,19 +104,61 @@ describe TasksController do
   describe "update" do
     # Note:  If there was a way to fail to save the changes to a task, that would be a great
     #        thing to test.
+    before do 
+      @new_task = Task.create(name: "Test", description: "Created for testing", completion_date: nil)
+    end 
+
     it "can update an existing task" do
-      # Your code here
+      # Arrange
+      original_task = Task.first
+      original_task_updated = {
+        task: {
+          name: "Return",
+          description: "items at Costco.",
+          completion_date: nil
+        },
+      }
+      
+      # Act
+      expect {
+        patch task_path(original_task.id), params: original_task_updated
+      }.wont_change 'Task.count'
+
+      # Assert: 
+      expect( Task.find_by(id: original_task.id).name ).must_equal "Return"
     end
 
     it "will redirect to the root page if given an invalid id" do
-      # Your code here
+      # Act
+      patch task_path(-1)
+
+      # Assert
+      must_respond_with :redirect    
     end
   end
 
   # Complete these tests for Wave 4
   describe "destroy" do
-    # Your tests go here
+    before do 
+      @new_task = Task.create(name: "Test", description: "Created for testing", completion_date: nil)
+      @new_task2 = Task.create(name: "Test2", description: "Created for testing", completion_date: nil)
+    end 
 
+    it "will redirect to main page if task is deleted" do
+      # Act
+      delete task_path(task)
+
+      # Assert
+      must_respond_with :redirect 
+    end
+
+    it "will delete the task from database" do
+      # Act - Assert
+      expect {
+        delete task_path(@new_task)
+        delete task_path(@new_task2)
+      }.wont_change 'Task.count'
+    end
   end
 
   # Complete for Wave 4
