@@ -74,14 +74,13 @@ class TasksController < ApplicationController
 
   def toggle_complete
     @task = Task.find_by(id: task_id)
-    @task.completed = true
-    if @task.completed = true
+    if @task.completed == nil
       @task.completed = Time.now
     end
     @task.save
     redirect_to current_user
   end
-  
+
   private
   
   def task_params
