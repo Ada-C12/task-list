@@ -142,16 +142,53 @@ describe TasksController do
 
   # Complete these tests for Wave 4
   describe "destroy" do
-    # it 'successfully deletes a task and redirects to ___ page' do
-      # create a book
+    it 'successfully deletes a task and redirects to the root path' do
+      new_task = Task.create(
+        name: "Make dinner", 
+        description: "figure out something edible from the fridge",
+        completion_date: nil
+      )
+      new_task_id = new_task.id
 
-      # expect-differ, count goes down by 1
-      # assert that redirect to ___ page
+      expect{
+        delete task_path(new_task_id)
+      }.must_differ "Task.count", -1
 
-    # end
+      must_redirect_to root_path
+    end
 
-    # 
+    it "redirects to the tasks path and does not delete any tasks if the task does not exist" do
+      Task.destroy_all
+      new_task = Task.create(
+        name: "Make dinner", 
+        description: "figure out something edible from the fridge",
+        completion_date: nil
+      )
+      invalid_task_id = 600
 
+      expect {
+        delete task_path(invalid_task_id)
+      }.must_differ "Task.count", 0
+      expect(new_task.id).wont_equal invalid_task_id
+
+      must_redirect_to tasks_path
+    end
+
+    it "redirects to the tasks path and does not delete any tasks if the task has already been deleted" do
+      new_task = Task.create(
+        name: "Make dinner", 
+        description: "figure out something edible from the fridge",
+        completion_date: nil
+      )
+      new_task_id = new_task.id
+      Task.destroy_all
+
+      expect {
+        delete task_path(new_task_id)
+      }.must_differ "Task.count", 0
+
+      must_redirect_to tasks_path
+    end
   end
 
   # Complete for Wave 4
