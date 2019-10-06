@@ -8,6 +8,7 @@
       <li>
         <%= task[:name].upcase %>: <%= task[:description] %>
       <%= link_to "Edit", edit_task_path(task) %> 
+      <%= link_to "Mark Complete", complete_task_path(task), method: :patch%>
       <%= link_to "Delete", task_path(task), method: :delete, data: {confirm: "Are you sure?"} %>
       </li>
       <% end %>
@@ -18,8 +19,9 @@
   <% @tasks.each do |task| 
     if task.completed != nil %>
     <li>
-    <%= task[:name].upcase %>: <%= task[:description] %>, completed on <%= task[:completed].strftime("%d/%m/%Y") %>
+    <span class="strikethrough"><%= task[:name].upcase %>:</span> <%= task[:description] %>, completed on <%= task[:completed].strftime("%d/%m/%Y") %>
     <%= link_to "Edit", edit_task_path(task) %> 
+    <%= link_to "Mark Incomplete", complete_task_path(task), method: :patch%>
     <%= link_to "Delete", task_path(task), method: :delete, data: {confirm: "Are you sure?"} %>
     </li>
     <% end %>
@@ -29,3 +31,10 @@
   <div class="index-container">
   <%= button_to "New Task", new_task_path, method: :get, class: "task-button"%>
   </div>
+
+  <footer class="footer-flex">
+    <%= image_tag "to-do-bird", alt: "A bird that says, I am more than my to-do list", class: "index-center" %>
+    <div>
+    Image copyright <%= link_to "Emm Roy", "https://positivedoodles.tumblr.com/" %>
+    </div>
+  </footer>

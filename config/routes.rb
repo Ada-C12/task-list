@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   #routes that operate on the tasks collection
 
   root 'tasks#index'
+  patch '/tasks/:id/complete', to: 'tasks#complete', as: 'complete_task'
   resources :tasks
 #   root 'tasks#index'
 #   get '/tasks', to: 'tasks#index', as: 'tasks'
