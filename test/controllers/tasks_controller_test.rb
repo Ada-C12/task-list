@@ -104,23 +104,28 @@ end
 
 # Uncomment and complete these tests for Wave 3
 describe "update" do
-  # Note:  If there was a way to fail to save the changes to a task, that would be a great
-  #        thing to test.
-  it "can update an existing task" do
-    edited = Task.first
-    
-    updated_task_form_data = {
-    task: {
-    name: "Errands to run",
-    description: "Buy coat, return library books",
-    completion_date: 2019/10/10
-  },
+  
+  before do
+    test_task = Task.create(name: "Best task", description: "Super fun things", completion_date: Time.now)
+  end
+  let (:new_task_hash) {
+  {
+  task: {
+  name: "Errands to run",
+  description: "Donate items, return library books, buy jacket",
+  completion_date: 2019/10/10
+},
 }
-
-patch task_path(id: edited.id), params: updated_task_form_data
-edited = Task.find_by(id: edited.id)
-expect(edited.name).must_equal "Errands to run"
-
+}
+# Note:  If there was a way to fail to save the changes to a task, that would be a great
+#        thing to test.
+it "can update an existing task" do
+  id = Task.first.id
+  
+  patch task_path(id: id), params: new_task_hash
+  edited = Task.find_by(id: id)
+  expect(edited.name).must_equal "Errands to run"
+  
 end
 
 it "will redirect to the root page if given an invalid id" do
