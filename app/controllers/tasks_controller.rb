@@ -8,7 +8,7 @@ class TasksController < ApplicationController
     @task = Task.find_by(id: @task_id)
 
     if @task.nil?
-      head :not_found
+      redirect_to root_path
       return
     end
   end
@@ -20,7 +20,7 @@ class TasksController < ApplicationController
   def create
     @task = Task.new(task_params)
     if @task.save
-      redirect_to root_path
+      redirect_to task_path(@task)
       return
     else
       render :new
