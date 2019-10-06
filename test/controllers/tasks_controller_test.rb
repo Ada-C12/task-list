@@ -63,6 +63,8 @@ describe TasksController do
 
   # Tests for Wave 3
   describe "update" do
+        # Note:  If there was a way to fail to save the changes to a task, that would be a great
+    #        thing to test.
     before do
       @new_task = Task.create(name: "make beds")
       @task_hash_with_new_data = {
@@ -88,29 +90,10 @@ describe TasksController do
     end
   end
 
-  # Uncomment and complete these tests for Wave 3
-  describe "update" do
-    # Note:  If there was a way to fail to save the changes to a task, that would be a great
-    #        thing to test.
-    let (:new_task_hash) {
-      {
-        task: {
-          name: "sweep front steps",
-          description: "compost leaves",
-          completion_date: nil
-        },
-      }
-    }
-
-
-    it "will redirect to the root page if given an invalid id" do
-      # Your code here
-    end
-  end
-
-  # Complete these tests for Wave 4
+  # Tests for Wave 4
   describe "destroy" do
-    # Your tests go here
+    before do
+      @task = Task.create(name: "take out compost")
 
   end
 
