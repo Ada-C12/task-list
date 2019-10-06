@@ -102,6 +102,17 @@ describe TasksController do
 
   # Complete for Wave 4
   describe "toggle_complete" do
-    # Your tests go here
+    it 'goes from nil to the current date' do
+      task = Task.create(name: "take out compost")
+      put toggle_complete_path(task.id)
+      expect(Task.find_by(id: task.id).completion_date).must_equal Date.today
+    end
+
+    it 'goes from the current date to nil' do
+      task = Task.create(name: "take out compost")
+      put toggle_complete_path(task.id)
+      put toggle_complete_path(task.id)
+      expect(Task.find_by(id: task.id).completion_date).must_equal nil
+    end
   end
 end

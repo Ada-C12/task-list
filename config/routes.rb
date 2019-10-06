@@ -1,6 +1,5 @@
 Rails.application.routes.draw do
   resources :tasks
   root 'tasks#index'
-  # delete '/tasks/:id', to: 'tasks#delete', as :delete_task
-  # resources :tasks, except: [:destroy]
+  put '/tasks/:id/complete', to: 'tasks#toggle_complete', as: 'toggle_complete'
 end
