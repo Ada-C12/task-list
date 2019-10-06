@@ -4,7 +4,7 @@ describe TasksController do
   
   let (:task) {
     Task.create name: "sample task", description: "this is an example for a test",
-    completion_date: Time.now + 5.days
+    completed: Time.now + 5.days
   }
   
   describe "index" do
@@ -64,7 +64,7 @@ describe TasksController do
         task: {
           name: "new task",
           description: "new task description",
-          completion_date: nil
+          completed: nil
         }
       }
       
@@ -75,7 +75,7 @@ describe TasksController do
       
       new_task = Task.find_by(name: task_hash[:task][:name])
       expect(new_task.description).must_equal task_hash[:task][:description]
-      expect(new_task.completion_date).must_equal task_hash[:task][:completion_date]
+      expect(new_task.completed).must_equal task_hash[:task][:completed]
       
       must_respond_with :redirect
       must_redirect_to task_path(new_task.id)
@@ -88,7 +88,7 @@ describe TasksController do
       task: {
         name: "task to be edited",
         description: "task to be edited description",
-        completion_date: nil,
+        completed: nil,
       }
     }
     
@@ -128,7 +128,7 @@ describe TasksController do
         task: {
           name: "Updated task", 
           description: "Updated task description",
-          completion_date: nil
+          completed: nil
         }
       }
       
