@@ -175,9 +175,9 @@ describe TasksController do
   describe "toggle_complete" do
     it "will change a task from not completed to completed with DateTime object" do
       incomplete_task = Task.create(name: "An incomplete task", description: "Yes, oh so incomplete", completed: nil)
-
+      
       patch toggle_complete_path(incomplete_task.id)
-
+      
       completed_task = Task.find_by(name: "An incomplete task")
       
       expect (completed_task.completed).must_be_kind_of ActiveSupport::TimeWithZone
@@ -186,10 +186,16 @@ describe TasksController do
     
     it "will change a task from completed with DateTime object to not completed" do
       patch toggle_complete_path(task.id)
-
+      
       completed_task = Task.find_by(id: task.id)
-
+      
       expect (completed_task.completed).must_be_nil
+    end
+    
+    it "will redirect to task index for invalid task" do
+      patch toggle_complete_path(-1)
+
+      must_redirect_to tasks_path
     end
   end
 end
