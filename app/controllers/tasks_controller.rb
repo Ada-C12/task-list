@@ -27,7 +27,6 @@ class TasksController < ApplicationController
     # new_task.due_date = DateTime.parse(Date.parse(form_date).strftime("%Y/%-d/%-m"))
 
     @new_task.completed = nil
-    @new_task.status = "INCOMPLETE"
     
     if @new_task.save
       redirect_to task_path( @new_task.id )
@@ -44,12 +43,12 @@ class TasksController < ApplicationController
   end
 
   def update
-    @task = Task.find_by(id: params[:id])
+    task = Task.find_by(id: params[:id])
 
-    if @task.nil?
+    if task.nil?
       redirect_to root_path
-    elsif @task.update(task_params)
-      redirect_to task_path( @task.id )
+    elsif task.update(task_params)
+      redirect_to task_path( task.id )
     else
       render new_task_path
     end
@@ -68,11 +67,29 @@ class TasksController < ApplicationController
 
   end
 
+  def toggle_completed
+    task = Task.find_by(id: params[:id])
+
+    if task.nil?
+      redirect_to root_path
+    elsif !task.completed?
+      task.update_attribute(:completed, DateTime.now.getlocal)
+      redirect_to tasks_path
+      return   
+    elsif task.completed?
+      task.update_attribute(:completed, nil)
+      redirect_to tasks_path
+      return
+    else
+      redirect_to tasks_path
+    end
+  end
+
 
   private
 
   def task_params
-    return params.require(:task).permit(:name, :description)
+    return params.require(:task).permit(:name, :description, :completed)
   end
 
 end

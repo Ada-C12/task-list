@@ -10,7 +10,10 @@
       <li>
         <p>
           <%= link_to task.name, task_path( task.id ) %>
-          <%= "#{task.description} ----- #{task.status}" %>
+          <% mark_complete_text = task.completed ? "Unmark Complete" : "Mark Complete" %>
+          <%= task.description %> | 
+          <%= link_to  mark_complete_text, toggle_completed_path( task.id ), method: :patch %> | 
+          <%= link_to "delete", task_path( task.id ), method: :delete %>
         </p>
         <p>
           <%# "Should be completed by: " + task.due_date.to_s %>
