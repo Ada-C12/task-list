@@ -25,7 +25,7 @@ class TasksController < ApplicationController
       name: params[:task][:name],
       description: params[:task][:description],
       completion_date: nil
-    ) #instantiate a new task
+    ) #instantiates a new task
     
     if @task.save #save returns true if the database insert succeeds
       redirect_to task_path(@task.id)  #go to the index so we can see the task in the list
