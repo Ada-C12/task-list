@@ -94,18 +94,15 @@ class TasksController < ApplicationController
     @task = Task.find_by(id: params[:id])
     
     if @task
-      if @task.completion_date == nil
-        # THIS IS CORRECT TIME
+      if @task.completion_status == nil
         now = Time.now
         
         # IF I WRITE OUT THE STRING HERE, AND STORE IT AS STRING, IT'S OK
         today_str = display_date(now)
         
-        # BUT IF I STORE IT AS A TIME DATATYPE IN DATABASE, IT'S IN 1/1/2000... WHAT?
-        # I will store the completion_date as its prescribed time datatype, but I'm morally opposed to it.
-        @task.update(completion_date: now, completion_datetime: now, display_date: today_str)
+        @task.update(completion_status: true, completion_datetime: now, display_date: today_str)
       else
-        @task.update(completion_date: nil)
+        @task.update(completion_status: nil)
       end
       redirect_to root_path
       return
@@ -127,7 +124,7 @@ class TasksController < ApplicationController
   
   private
   def params_from_form
-    return params.require(:task).permit(:name, :description, :completion_date)
+    return params.require(:task).permit(:name, :description, :completion_status)
   end
   
 end

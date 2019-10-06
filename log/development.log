@@ -15751,3 +15751,262 @@ Processing by TasksController#index as HTML
 Completed 200 OK in 26ms (Views: 22.9ms | ActiveRecord: 0.2ms)
 
 
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT pg_try_advisory_lock(3827420325922003335)[0m
+  ↳ bin/rails:9
+  [1m[35m (0.4ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  ↳ bin/rails:9
+Migrating to ChangeCompletionDateInTasks (20191006002301)
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ bin/rails:9
+  [1m[35m (2.4ms)[0m  [1m[35mALTER TABLE "tasks" DROP COLUMN "completion_date"[0m
+  ↳ db/migrate/20191006002301_change_completion_date_in_tasks.rb:3
+  [1m[35m (0.3ms)[0m  [1m[35mALTER TABLE "tasks" ADD "completion_status" boolean[0m
+  ↳ db/migrate/20191006002301_change_completion_date_in_tasks.rb:4
+  [1m[36mActiveRecord::SchemaMigration Create (0.2ms)[0m  [1m[32mINSERT INTO "schema_migrations" ("version") VALUES ($1) RETURNING "version"[0m  [["version", "20191006002301"]]
+  ↳ bin/rails:9
+  [1m[35m (1.0ms)[0m  [1m[35mCOMMIT[0m
+  ↳ bin/rails:9
+  [1m[36mActiveRecord::InternalMetadata Load (0.3ms)[0m  [1m[34mSELECT  "ar_internal_metadata".* FROM "ar_internal_metadata" WHERE "ar_internal_metadata"."key" = $1 LIMIT $2[0m  [["key", "environment"], ["LIMIT", 1]]
+  ↳ bin/rails:9
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ bin/rails:9
+  [1m[35m (0.1ms)[0m  [1m[35mCOMMIT[0m
+  ↳ bin/rails:9
+  [1m[35m (0.1ms)[0m  [1m[34mSELECT pg_advisory_unlock(3827420325922003335)[0m
+  ↳ bin/rails:9
+  [1m[35m (0.2ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  ↳ bin/rails:9
+Started GET "/" for ::1 at 2019-10-05 17:25:55 -0700
+  [1m[35m (0.5ms)[0m  [1m[34mSELECT "schema_migrations"."version" FROM "schema_migrations" ORDER BY "schema_migrations"."version" ASC[0m
+  ↳ /Users/carolinewu/.rbenv/versions/2.5.5/lib/ruby/gems/2.5.0/gems/activerecord-5.2.3/lib/active_record/log_subscriber.rb:98
+Processing by TasksController#index as HTML
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.5ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks"[0m
+  ↳ app/views/tasks/index.html.erb:15
+  Rendered tasks/index.html.erb within layouts/application (13.2ms)
+Completed 200 OK in 33ms (Views: 25.3ms | ActiveRecord: 4.4ms)
+
+
+Started PATCH "/tasks?id=29" for ::1 at 2019-10-05 17:25:58 -0700
+Processing by TasksController#toggle as HTML
+  Parameters: {"authenticity_token"=>"RkLtR/zzEX4X7RFH62Zol3pmm8wxYkClP1+1SqpDcqjgYmMPsEd0z5Jx2CrvrClMHEG5/zks0uZffWR8Rv4JEQ==", "id"=>"29"}
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT  "tasks".* FROM "tasks" WHERE "tasks"."id" = $1 LIMIT $2[0m  [["id", 29], ["LIMIT", 1]]
+  ↳ app/controllers/tasks_controller.rb:94
+Completed 500 Internal Server Error in 3ms (ActiveRecord: 0.4ms)
+
+
+
+NoMethodError - undefined method `completion_date' for #<Task:0x00007f9e0331cf38>:
+  app/controllers/tasks_controller.rb:97:in `toggle'
+
+Started POST "/__better_errors/d7288817bcf38375/variables" for ::1 at 2019-10-05 17:25:58 -0700
+Started GET "/" for ::1 at 2019-10-05 17:27:00 -0700
+Processing by TasksController#index as HTML
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.3ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks"[0m
+  ↳ app/views/tasks/index.html.erb:15
+  Rendered tasks/index.html.erb within layouts/application (11.7ms)
+Completed 200 OK in 30ms (Views: 23.2ms | ActiveRecord: 3.2ms)
+
+
+Started PATCH "/tasks?id=29" for ::1 at 2019-10-05 17:27:02 -0700
+Processing by TasksController#toggle as HTML
+  Parameters: {"authenticity_token"=>"zrZlHB80cvNjCEKHKIqzW1efCB2u7qJG6McbIqrH6H1olutUU4AXQuaUi+osQPKAMbgqLqagMAWI5coURnqTxA==", "id"=>"29"}
+  [1m[36mTask Load (0.3ms)[0m  [1m[34mSELECT  "tasks".* FROM "tasks" WHERE "tasks"."id" = $1 LIMIT $2[0m  [["id", 29], ["LIMIT", 1]]
+  ↳ app/controllers/tasks_controller.rb:94
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/tasks_controller.rb:106
+  [1m[36mTask Update (0.3ms)[0m  [1m[33mUPDATE "tasks" SET "completion_status" = $1, "completion_datetime" = $2, "display_date" = $3, "updated_at" = $4 WHERE "tasks"."id" = $5[0m  [["completion_status", true], ["completion_datetime", "2019-10-06 00:27:02.084011"], ["display_date", "2019-10-5"], ["updated_at", "2019-10-06 00:27:02.084577"], ["id", 29]]
+  ↳ app/controllers/tasks_controller.rb:106
+  [1m[35m (0.4ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/tasks_controller.rb:106
+Redirected to http://localhost:3000/
+Completed 302 Found in 4ms (ActiveRecord: 1.0ms)
+
+
+Started GET "/" for ::1 at 2019-10-05 17:27:02 -0700
+Processing by TasksController#index as HTML
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks"[0m
+  ↳ app/views/tasks/index.html.erb:15
+  Rendered tasks/index.html.erb within layouts/application (3.6ms)
+Completed 200 OK in 22ms (Views: 19.1ms | ActiveRecord: 0.2ms)
+
+
+Started PATCH "/tasks?id=27" for ::1 at 2019-10-05 17:27:05 -0700
+Processing by TasksController#toggle as HTML
+  Parameters: {"authenticity_token"=>"ig3PA8CuD4qLWKwF/0ypdnSoOgixzV47RzsSuhcp+3YsLUFLjBpqOw7EZWj7huitEo8YO7mDzHgnGcOM+5SAzw==", "id"=>"27"}
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT  "tasks".* FROM "tasks" WHERE "tasks"."id" = $1 LIMIT $2[0m  [["id", 27], ["LIMIT", 1]]
+  ↳ app/controllers/tasks_controller.rb:94
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/tasks_controller.rb:106
+  [1m[36mTask Update (0.2ms)[0m  [1m[33mUPDATE "tasks" SET "completion_status" = $1, "completion_datetime" = $2, "updated_at" = $3 WHERE "tasks"."id" = $4[0m  [["completion_status", true], ["completion_datetime", "2019-10-06 00:27:05.510160"], ["updated_at", "2019-10-06 00:27:05.510708"], ["id", 27]]
+  ↳ app/controllers/tasks_controller.rb:106
+  [1m[35m (0.5ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/tasks_controller.rb:106
+Redirected to http://localhost:3000/
+Completed 302 Found in 3ms (ActiveRecord: 1.1ms)
+
+
+Started GET "/" for ::1 at 2019-10-05 17:27:05 -0700
+Processing by TasksController#index as HTML
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks"[0m
+  ↳ app/views/tasks/index.html.erb:15
+  Rendered tasks/index.html.erb within layouts/application (3.7ms)
+Completed 200 OK in 30ms (Views: 27.2ms | ActiveRecord: 0.2ms)
+
+
+Started PATCH "/tasks?id=27" for ::1 at 2019-10-05 17:27:06 -0700
+Processing by TasksController#toggle as HTML
+  Parameters: {"authenticity_token"=>"t+IIKZdVgHxgmajKWLsKq+GvwWwnAUuYwIFiuHUSxP8RwoZh2+HlzeUFYadccUtwh4jjXy9P2dugo7OOma+/Rg==", "id"=>"27"}
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT  "tasks".* FROM "tasks" WHERE "tasks"."id" = $1 LIMIT $2[0m  [["id", 27], ["LIMIT", 1]]
+  ↳ app/controllers/tasks_controller.rb:94
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/tasks_controller.rb:108
+  [1m[36mTask Update (0.3ms)[0m  [1m[33mUPDATE "tasks" SET "completion_status" = $1, "updated_at" = $2 WHERE "tasks"."id" = $3[0m  [["completion_status", nil], ["updated_at", "2019-10-06 00:27:06.929036"], ["id", 27]]
+  ↳ app/controllers/tasks_controller.rb:108
+  [1m[35m (0.5ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/tasks_controller.rb:108
+Redirected to http://localhost:3000/
+Completed 302 Found in 4ms (ActiveRecord: 1.1ms)
+
+
+Started GET "/" for ::1 at 2019-10-05 17:27:06 -0700
+Processing by TasksController#index as HTML
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.3ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks"[0m
+  ↳ app/views/tasks/index.html.erb:15
+  Rendered tasks/index.html.erb within layouts/application (3.9ms)
+Completed 200 OK in 24ms (Views: 21.3ms | ActiveRecord: 0.3ms)
+
+
+Started PATCH "/tasks?id=27" for ::1 at 2019-10-05 17:27:08 -0700
+Processing by TasksController#toggle as HTML
+  Parameters: {"authenticity_token"=>"Hl5A11Nj2Mg1pn/pkWcvPceCrZsC7BGVpmbU8ME+HVi4fs6fH9e9ebA6toSVrW7moaWPqAqig9bGRAXGLYNm4Q==", "id"=>"27"}
+  [1m[36mTask Load (0.3ms)[0m  [1m[34mSELECT  "tasks".* FROM "tasks" WHERE "tasks"."id" = $1 LIMIT $2[0m  [["id", 27], ["LIMIT", 1]]
+  ↳ app/controllers/tasks_controller.rb:94
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/tasks_controller.rb:106
+  [1m[36mTask Update (0.3ms)[0m  [1m[33mUPDATE "tasks" SET "completion_status" = $1, "completion_datetime" = $2, "updated_at" = $3 WHERE "tasks"."id" = $4[0m  [["completion_status", true], ["completion_datetime", "2019-10-06 00:27:08.074242"], ["updated_at", "2019-10-06 00:27:08.075266"], ["id", 27]]
+  ↳ app/controllers/tasks_controller.rb:106
+  [1m[35m (0.3ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/tasks_controller.rb:106
+Redirected to http://localhost:3000/
+Completed 302 Found in 4ms (ActiveRecord: 0.9ms)
+
+
+Started GET "/" for ::1 at 2019-10-05 17:27:08 -0700
+Processing by TasksController#index as HTML
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.3ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks"[0m
+  ↳ app/views/tasks/index.html.erb:15
+  Rendered tasks/index.html.erb within layouts/application (4.0ms)
+Completed 200 OK in 24ms (Views: 21.0ms | ActiveRecord: 0.3ms)
+
+
+Started GET "/" for ::1 at 2019-10-05 17:27:16 -0700
+Processing by TasksController#index as HTML
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks"[0m
+  ↳ app/views/tasks/index.html.erb:15
+  Rendered tasks/index.html.erb within layouts/application (4.0ms)
+Completed 200 OK in 25ms (Views: 22.0ms | ActiveRecord: 0.2ms)
+
+
+Started PATCH "/tasks?id=29" for ::1 at 2019-10-05 17:27:18 -0700
+Processing by TasksController#toggle as HTML
+  Parameters: {"authenticity_token"=>"Sly0Fn2ksN5Jc4XB4lofanGTf1jA084E1VzNulBDQADsfDpeMRDVb8zvTKzmkF6xF7Rda8idXEe1fhyMvP47uQ==", "id"=>"29"}
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT  "tasks".* FROM "tasks" WHERE "tasks"."id" = $1 LIMIT $2[0m  [["id", 29], ["LIMIT", 1]]
+  ↳ app/controllers/tasks_controller.rb:94
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/tasks_controller.rb:108
+  [1m[36mTask Update (0.3ms)[0m  [1m[33mUPDATE "tasks" SET "completion_status" = $1, "updated_at" = $2 WHERE "tasks"."id" = $3[0m  [["completion_status", nil], ["updated_at", "2019-10-06 00:27:18.747287"], ["id", 29]]
+  ↳ app/controllers/tasks_controller.rb:108
+  [1m[35m (0.5ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/tasks_controller.rb:108
+Redirected to http://localhost:3000/
+Completed 302 Found in 4ms (ActiveRecord: 1.1ms)
+
+
+Started GET "/" for ::1 at 2019-10-05 17:27:18 -0700
+Processing by TasksController#index as HTML
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.3ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks"[0m
+  ↳ app/views/tasks/index.html.erb:15
+  Rendered tasks/index.html.erb within layouts/application (4.4ms)
+Completed 200 OK in 26ms (Views: 22.8ms | ActiveRecord: 0.3ms)
+
+
+Started PATCH "/tasks?id=27" for ::1 at 2019-10-05 17:27:19 -0700
+Processing by TasksController#toggle as HTML
+  Parameters: {"authenticity_token"=>"BaKonQ1Z2TTlDH4tUrVMXBhz3g4rP13vSm6zP7Y9RnKjgibVQe28hWCQt0BWfw2HflT8PSNxz6wqTGIJWoA9yw==", "id"=>"27"}
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT  "tasks".* FROM "tasks" WHERE "tasks"."id" = $1 LIMIT $2[0m  [["id", 27], ["LIMIT", 1]]
+  ↳ app/controllers/tasks_controller.rb:94
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/tasks_controller.rb:108
+  [1m[36mTask Update (0.2ms)[0m  [1m[33mUPDATE "tasks" SET "completion_status" = $1, "updated_at" = $2 WHERE "tasks"."id" = $3[0m  [["completion_status", nil], ["updated_at", "2019-10-06 00:27:19.298796"], ["id", 27]]
+  ↳ app/controllers/tasks_controller.rb:108
+  [1m[35m (0.5ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/tasks_controller.rb:108
+Redirected to http://localhost:3000/
+Completed 302 Found in 4ms (ActiveRecord: 1.0ms)
+
+
+Started GET "/" for ::1 at 2019-10-05 17:27:19 -0700
+Processing by TasksController#index as HTML
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.3ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks"[0m
+  ↳ app/views/tasks/index.html.erb:15
+  Rendered tasks/index.html.erb within layouts/application (4.1ms)
+Completed 200 OK in 25ms (Views: 22.0ms | ActiveRecord: 0.3ms)
+
+
+Started PATCH "/tasks?id=27" for ::1 at 2019-10-05 17:27:20 -0700
+Processing by TasksController#toggle as HTML
+  Parameters: {"authenticity_token"=>"zyxzHHotq+i8srSgtedXbd9sKadoV6ttv5T6ni2hq6RpDP1UNpnOWTkufc2xLRa2uUsLlGAZOS7ftiuowRzQHQ==", "id"=>"27"}
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT  "tasks".* FROM "tasks" WHERE "tasks"."id" = $1 LIMIT $2[0m  [["id", 27], ["LIMIT", 1]]
+  ↳ app/controllers/tasks_controller.rb:94
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/tasks_controller.rb:106
+  [1m[36mTask Update (0.3ms)[0m  [1m[33mUPDATE "tasks" SET "completion_status" = $1, "completion_datetime" = $2, "updated_at" = $3 WHERE "tasks"."id" = $4[0m  [["completion_status", true], ["completion_datetime", "2019-10-06 00:27:20.408269"], ["updated_at", "2019-10-06 00:27:20.408910"], ["id", 27]]
+  ↳ app/controllers/tasks_controller.rb:106
+  [1m[35m (0.2ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/tasks_controller.rb:106
+Redirected to http://localhost:3000/
+Completed 302 Found in 8ms (ActiveRecord: 0.8ms)
+
+
+Started GET "/" for ::1 at 2019-10-05 17:27:20 -0700
+Processing by TasksController#index as HTML
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks"[0m
+  ↳ app/views/tasks/index.html.erb:15
+  Rendered tasks/index.html.erb within layouts/application (4.0ms)
+Completed 200 OK in 24ms (Views: 21.1ms | ActiveRecord: 0.2ms)
+
+
+Started PATCH "/tasks?id=29" for ::1 at 2019-10-05 17:27:21 -0700
+Processing by TasksController#toggle as HTML
+  Parameters: {"authenticity_token"=>"IlAeHM7bV6Bj2cDLx/Y6HUux1frqm6bRheWJrIQJLXmEcJBUgm8yEeZFCabDPHvGLZb3yeLVNJLlx1iaaLRWwA==", "id"=>"29"}
+  [1m[36mTask Load (0.2ms)[0m  [1m[34mSELECT  "tasks".* FROM "tasks" WHERE "tasks"."id" = $1 LIMIT $2[0m  [["id", 29], ["LIMIT", 1]]
+  ↳ app/controllers/tasks_controller.rb:94
+  [1m[35m (0.1ms)[0m  [1m[35mBEGIN[0m
+  ↳ app/controllers/tasks_controller.rb:106
+  [1m[36mTask Update (0.2ms)[0m  [1m[33mUPDATE "tasks" SET "completion_status" = $1, "completion_datetime" = $2, "updated_at" = $3 WHERE "tasks"."id" = $4[0m  [["completion_status", true], ["completion_datetime", "2019-10-06 00:27:21.078579"], ["updated_at", "2019-10-06 00:27:21.079148"], ["id", 29]]
+  ↳ app/controllers/tasks_controller.rb:106
+  [1m[35m (0.3ms)[0m  [1m[35mCOMMIT[0m
+  ↳ app/controllers/tasks_controller.rb:106
+Redirected to http://localhost:3000/
+Completed 302 Found in 3ms (ActiveRecord: 0.8ms)
+
+
+Started GET "/" for ::1 at 2019-10-05 17:27:21 -0700
+Processing by TasksController#index as HTML
+  Rendering tasks/index.html.erb within layouts/application
+  [1m[36mTask Load (0.3ms)[0m  [1m[34mSELECT "tasks".* FROM "tasks"[0m
+  ↳ app/views/tasks/index.html.erb:15
+  Rendered tasks/index.html.erb within layouts/application (4.0ms)
+Completed 200 OK in 25ms (Views: 21.6ms | ActiveRecord: 0.3ms)
+
+
