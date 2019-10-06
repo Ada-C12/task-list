@@ -35,13 +35,13 @@ describe TasksController do
       must_respond_with :success
     end
     
-    # it "will redirect for an invalid task" do
-    #   # Act
-    #   get task_path(-1)
-    
-    #   # 
-    #   must_respond_with :redirect
-    # end
+    it "will redirect for an invalid task" do
+      # Act
+      get task_path(-1)
+      
+      # 
+      must_respond_with :redirect
+    end
   end
   
   describe "new" do
@@ -100,29 +100,6 @@ describe TasksController do
       must_respond_with :redirect
       must_redirect_to root_path
     end
-    
-    # it "redirects to tasks index page and deletes no tasks if no tasks exist" do
-    #   Task.destroy_all
-    #   invalid_task_id = -1
-    
-    #   expect {
-    #     delete task_path( invalid_task_id )
-    #   }.must_differ "Task.count", 0
-    
-    #   must_redirect_to root_path
-    # end
-    
-    # it "redirects to tasks index page and deletes no tasks if deleting a task with an id that has already been deleted" do
-    #   Task.create(name: "A test task", description: "A test task", completion_date: nil)
-    #   task_id = Task.find_by(name: "A test task").id
-    #   Task.destroy_all
-    
-    #   expect {
-    #     delete task_path( task_id )
-    #   }.must_differ "Task.count", 0
-    
-    #   must_redirect_to root_path
-    # end
   end
   
   # Uncomment and complete these tests for Wave 3
@@ -159,30 +136,55 @@ describe TasksController do
   
   # Complete these tests for Wave 4
   describe "destroy" do
-    @task_to_be_destroyed = Task.create(name: "See ya task", description: "This don't matta", completion_date: nil)
-  end 
-  
-  it "can destroy a task" do
-    expect {
-      delete task_path(@task_to_be_destroyed.id)
-    }.must_change 'Task.count'
-    must_respond_with :redirect
+    before do
+      @task_to_be_destroyed = Task.create(name: "See ya task", description: "This don't matta", completion_date: nil)
+    end 
     
-    get tasks_path(@task_to_be_destroyed)
-    must_respond_with :redirect
-  end
-  
+    it "can destroy a task" do
+      expect {
+        delete task_path(@task_to_be_destroyed.id)
+      }.must_change 'Task.count'
+      must_respond_with :redirect
+      
+      get task_path(@task_to_be_destroyed.id)
+      must_respond_with :redirect
+    end
+  end  
   
   # Complete for Wave 4
   describe "toggle_complete" do
-    before do
-      @another_task = Task.create(name: "Another task", description: "Another description", completion_date: DateTime.now)
-    end
     
     it "will mark completed tasks as complete" do
-      task_id = @another_task.id
-      patch complete_task_path(task_id)
-      @another_task.reload
+      another_task = Task.create(
+        name: "new task", 
+        description: "anotha one",
+        completion_date: nil
+      )
+      another_task_id = another_task.id
+      today = DateTime.now
+      
+      patch complete_task_path(another_task_id)
+      
+      expect(Task.find_by(id: another_task.id).completion_date).wont_be_nil
     end
   end
+  
+  describe "toggle_incomplete" do
+    
+    it "will mark incompleted tasks as incomplete" do
+      another_task_2 = Task.create(
+        name: "new task", 
+        description: "anotha one",
+        completion_date: DateTime.now
+      )
+      another_task_id_2 = another_task_2.id
+      today = DateTime.now
+      
+      patch incomplete_task_path(another_task_id_2)
+      
+      expect(Task.find_by(id: another_task_2.id).completion_date).must_be_nil
+    end
+  end
+  
+  
 end
