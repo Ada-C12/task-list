@@ -108,6 +108,7 @@ describe "update" do
   before do
     test_task = Task.create(name: "Best task", description: "Super fun things", completion_date: Time.now)
   end
+  
   let (:new_task_hash) {
   {
   task: {
@@ -139,9 +140,19 @@ end
 
 # Complete these tests for Wave 4
 describe "destroy" do
-  # Your tests go here
+  it "deletes existing task and redirects to index page" do
+    test_task = Task.create(name: "Definitely a real task", description: "obviously real task", completion_date: Time.now)
+    target_id = Task.find_by(name: "Definitely a real task").id
+    
+    expect {delete task_path(target_id)}.must_differ "Task.count", -1
+    
+    must_redirect_to root_path
+  end
+  
+  
   
 end
+
 
 # Complete for Wave 4
 describe "toggle_complete" do
