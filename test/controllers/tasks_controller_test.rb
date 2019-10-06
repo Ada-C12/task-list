@@ -88,37 +88,87 @@ describe TasksController do
   # Unskip and complete these tests for Wave 3
   describe "edit" do
     it "can get the edit page for an existing task" do
-      skip
+      # skip
       # Your code here
+      get edit_task_path(task.id)
+      must_respond_with :success
     end
     
     it "will respond with redirect when attempting to edit a nonexistant task" do
-      skip
+      # skip
       # Your code here
+      get edit_task_path(-1)
+      must_respond_with :redirect
     end
   end
   
   # Uncomment and complete these tests for Wave 3
   describe "update" do
-    # Note:  If there was a way to fail to save the changes to a task, that would be a great
-    #        thing to test.
+    # Note:  If there was a way to fail to save the changes to a task, that would be a great thing to test.
     it "can update an existing task" do
       # Your code here
+      new_values = {
+        name: "new name",
+        description: "new description"
+      }
+      task.update(new_values)
+      expect(task.name).must_equal new_values[:name]
+      expect(task.description).must_equal new_values[:description]
     end
     
     it "will redirect to the root page if given an invalid id" do
       # Your code here
+      get '/tasks/-1'
+      must_respond_with :redirect
+      must_redirect_to tasks_path
     end
   end
   
   # Complete these tests for Wave 4
   describe "destroy" do
     # Your tests go here
+    it "successfully deletes an existing Task and then redirects to home page" do
+      task
+      expect{
+        delete task_path(task.id)
+      }.must_differ "Task.count", -1
+      must_redirect_to root_path
+    end
     
+    it "redirects to index page and deletes nothing if no task exist" do 
+      expect{
+        delete task_path(-1)
+      }.must_differ "Task.count", 0
+      must_redirect_to tasks_path
+    end
   end
   
-  # Complete for Wave 4
-  describe "toggle_complete" do
+  describe "complete" do
     # Your tests go here
+    it "must update the completed time to now and redirect to index page" do
+      new_values = {
+        name: "new name",
+        description: "new description"
+      }
+      new_task = Task.create(new_values)
+      expect(new_task.completed).must_be_nil
+      
+      patch complete_task_path(new_task.id)
+      find_new_task = Task.find_by(id: new_task.id)
+      
+      expect(find_new_task.completed).must_be_instance_of ActiveSupport::TimeWithZone
+      must_redirect_to tasks_path
+    end
+  end
+  
+  describe "uncomplete" do
+    # Your tests go here
+    it "must update the completed time to nil and redirect to index page" do
+      patch uncomplete_task_path(task.id)
+      uncomplete_task = Task.find_by(id: task.id)
+      
+      expect(uncomplete_task.completed).must_be_nil 
+      must_redirect_to tasks_path
+    end
   end
 end
