@@ -69,15 +69,21 @@ class TasksController < ApplicationController
 
   def destroy
     task_id = params[:id]
-    
+    @task = Task.find_by(id: task_id)
 
-    task = Task.find(task_id)
-    # the view does not need to access "task", so there is no instance variable. 
 
-    task.destroy
+    if @task.nil?
+      head :not_found
+      return
+    else 
+      # task = Task.find(task_id)
+      # the view does not need to access "task", so there is no instance variable. 
 
-    redirect_to tasks_path
-    return 
+      @task.destroy
+
+      redirect_to tasks_path
+      return 
+    end 
   end
 
   def complete
