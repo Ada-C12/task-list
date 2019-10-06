@@ -11,10 +11,14 @@
 <ul>
 <% @tasks.each do |task| %>
   <li>
-    <%= task.name%>
+    <span class="<%= 'strike' unless task.completion_date == nil %>"><%= task.name %></span>
     <%= link_to "details", task_path(task) %>
     <%= link_to "edit", edit_task_path(task) %>
     <%= link_to "delete", task_path(task), method: :delete, data: {confirm: "Are you sure?"}%>
+    <%= form_with model: task, url: completed_path(task.id) do |f| %>
+      <%= f.check_box :completed %>
+      <%= f.submit "Completed Task", class: "task-button" %>
+    <% end %>
   </li>
   <% end %>
 </ul>

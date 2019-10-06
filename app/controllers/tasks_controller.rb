@@ -51,6 +51,20 @@ class TasksController < ApplicationController
     end
   end 
   
+  def completed 
+    @task = Task.find_by(id: params[:id])
+    
+    if @task.nil?
+      head :not_found
+      return
+    end
+    
+    @task.completion_date = Time.now
+    @task.save 
+    
+    return
+  end
+  
   def destroy
     task_id = params[:id]
     @task = Task.find_by(id: task_id)

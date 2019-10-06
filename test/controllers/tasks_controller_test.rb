@@ -1,10 +1,10 @@
 require "test_helper"
 
 describe TasksController do
-  let (:task) {
+  let (:task) do
     Task.create name: "sample task", description: "this is an example for a test",
     completion_date: Time.now + 5.days
-  }
+  end
   
   # Tests for Wave 1
   describe "index" do
@@ -63,18 +63,10 @@ describe TasksController do
       # skip
       
       # Arrange
-      task_hash = {
-        task: {
-          name: "new task",
-          description: "new task description",
-          completion_date: nil,
-        },
-      }
+      task_hash = {task: { name: "new task", description: "new task description", completion_date: nil}}
       
       # Act-Assert
-      expect {
-        post tasks_path, params: task_hash
-      }.must_change "Task.count", 1
+      expect {post tasks_path, params: task_hash}.must_change "Task.count", 1
       
       new_task = Task.find_by(name: task_hash[:task][:name])
       expect(new_task.description).must_equal task_hash[:task][:description]
@@ -114,12 +106,7 @@ describe TasksController do
       update_task = Task.create(name: "play with the cat", description: "mouse")
       
       # Arrange
-      updated_task_test = {
-        task: {
-          name: "play with the cat",
-          description: "buy new cat toys"
-        }
-      }
+      updated_task_test = {task: {name: "play with the cat", description: "buy new cat toys"}}
       
       # Act
       patch task_path(update_task), params: updated_task_test
@@ -130,12 +117,7 @@ describe TasksController do
     end
     
     it "will redirect to the root page if given an invalid id" do
-      bad_id = {
-        task: {
-          name: "bake",
-          description: "chocolate chip cookies"
-        }
-      }
+      bad_id = {task: {name: "bake", description: "chocolate chip cookies"}}
       
       patch task_path(45743895), params: bad_id
       
@@ -148,26 +130,41 @@ describe TasksController do
   # Complete these tests for Wave 4
   describe "destroy" do
     it "can delete a task" do 
-      task_count = Task.count
       remove_task = Task.create(name: "watch lectures", description: "panopto")
-      expect(Task.count).must_equal (task_count + 1)
+      task_count = Task.count
+      
+      #Act
       delete task_path(remove_task)
       
       #Assert
-      expect(Task.count).must_equal task_count 
+      expect(Task.count).must_equal (task_count - 1)
     end
     
-    it "gives a 404 error if invalid " do 
-      
-      # Assert
-      get tasks_path
-      
-      
+    it "gives a 404 error when invalid " do 
+      delete task_path(4756437657384658345)
+      must_respond_with :not_found
     end
+    
   end
   
-  # Complete for Wave 4
   describe "toggle_complete" do
-    # Your tests go here
+    it "can complete a task" do 
+      
+      #Arrange
+      task_one = Task.create(name: "cs fun", description: "complete recursion homework")
+      
+      
+      #Act
+      patch completed_path(task_one.id)
+      task_one.reload
+      
+      #Assert
+      expect(task_one.completion_date).wont_be_nil
+    end
+    
+    it "gives a 404 error when invalid" do 
+      patch completed_path(357283582365382657823)
+      must_respond_with :not_found
+    end
   end
 end
