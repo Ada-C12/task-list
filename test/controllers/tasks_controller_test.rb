@@ -118,17 +118,16 @@ describe TasksController do
       must_redirect_to root_path
     end
 
-    # ADD THIS TEST AFTER ADDING A REMOVAL ALL TASKS BUTTON
-    # it "redirects to books index page and deletes no books if no books exist" do
-    #   Book.destroy_all
-    #   invalid_book_id = 1
+    it "redirects to tasks index page and doesn't delete any tasks if no tasks exist" do
+      Task.destroy_all
+      invalid_id = 1
 
-    #   expect {
-    #     delete book_path( invalid_book_id )
-    #   }.must_differ "Book.count", 0
+      expect {
+        delete task_path(invalid_id)
+      }.must_differ "Task.count", 0
 
-    #   must_redirect_to books_path
-    # end
+      must_redirect_to tasks_path
+    end
 
     it "redirects to tasks index page if selected task has already been deleted and doesn't delete any other tasks" do
       my_task = Task.create(name: "Cuddle with Kaya", description: "She hates cuddles but do it anyways hehehehehe", completed: nil)
@@ -157,12 +156,9 @@ describe TasksController do
       patch completed_task_path(my_task.id), params: updated_task_data
 
       completed_task = Task.find_by(id:my_task.id)
+      
       expect(completed_task.completed).must_be_kind_of Time 
       must_redirect_to tasks_path
-    end 
-
-    it "should have a strikethrough" do 
-
     end 
   end
 end

@@ -82,7 +82,6 @@ class TasksController < ApplicationController
         @task.save
         redirect_to tasks_path
         return
-        #then cross out the task with a strikethrough
       end
     end
   end 
