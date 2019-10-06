@@ -127,10 +127,6 @@ describe TasksController do
       expect(update_task.description).must_equal "updated description"
       expect(update_task.name).must_equal "test name"
       expect(update_task.completion_date).must_equal nil
-      
-      # expect(Task.find_by(id: @original_task.id).description).must_equal "updated description"
-      # expect(Task.find_by(id: @original_task.id).name).must_equal "test name"
-      # expect(Task.find_by(id: @original_task.id).completion_date).must_equal nil
     end
     
     it "will redirect to the root page if given an invalid id" do
@@ -148,6 +144,9 @@ describe TasksController do
     
     it "can remove an existing task" do
       expect { delete task_path(@another_task.id)}.must_change "Task.count"
+      
+      # deleted_task = Task.find_by(id: @another_task.id)
+      # expect deleted_task.name.must_equal nil
     end
     
     it "will redirect to the root page if given an invalid id" do
@@ -159,12 +158,20 @@ describe TasksController do
   
   # Complete for Wave 4
   describe "toggle_complete" do
-    #   before do
-    #     @task2 = Task.create name: "test name", description: "test description"
-    #   end
+    before do
+      @task2 = Task.create name: "test name", description: "test description"
+    end
     
-    #   it "Can update a task from nil to completed" do
-    #     expect { patch completed_path(@task2.id) }.wont_change "Task.count"
-    #   end
+    it "Can update a task from nil to completed and vice versa" do
+      expect { patch completed_path(@task2.id) }.wont_change "Task.count"
+      
+      complete_task = Task.find_by(id: @task2.id)
+      assert_kind_of Time, complete_task.completion_date
+      
+      # toggle completion to nil
+      patch completed_path(@task2.id)
+      complete_task.reload
+      assert_kind_of NilClass, complete_task.completion_date
+    end
   end
 end
