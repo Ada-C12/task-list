@@ -118,6 +118,22 @@ describe TasksController do
       expect(Task.find_by(id: existing_task.id).name).must_equal "task_80"
     end
 
+    it "can't update an existing task giving wrong parameters" do
+      # Your code here
+      existing_task = Task.create(name: "task_100", description: "clean the house", completed: nil)
+      updated_task_form_data = {
+        task: {
+          names: "task_70",
+          description: "clean the house",
+          completed: nil,
+        }
+      }
+      
+      patch task_path(existing_task.id), params: updated_task_form_data
+
+      expect(Task.find_by(id: existing_task.id).name).must_equal nil
+    end
+
     it "will redirect to the root page if given an invalid id" do
       # Act
       patch task_path(-1)
