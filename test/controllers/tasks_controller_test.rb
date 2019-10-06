@@ -136,55 +136,56 @@ describe TasksController do
   
   # Complete these tests for Wave 4
   describe "destroy" do
-    before do
-      @task_to_be_destroyed = Task.create(name: "See ya task", description: "This don't matta", completion_date: nil)
-    end 
-    
     it "can destroy a task" do
-      expect {
-        delete task_path(@task_to_be_destroyed.id)
-      }.must_change 'Task.count'
-      must_respond_with :redirect
-      
-      get task_path(@task_to_be_destroyed.id)
-      must_respond_with :redirect
+      task_to_be_destroyed = Task.create(
+        name: "See ya task", 
+        description: "This don't matta", 
+        completion_date: nil)
+        
+        task_to_be_destroyed_id = task_to_be_destroyed.id
+        
+        expect {
+          delete task_path(task_to_be_destroyed_id)
+        }.must_differ 'Task.count', -1        
+        # get task_path(@task_to_be_destroyed.id)
+        # must_respond_with :redirect
+        must_redirect_to root_path
+      end 
     end
-  end  
-  
-  # Complete for Wave 4
-  describe "toggle_complete" do
     
-    it "will mark completed tasks as complete" do
-      another_task = Task.create(
-        name: "new task", 
-        description: "anotha one",
-        completion_date: nil
-      )
-      another_task_id = another_task.id
-      today = DateTime.now
+    # Complete for Wave 4
+    describe "toggle_complete" do
       
-      patch complete_task_path(another_task_id)
-      
-      expect(Task.find_by(id: another_task.id).completion_date).wont_be_nil
+      it "will mark completed tasks as complete" do
+        another_task = Task.create(
+          name: "new task", 
+          description: "anotha one",
+          completion_date: nil
+        )
+        another_task_id = another_task.id
+        today = DateTime.now
+        
+        patch complete_task_path(another_task_id)
+        
+        expect(Task.find_by(id: another_task.id).completion_date).wont_be_nil
+      end
     end
-  end
-  
-  describe "toggle_incomplete" do
     
-    it "will mark incompleted tasks as incomplete" do
-      another_task_2 = Task.create(
-        name: "new task", 
-        description: "anotha one",
-        completion_date: DateTime.now
-      )
-      another_task_id_2 = another_task_2.id
-      today = DateTime.now
+    describe "toggle_incomplete" do
       
-      patch incomplete_task_path(another_task_id_2)
-      
-      expect(Task.find_by(id: another_task_2.id).completion_date).must_be_nil
+      it "will mark incompleted tasks as incomplete" do
+        another_task_2 = Task.create(
+          name: "new task", 
+          description: "anotha one",
+          completion_date: DateTime.now
+        )
+        another_task_id_2 = another_task_2.id
+        today = DateTime.now
+        
+        patch incomplete_task_path(another_task_id_2)
+        
+        expect(Task.find_by(id: another_task_2.id).completion_date).must_be_nil
+      end
     end
-  end
+  end 
   
-  
-end
