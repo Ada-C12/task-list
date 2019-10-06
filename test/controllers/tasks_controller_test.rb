@@ -107,12 +107,25 @@ describe "update" do
   # Note:  If there was a way to fail to save the changes to a task, that would be a great
   #        thing to test.
   it "can update an existing task" do
-    # Your code here
-  end
-  
-  it "will redirect to the root page if given an invalid id" do
-    # Your code here
-  end
+    edited = Task.first
+    
+    updated_task_form_data = {
+    task: {
+    name: "Errands to run",
+    description: "Buy coat, return library books",
+    completion_date: 2019/10/10
+  },
+}
+
+patch task_path(id: edited.id), params: updated_task_form_data
+edited = Task.find_by(id: edited.id)
+expect(edited.name).must_equal "Errands to run"
+
+end
+
+it "will redirect to the root page if given an invalid id" do
+  # Your code here
+end
 end
 
 # Complete these tests for Wave 4
