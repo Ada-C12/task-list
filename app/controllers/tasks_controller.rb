@@ -30,10 +30,8 @@ class TasksController < ApplicationController
   def complete
     params[:task_ids].each do |id|
       @task = Task.find_by(id: id.to_i )
-      @task.completion_date = Time.now.in_time_zone("Pacific Time (US & Canada)")
+      @task.completion_date = Time.now
     end
-    # @task = Task.find_by(id: params[:id] )
-    # @task.completion_date = params[:task][:completion_date]
     
     if @task.save
       redirect_to tasks_path
@@ -69,5 +67,9 @@ class TasksController < ApplicationController
   
   def edit
     @task = Task.find_by(id: params[:id] )
+    if @task.nil?
+      redirect_to tasks_path
+      return
+    end
   end
 end
