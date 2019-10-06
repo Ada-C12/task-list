@@ -126,7 +126,7 @@ describe TasksController do
       update_task = Task.find_by(id: @original_task.id)
       expect(update_task.description).must_equal "updated description"
       expect(update_task.name).must_equal "test name"
-      expect(update_task.completion_date).must_equal nil
+      assert_nil (update_task.completion_date)
     end
     
     it "will redirect to the root page if given an invalid id" do
@@ -143,10 +143,11 @@ describe TasksController do
     end
     
     it "can remove an existing task" do
-      expect { delete task_path(@another_task.id)}.must_change "Task.count"
+      assert_difference('Task.count', -1, 'A task should be deleted' ) do 
+        delete task_path(@another_task.id)
+      end
       
-      # deleted_task = Task.find_by(id: @another_task.id)
-      # expect deleted_task.name.must_equal nil
+      assert_nil Task.find_by(name: "test name")
     end
     
     it "will redirect to the root page if given an invalid id" do
