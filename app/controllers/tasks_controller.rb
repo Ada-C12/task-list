@@ -82,10 +82,10 @@ class TasksController < ApplicationController
   end
   
   def destroy
-    @task = Task.find_by(id: params[:id])
-    @task.destroy if @task
+    task = Task.find_by(id: params[:id])
+    task.destroy if task
     
-    # whether @task existed or not, it's gone now
+    # whether task existed or not, it's gone now
     redirect_to root_path
     return
   end
@@ -94,18 +94,24 @@ class TasksController < ApplicationController
     @task = Task.find_by(id: params[:id])
     
     if @task
-      if @task.completion_status == nil
-        now = Time.now
-        @task.update(completion_status: true, completion_datetime: now)
+      if @task.completion_datetime
+        @task.update(completion_datetime: nil)
       else
-        @task.update(completion_status: nil, completion_datetime: nil)
+        now = Time.now
+        @task.update(completion_datetime: now)
       end
       
+      print "NOW LOOK HERE:\t", @task.completion_datetime, "\n\n"
+      
       if params[:destination] == "root"
+        puts "going back to root"
         redirect_to root_path
+        return
       elsif params[:destination] == "show"
         redirect_to task_path(id: @task.id)
+        return
       else
+        puts "OH HELL NO!"
         head :not_found
         return
       end
@@ -119,7 +125,7 @@ class TasksController < ApplicationController
   
   private
   def params_from_form
-    return params.require(:task).permit(:name, :description, :completion_status)
+    return params.require(:task).permit(:name, :description, :completion_datetime)
   end
   
 end

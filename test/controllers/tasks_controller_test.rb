@@ -1,8 +1,11 @@
 require "test_helper"
 
 describe TasksController do
-  let (:task) { Task.create name: "sample task", description: "this is an example for a test", completion_status: true, completion_datetime: Time.now + 5.days }
-  let (:bad_hash) { { task: { name: "", description: "anonymous troll", completion_status: nil } } }
+  let (:task) { Task.create name: "sample task", description: "this is an example for a test", completion_datetime: Time.now + 5.days }
+  let (:anonymous_hash) { { task: { name: "", description: "anonymous troll" } } }
+  let (:crappy_hash) { { task: { garbage: "garbage" } } }
+  let (:nil_name_hash) { { task: { name: nil } } }
+  let (:new_hash) { { task: { name: "come on", description: "be cool", completion_datetime: Time.now } } }
   
   ############################################
   # Wave 1
@@ -61,7 +64,7 @@ describe TasksController do
     it "can create a new task" do
       
       # Arrange
-      task_hash = { task: { name: "new task", description: "new task description", completion_status: nil } }
+      task_hash = { task: { name: "new task", description: "new task description" } }
       
       # Act-Assert
       # going down tasks_path & POST triggers TasksCtrler.create()
@@ -69,19 +72,20 @@ describe TasksController do
       
       new_task = Task.find_by(name: task_hash[:task][:name])
       expect(new_task.description).must_equal task_hash[:task][:description]
-      # I deactivated line below, b/c if completion_status is set to nil, how can you .to_time() on nil?
-      # expect(new_task.completion_status.to_time.to_i).must_equal task_hash[:task][:completion_status].to_i
-      expect(new_task.completion_status).must_equal task_hash[:task][:completion_status]
+      expect(new_task.completion_datetime).must_equal task_hash[:task][:completion_datetime]
       
       must_respond_with :redirect
       must_redirect_to task_path(new_task.id)
     end
     
-    it "I ADDED THIS: if bogus args, won't create task and will render form again" do
-      expect { post tasks_path, params: bad_hash }.must_differ "Task.count", 0
+    it "If bad args given, won't create task and will render form again" do
+      bad_args = [ anonymous_hash, crappy_hash, nil_name_hash ]
+      bad_args.each do |bad|
+        expect { post tasks_path, params: bad }.must_differ "Task.count", 0
+        must_respond_with 200
+      end
       # yeah... couldn't figure out how to test for the rendered form, only that it got 200
       # i think we're not supposed to be able to test for render? Can't even test for a must_redirect_to self... idk...
-      must_respond_with 200
     end
   end
   ############################################
@@ -100,14 +104,8 @@ describe TasksController do
   end
   
   describe "UPDATE" do
-    let (:new_hash) { { task: { name: "come on", description: "be cool", completion_status: nil } } }
     
     it "can update an existing task" do
-      # Arrange
-      new_hash
-      task
-      
-      # Act-Assert
       # going down edit_tasks_path & PATCH triggers TasksCtrler.update()
       patch task_path(task.id), params: new_hash
       
@@ -115,7 +113,19 @@ describe TasksController do
       assert (updated_task.id == task.id)
       expect(updated_task.name).must_equal new_hash[:task][:name]
       expect(updated_task.description).must_equal new_hash[:task][:description]
-      expect(updated_task.completion_status).must_equal new_hash[:task][:completion_status]
+      
+      db_time = updated_task.completion_datetime.getlocal
+      input_time = new_hash[:task][:completion_datetime]
+      # assert (db_time == input_time) will FAIL b/c they don't share same memory address!
+      # I can test their string form
+      expect(db_time.to_s).must_equal input_time.to_s
+      # or I can test their attribs
+      expect(db_time.year == input_time.year)
+      expect(db_time.month == input_time.month)
+      expect(db_time.day == input_time.day)
+      expect(db_time.hour == input_time.hour)
+      expect(db_time.min == input_time.min)
+      expect(db_time.sec == input_time.sec)
       
       must_respond_with :redirect
       must_redirect_to task_path(updated_task.id)
@@ -129,12 +139,12 @@ describe TasksController do
       end
     end
     
-    it "if changes fail to save to test, it should stay rendered on page (code 200)" do
-      # If there was a way to fail to save the changes to a task, that would be a great thing to test.
-      # I added validation code in Model, which would make @update/@save return F if name==""
-      patch task_path(task.id), params: bad_hash
-      # I made failed saves stay on rendered form w/ same info, thus code 200
-      must_respond_with 200
+    it "If bad args given, won't update task and will render form again" do
+      bad_args = [ anonymous_hash, nil_name_hash ]
+      bad_args.each do |bad|
+        expect { patch task_path(task.id), params: bad }.wont_change "task.updated_at"
+        must_respond_with 200
+      end
     end
     
   end
@@ -180,54 +190,34 @@ describe TasksController do
   
   describe "TOGGLE" do
     describe "If toggling task to complete..." do
-      let (:hard_task) { Task.create name: "super hard", description: "not done yet", completion_status: nil, completion_datetime: nil }
-      it "Check: completion_status goes from nil to true" do
-        assert (hard_task.completion_status == nil )
-        
-        patch toggle_path, params: {id: hard_task.id }
-        
-        assert (hard_task.completion_status)
-      end
+      let (:hard_task) { Task.create name: "super hard", description: "not done yet" }
       
+      # it "Check: completion_datetime goes from nil to correct datetime value" do
+      #   assert_nil (hard_task.completion_datetime)
       
-      it "Check: complete_datetime goes from nil to correct datetime obj" do
-        assert (hard_task.completion_datetime == nil)
-        
-        today = Time.now
-        patch toggle_path, params: {id: hard_task.id }
-        
-        assert (hard_task.completion_datetime.year == today.year)
-        assert (hard_task.completion_datetime.month == today.month)
-        assert (hard_task.completion_datetime.day == today.day)
-      end
+      #   puts "", hard_task.attributes, "VS"
+      #   patch toggle_path(id: hard_task.id), params: { destination: "root" }
+      #   now = Time.now
+      #   puts hard_task.attributes
+      
+      #   must_redirect_to root_path
+      #   expect (hard_task.completion_datetime).must_be_close_to now, 0.1
+      # end
       
       
     end
     
-    describe "If toggling task back to incomplete..." do
-      let (:easy_task) { Task.create name: "super easy", description: "finished!", completion_status: true, completion_datetime: Time.now + 5.days }
-      
-      it "Check: completion_status goes from true to nil or false" do
-        assert (easy_task.completion_status == true )
-        
-        puts "STARTED AS:"
-        puts easy_task.completion_status, easy_task.completion_datetime
-        
-        puts "TOGGLE HERE!"
-        patch toggle_path, params: {id: easy_task.id }
-        
-        puts easy_task.completion_status, easy_task.completion_datetime
-        assert (easy_task.completion_status == nil )
-      end
-      
-      it "Check: complete_datetime goes from datetime obj to nil" do
-        assert (easy_task.completion_datetime)
-        
-        patch toggle_path, params: {id: easy_task.id }
-        
-        assert (easy_task.completion_datetime == nil )
-      end
-    end
+    # describe "If toggling task back to incomplete..." do
+    #   let (:easy_task) { Task.create name: "super easy", description: "finished!", completion_datetime: Time.now + 5.days }
+    
+    #   it "Check: completion_datetime goes from datetime obj to nil" do
+    #     assert (easy_task.completion_datetime)
+    
+    #     patch toggle_path, params: {id: easy_task.id }
+    
+    #     assert (easy_task.completion_datetime == nil )
+    #   end
+    # end
     
     it "Edge case: trying to toggle a nonexistent task will get 404" do
       patch toggle_path, params: {id: -666 }
