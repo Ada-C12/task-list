@@ -3,7 +3,7 @@ require "test_helper"
 describe TasksController do
   let (:task) {
   Task.create name: "sample task", description: "this is an example for a test",
-  completion_date: Time.now + 5.days
+  completed: Time.now + 5.days
 }
 
 # Tests for Wave 1
@@ -37,7 +37,7 @@ describe "show" do
   end
   
   it "will redirect for an invalid task" do
-    skip
+    
     # Act
     get task_path(-1)
     
@@ -49,7 +49,7 @@ end
 
 describe "new" do
   it "can get the new task page" do
-    skip
+    
     # Act
     get new_task_path
     
@@ -60,13 +60,13 @@ end
 
 describe "create" do
   it "can create a new task" do
-    skip
-    # Arrange
+    
+    
     task_hash = {
     task: {
     name: "new task",
     description: "new task description",
-    completion_date: nil,
+    completed: nil,
   },
 }
 
@@ -77,7 +77,6 @@ post tasks_path, params: task_hash
 
 new_task = Task.find_by(name: task_hash[:task][:name])
 expect(new_task.description).must_equal task_hash[:task][:description]
-expect(new_task.due_date.to_time.to_i).must_equal task_hash[:task][:due_date].to_i
 expect(new_task.completed).must_equal task_hash[:task][:completed]
 
 must_respond_with :redirect
