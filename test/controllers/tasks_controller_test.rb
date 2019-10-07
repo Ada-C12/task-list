@@ -56,7 +56,7 @@ describe TasksController do
         task: {
           name: "new task",
           description: "new task description",
-          completion_date: nil,
+          completion_date: Date.today + 3,
         },
       }
       # Act-Assert
@@ -84,7 +84,6 @@ describe TasksController do
       @new_task.save
       @new_task = Task.find_by(name: @new_task.name)
       @new_task_id = @new_task.id
-      
     end
     it "can get the edit page for an existing task" do
       #Act
@@ -128,7 +127,45 @@ describe TasksController do
   
   # Complete these tests for Wave 4
   describe "destroy" do
-    # Your tests go here
+    before do
+      @new_task = Task.new
+      @new_task.name = "sample task"
+      @new_task.description = "this is an example for a test"
+      @new_task.completion_date = Time.now + 5.days
+      @new_task.save
+      
+      @new_task = Task.first
+      @new_task_id = @new_task.id
+      
+    end
+    it "delete causes count to decrease by 1 and refreshes root following deletion" do
+      expect { 
+        @new_task.destroy
+      }.must_differ 'Task.count', -1
+      
+      must_redirect_to root_path
+    end
+    
+    it "delete responds with redirect to index for attempted deletion of an invalid ID" do
+      delete task_path(-1)
+      must_redirect_to root_path
+    end
+    
+    it "only redirects to root if trying to delete a book twice. Aka, the second time, it does nothing" do
+      Task.destroy_all
+      invalid_task_id = 1
+      
+      expect {
+        delete task_path(invalid_task_id)
+      }.must_differ 'Task.count', 0
+      
+      must_redirect_to root_path
+    end
+    
+    it "delete confirmation button functionality" do
+      #checked on server: confirmation button continues with deletion action
+      #checked on server: confirmation button "back" redirects to index wih task index unchanged
+    end
     
   end
   
