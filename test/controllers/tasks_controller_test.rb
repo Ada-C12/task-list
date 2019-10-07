@@ -80,19 +80,15 @@ describe TasksController do
   # Unskip and complete these tests for Wave 3
   describe "edit" do
     it "can get the edit page for an existing task" do
-      #Act
       edit_task = Task.create(name: "dishes", description: "run dishwasher")
       get edit_task_path(edit_task)
       
-      # Assert
       must_respond_with :success
     end
     
     it "will respond with redirect when attempting to edit a nonexistant task" do
-      #Act
       get edit_task_path(1337)
       
-      #Assert
       must_respond_with :redirect
       must_redirect_to tasks_path
     end
@@ -100,18 +96,13 @@ describe TasksController do
   
   # Uncomment and complete these tests for Wave 3
   describe "update" do
-    # Note:  If there was a way to fail to save the changes to a task, that would be a great
-    #        thing to test.
     it "can update an existing task" do
       update_task = Task.create(name: "play with the cat", description: "mouse")
       
-      # Arrange
       updated_task_test = {task: {name: "play with the cat", description: "buy new cat toys"}}
       
-      # Act
       patch task_path(update_task), params: updated_task_test
       
-      #Assert 
       update_task.reload
       expect(update_task.description).must_equal updated_task_test[:task][:description]
     end
@@ -121,7 +112,6 @@ describe TasksController do
       
       patch task_path(45743895), params: bad_id
       
-      #Arrange
       must_respond_with :redirect
       must_redirect_to tasks_path 
     end
@@ -133,10 +123,10 @@ describe TasksController do
       remove_task = Task.create(name: "watch lectures", description: "panopto")
       task_count = Task.count
       
-      #Act
+      
       delete task_path(remove_task)
       
-      #Assert
+      
       expect(Task.count).must_equal (task_count - 1)
     end
     
@@ -150,15 +140,14 @@ describe TasksController do
   describe "toggle_complete" do
     it "can complete a task" do 
       
-      #Arrange
       task_one = Task.create(name: "cs fun", description: "complete recursion homework")
       
       
-      #Act
+      
       patch completed_path(task_one.id)
       task_one.reload
       
-      #Assert
+      
       expect(task_one.completion_date).wont_be_nil
     end
     
