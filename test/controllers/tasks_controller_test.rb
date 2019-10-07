@@ -132,6 +132,7 @@ describe TasksController do
     end
   end 
   
+  # Tests for Wave 4
   describe "toggle_complete" do   
     before do
       @new_task = Task.create(name: "completed task", completion_date: nil )
