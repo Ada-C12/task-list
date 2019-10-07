@@ -3,13 +3,15 @@
 <ol>
   <% @tasks.each do |task| %>
     <li>
-      <%= task.name %> is the name of the task. Which is just when you <%= task.description %>. You must complete this by <%= task.completion_date %>.
+      <%= task.name %>
       <ul>
+        <li>Description: <%= task.description %> </li>
         <li><%= link_to "Edit Task", task_path(task.id) %></li>
         <li><%= link_to "DELETE THIS task", task_path(task.id), method: :delete, data: {confirm: "U sure?" } %></li>
         <li><% if task.completion_date == nil %>
                 <%= link_to "Mark Complete", completed_task_path(task.id), method: :patch %>
             <% else %>
+                Completed on <%= task.completion_date %>
                 <%= link_to "Mark Incomplete", completed_task_path(task.id), method: :patch %>
             <% end %>
         </li>
