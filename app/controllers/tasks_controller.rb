@@ -21,7 +21,6 @@ class TasksController < ApplicationController
  
  def create
   @task = Task.new(task_params)
-  
   if @task.save
    redirect_to task_path(@task.id)
   else
@@ -31,31 +30,25 @@ class TasksController < ApplicationController
  
  #dit and update methods work in congress. Edit gets the information that's going to changed. Update actually uses the informxation from the filled in form to then update the instance information in the db. 
  def edit
-  begin
-   @task = Task.find(params[:id])
-  rescue ActiveRecord::RecordNotFound => e
+  @task = Task.find_by(id: params[:id])
+  if @task.nil? 
    redirect_to root_path
-  else @task = Task.find(params[:id])
   end
  end
  
  def update
   @task = Task.find_by(id: params[:id])
-  @task.name = params[:task][:name]
-  @task.description = params[:task][:description]
-  @task.progress = params[:task][:progress]
-  @task.completion_date = params[:task][:completion_date]
-  
-  if @task.save(id: params[task.id])
+  if @task.update(task_params)
+   # @task.save
    redirect_to task_path(@task.id)
   else
-   redirect_to action: 'index', status: 303
+   render new_task_path
   end
  end
  
  def destroy
   @task = Task.find_by(id:params[:id])
-  if @desired_task.nil?
+  if @task.nil?
    redirect_to root_path
   else
    @task = Task.find_by(id:params[:id])
