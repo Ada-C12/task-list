@@ -1,10 +1,13 @@
-<h1>The Index Action: The place where you get all of the tasks!</h1>
+<h1>Here's a list of all your tasks!</h1>
 
 <section>
   <ul>
     <% @tasks.each do |task| %>
       <li>
-        <%= task %> 
+        <%= link_to task.name, task_path( task.id )%> : <%= task.description %> 
+        <%= link_to "(Delete)", task_path(task.id), method: :delete, data: { confirm: "Are you sure?" }, class: "index-delete-link"%>
+
+        <%= link_to "#{(task.completion_date == nil)? "(Mark Complete)" : "(Mark Incomplete)"}", mark_complete_path(task.id), method: :patch, class: "mark-complete-link"%>
       </li>
     <% end %>
   </ul>

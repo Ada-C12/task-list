@@ -61,7 +61,6 @@ describe TasksController do
 
   describe "create" do
     it "can create a new task" do
-      skip
 
       # Arrange
       task_hash = {
@@ -78,25 +77,29 @@ describe TasksController do
       }.must_change "Task.count", 1
 
       new_task = Task.find_by(name: task_hash[:task][:name])
+
       expect(new_task.description).must_equal task_hash[:task][:description]
-      expect(new_task.due_date.to_time.to_i).must_equal task_hash[:task][:due_date].to_i
-      expect(new_task.completed).must_equal task_hash[:task][:completed]
+      expect(new_task.completion_date).must_equal nil
+      expect(new_task.name).must_equal task_hash[:task][:name]
 
       must_respond_with :redirect
       must_redirect_to task_path(new_task.id)
     end
   end
 
-  # Unskip and complete these tests for Wave 3
+  # tests for Wave 3
   describe "edit" do
     it "can get the edit page for an existing task" do
-      skip
-      # Your code here
+      
+      get edit_task_path(1)
+
+      must_respond_with :found
     end
 
     it "will respond with redirect when attempting to edit a nonexistant task" do
-      skip
-      # Your code here
+      get edit_task_path(-1)
+
+      must_respond_with :redirect
     end
   end
 
