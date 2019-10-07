@@ -162,7 +162,7 @@ describe TasksController do
   # Complete for Wave 4
   describe "toggle_complete" do
     # Your tests go here
-    it "returns a datetime when we mark a task completed" do
+    it "returns a datetime when we mark a task completed and redirects to the root path" do
       completed_task = Task.create name: "sample task", description: "this is an example for a test",
                                    completed: DateTime.now
 
@@ -171,13 +171,14 @@ describe TasksController do
 
       completed_task = Task.find_by(id: id)
       expect(completed_task.completed).must_be_nil
+      expect must_redirect_to root_path
     end
 
-    it "marks changes the completed property to a TimeWithZone object" do
+    it " changes the completed task to an non-nil" do
       id = task.id
       patch toggle_completed_task_path(id)
       task = Task.find_by(id: id)
-      expect(task.completed).must_be_kind_of ActiveSupport::TimeWithZone
+      expect(task.completed).wont_be_nil
     end
   end
 end
