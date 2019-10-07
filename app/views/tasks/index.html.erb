@@ -1,0 +1,18 @@
+<h1>To Do List</h1>
+<ul>
+  <%= link_to 'New Task', new_task_path %>
+  <% @tasks.each do |task| %>
+    <li>
+    <%= link_to task.name, task_path(task) %>
+    <%= link_to 'Edit', edit_task_path(task)%>
+    <%= link_to 'Delete', task_path(task), method: :delete %>
+
+    <% if task.completion_date.nil? %>
+      <%= link_to 'Completed', completed_task_path(task.id), method: :patch %>
+      <% else %>
+      <%= link_to 'Incomplete', incomplete_task_path(task.id), method: :patch %>
+      <% end %>
+    </li>
+    <% end %>
+    
+</ul>
