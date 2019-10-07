@@ -36,6 +36,15 @@ class TasksController < ApplicationController
       end
     end
     
+    completed_tasks = Task.where.not(completion_date: nil)
+    completed_tasks.each do |task|
+      if params[:task_ids].include?(task.id.to_s)
+      else
+        task.completion_date = nil
+        task.save
+      end
+    end
+    
     if @task.save
       redirect_to tasks_path
     else
