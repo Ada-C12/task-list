@@ -95,6 +95,13 @@ describe TasksController do
         },
         {
           task: {
+            name: "",
+            description: "      ",
+            completion_date: nil,
+          }
+        },
+        {
+          task: {
             
           }
         }
@@ -178,6 +185,13 @@ describe TasksController do
           task: {
             name: nil,
             description: "No name task description",
+            completion_date: nil,
+          }
+        },
+        {
+          task: {
+            name: "",
+            description: "      ",
             completion_date: nil,
           }
         },
