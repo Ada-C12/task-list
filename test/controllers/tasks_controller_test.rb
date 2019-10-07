@@ -165,7 +165,28 @@ describe TasksController do
   
   # Complete for Wave 4
   describe "toggle_complete" do
-    # Your tests go here
+    it "will respond with not found if invalid id is given" do
+      invalid_id = -1
+      # Act
+      get task_status_path(invalid_id)
+      
+      # Assert
+      must_respond_with :not_found
+    end
+    
+    it "if completed is nil assign timestamp" do
+      completed_task = Task.first
+      completed_task.completed = nil 
+      
+      # Act
+      get tasks_path_root(completed_task)
+      
+      # Assert
+      
+    end 
+    
+    it "if completed has a timestamp, assign nil" do
+    end
   end
 end
 

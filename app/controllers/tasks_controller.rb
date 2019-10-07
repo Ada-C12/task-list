@@ -96,5 +96,4 @@ class TasksController < ApplicationController
 end
 
 
-# make button on page
 
