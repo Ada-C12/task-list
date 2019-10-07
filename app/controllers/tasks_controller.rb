@@ -79,16 +79,31 @@ class TasksController < ApplicationController
       redirect_to tasks_path
       return
     else
-      if @task.completion_date.nil?
-        @task.completion_date = DateTime.now
-        @task.save
-        redirect_to tasks_path
-        return
-      else
-        @task.completion_date = nil
-        redirect_to tasks_path
-        return
-      end
+      # if @task.completion_date.nil?
+      @task.completion_date = DateTime.now
+      @task.save
+      redirect_to tasks_path
+      return
+      # else
+      #   @task.completion_date = nil
+      #   redirect_to tasks_path
+      #   return
+      # end
+    end
+  end
+
+  def incomplete
+    task_id = params[:id]
+    @task = Task.find_by(id: task_id)
+
+    if @task.nil?
+      redirect_to tasks_path
+      return
+    else
+      @task.completion_date = nil
+      @task.save
+      redirect_to tasks_path
+      return
     end
   end
 
