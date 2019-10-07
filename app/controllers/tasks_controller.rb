@@ -1,9 +1,11 @@
 class TasksController < ApplicationController
   
+  
   def index
     @greeting = "HELLO, THERE!"
     @tasks = Task.all
   end
+  
   
   def show
     task_id = params[:id].to_i
@@ -15,10 +17,12 @@ class TasksController < ApplicationController
     end
   end
   
+  
   def new
     @task = Task.new
     @task.completion_date = nil
   end
+  
   
   def create
     @task = Task.new( task_params )
@@ -32,6 +36,7 @@ class TasksController < ApplicationController
     end
   end
   
+  
   def edit
     task_id = params[:id].to_i
     @edit_task = Task.find_by(id: task_id)
@@ -41,6 +46,7 @@ class TasksController < ApplicationController
       return
     end    
   end  
+  
   
   def update
     @task = Task.find_by(id: params[:id])
@@ -81,7 +87,6 @@ class TasksController < ApplicationController
   end
   
   
-  
   def complete 
     
     @task = Task.find_by(id: params[:id])
@@ -102,9 +107,7 @@ class TasksController < ApplicationController
   private
   
   def task_params
-    
     return params.require(:task).permit(:name, :description, :completion_date)
-    
   end
   
 end

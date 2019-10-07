@@ -9,30 +9,33 @@
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
     <link href="https://fonts.googleapis.com/css?family=Creepster&display=swap" rel="stylesheet">
 
+<!-- SOURCES -->
+  <!-- `current_path` & `path` code: https://stackoverflow.com/questions/1203892/how-can-i-find-out-the-current-route-in-rails  -->
+  <!-- icons: https://material.io/resources/icons, open source -->
+<!-- END SOURCES -->
+
   </head>
 
-  <body>
+  <body class="creepy">
 
-  <header>
-  <!-- 
-    path code source: https://stackoverflow.com/questions/1203892/how-can-i-find-out-the-current-route-in-rails
-  -->
-  <% current_path = request.env['PATH_INFO'] %>
-  <% path = Rails.application.routes.recognize_path('/tasks') %>
-  <% if current_path.include? path[:controller] %>
-    <span class="tasklist-home">
-      <%= link_to "Home", root_path %>
-    </span>
-  <% else %>
-  <span>
-    <%= @greeting %>
-  </span>
-  <% end %>
-  <span class="tasklist-logo">
-    Tasklist
-  </span>
-  </header>
-  
+    <header>
+      <% current_path = request.env['PATH_INFO'] %>
+      <% path = Rails.application.routes.recognize_path('/tasks') %>
+      <% if current_path.include? path[:controller] %>
+        <span class="tasklist-home">
+          <%= link_to "Home", root_path %>
+        </span>
+      <% else %>
+        <span>
+          <%= @greeting %>
+        </span>
+      <% end %>
+      <span class="tasklist-logo">
+        Tasklist
+      </span>
+    </header>
+    
     <%= yield %>
+
   </body>
 </html>
