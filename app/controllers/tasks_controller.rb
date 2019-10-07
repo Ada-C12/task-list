@@ -7,13 +7,11 @@ class TasksController < ApplicationController
   def show
     task_id = params[:id]
     @task = Task.find_by(id: task_id)
-
     if @task.nil?
       head :not_found
       return
     end
   end
-
   def new
     @task = Task.new
   end
@@ -32,7 +30,6 @@ class TasksController < ApplicationController
 
   def edit
     @task = Task.find_by(id: params[:id])
-
     if @task.nil?
       redirect_to edit_task_path
       return
@@ -57,12 +54,10 @@ class TasksController < ApplicationController
   def destroy
     task_id = params[:id]
     task = Task.find_by(id: task_id)
-
     if task.nil?
       head not:not_found
       return
     end
-
     if task.destroy
       redirect_to tasks_path
       return
@@ -86,10 +81,8 @@ class TasksController < ApplicationController
     end
   end
 
-
   private
   def task_params
     return params.require(:task).permit(:name, :description, :completion_date)
   end
-
 end

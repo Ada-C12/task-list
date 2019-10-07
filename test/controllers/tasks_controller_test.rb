@@ -106,6 +106,7 @@ describe TasksController do
       task = Task.create(name: "take out compost")
       put toggle_complete_path(task.id)
       expect(Task.find_by(id: task.id).completion_date).must_equal Date.today
+      must_redirect_to tasks_path
     end
 
     it 'goes from the current date to nil' do
@@ -113,6 +114,7 @@ describe TasksController do
       put toggle_complete_path(task.id)
       put toggle_complete_path(task.id)
       expect(Task.find_by(id: task.id).completion_date).must_equal nil
+      must_redirect_to tasks_path
     end
   end
 end
