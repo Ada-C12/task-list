@@ -22,6 +22,7 @@ describe TasksController do
     end
   end
   # Unskip these tests for Wave 2
+  
   describe "show" do
     it "can get a valid task" do
       # Act
@@ -103,12 +104,10 @@ describe TasksController do
           completed: nil,
         },
       }
-      
       # Act-Assert
       patch task_path(task.id), params: task_hash
       must_respond_with :found
       must_redirect_to tasks_path
-      
     end
     
     it "will redirect to the root page if given an invalid id" do
@@ -118,12 +117,20 @@ describe TasksController do
       must_redirect_to tasks_path
     end
   end
-  # Complete these tests for Wave 4
+  # Complete these tests For Wave 4
   describe "destroy" do
-    # Your tests go here
+    it "can delete a task" do
+      new_task = Task.create(name: "fake_task")
+      
+      expect {delete task_path(new_task.id)}.must_change 'Task.count', -1
+    end
   end
-  # Complete for Wave 4
+  
+  # Complete For Wave 4
   describe "toggle_complete" do
-    # Your tests go here
+    it "responds with a success" do
+      post complete_task_path(task.id)
+      must_respond_with :found
+    end
   end
 end
