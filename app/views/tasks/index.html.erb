@@ -1,0 +1,16 @@
+<h1>To-do:</h1>
+
+<ul>
+  <% @tasks.each do |task| %>
+    <li><strong>
+    <%= link_to task.name, task_path(task) %></strong></li>
+    <br>
+    <%= button_to 'Change Completion Status', toggle_complete_path(task), method: :put, data: {confirm: "Are you sure?"} %>
+    <p>date completed: <%=task.completion_date%></p>
+    <%= button_to "Delete Task", task_path(task), method: :delete, data: {confirm: "Please confirm!"} %>
+    <br>
+    <br>
+  <% end %>
+</ul>
+
+<%= link_to "Make New Task", new_task_path %>
