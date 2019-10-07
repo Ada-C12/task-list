@@ -41,7 +41,6 @@ describe TasksController do
 
       # Assert
       must_respond_with :redirect
-      # expect(flash[:error]).must_equal "Could not find task with id: -1"
     end
   end
 
@@ -140,7 +139,7 @@ describe TasksController do
   # Complete these tests for Wave 4
   describe "destroy" do
     before do 
-      @new_task = Task.create(name: "Test", description: "Created for testing", completion_date: nil)
+      @new_task1 = Task.create(name: "Test", description: "Created for testing", completion_date: nil)
       @new_task2 = Task.create(name: "Test2", description: "Created for testing", completion_date: nil)
     end 
 
@@ -155,7 +154,7 @@ describe TasksController do
     it "will delete the task from database" do
       # Act 
       expect {
-        delete task_path(@new_task)
+        delete task_path(@new_task1)
         delete task_path(@new_task2)
       }.must_change 'Task.count'
       # Assert
@@ -165,6 +164,30 @@ describe TasksController do
 
   # Complete for Wave 4
   describe "toggle_complete" do
-    # Your tests go here
+    before do 
+      @task_testing = Task.create(name: "Test", description: "Created for testing complete", completion_date: nil)
+    end 
+    it "will redirect to main page when task is marked as complete" do
+      # Act
+      put complete_task_path(@task_testing.id)
+      # Assert
+      must_respond_with :redirect
+      must_redirect_to tasks_path
+    end
+
+    it "will not change the total number of tasks" do
+      # Act-Assert
+      expect {
+        put complete_task_path(@task_testing.id)
+      }.wont_change 'Task.count'    
+    end
+
+    it "will update the completion date to datetime when checked" do
+      # Act
+        put complete_task_path(@task_testing.id)
+      # Assert
+      expect( Task.find_by(id: @task_testing.id).completion_date ).wont_equal nil
+      expect( Task.find_by(id: @task_testing.id).completion_date ).must_be_kind_of ActiveSupport::TimeWithZone
+    end
   end
 end

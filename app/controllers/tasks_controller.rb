@@ -70,7 +70,7 @@ class TasksController < ApplicationController
   def complete
     @task = Task.find_by(id: params[:id])
     if @task.completion_date == nil
-        @task.update(completion_date: DateTime.now)
+        @task.update(completion_date: Time.now)
     else
       @task.update(completion_date: nil)
     end
