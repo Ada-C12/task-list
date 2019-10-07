@@ -1,8 +1,17 @@
 <h2> Tasks List</h2>
+
+
 <ul>
     <%@tasks.each do |task|%>  
         <li>
-        <%=task.name %> <%= link_to "Delete", task_path(task.id), method: :delete, data: {confirm: "Are you sure? It will be gone forever."} %>
+        <%if task.completion_date?%>
+        <%status = "Unmark Complete"%>
+        <%else%>
+        <%status = "Mark Complete"%>
+        <%end%>
+        <%=link_to task.name, task_path(task.id)%> <%= link_to "Delete", task_path(task.id), method: :delete, data: {confirm: "Are you sure? It will be gone forever."} %>
+        <%=link_to status ,complete_path(task.id), method: :patch%>
+    
         </li>
 
     <%end%>

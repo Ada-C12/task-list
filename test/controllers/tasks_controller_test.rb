@@ -125,8 +125,8 @@ describe TasksController do
       # Your code here
       updated_task = {
         task: {
-          name: "Watch Schoology Lecture",
-          description: "need to review concepts learned to get better understanding",
+          name: "Finish A Book For Goodreads Challenge",
+          description: "finish reading the Institute by Stephen King ",
           completion_date: nil,
 
         },
@@ -143,10 +143,51 @@ describe TasksController do
   describe "destroy" do
 
     # Your tests go here
-    
+    it " successfully deletes an existing Task and redicrects to homepage" do
+      old_task = task
+
+      expect {
+        delete task_path(old_task.id)
+      }.must_differ "Task.count", -1
+      must_redirect_to root_path
+    end
+
+    it "redirects to homepage if no books exist" do
+      Task.destroy_all
+      expect {
+        delete task_path(1)
+      }.must_differ "Task.count", 0
+    end
+    it "redirects to homepage and deletes no books when deleting a book twice " do
+      new_task = Task.create(name: "cs fundamentals", description: "recursion worksheet", completion_date: nil)
+      Task.destroy_all
+      expect {
+        delete task_path(new_task.id)
+      }.must_differ "Task.count", 0
+      must_redirect_to root_path
+    end
+  end
 
   # Complete for Wave 4
   describe "toggle_complete" do
     # Your tests go here
+    it " updates completion_date to datetime when mark complete is clicked and redirects to home" do
+      new_task = Task.create(name: "Luhn Exercism", description: "Homework", completion_date: nil)
+      patch complete_path(new_task.id)
+    
+      expect (Task.find_by(id: new_task.id).completion_date).must_be_instance_of ActiveSupport::TimeWithZone
+      must_redirect_to tasks_path
+    end
+    it "updates completion_date to nil when unmark complete is clicked and redirects to home" do
+      new_task = Task.create(name: "Luhn Exercism", description: "Homework", completion_date: DateTime.now)
+      patch complete_path(new_task.id)
+      expect (Task.find_by(id: new_task.id).completion_date).must_equal nil
+      must_redirect_to tasks_path
+    end
+    it "will respond with redirect when attempting mark a nonexistant task complete" do
+
+      patch complete_path(-1)
+      must_respond_with :redirect
+    end
   end
 end
