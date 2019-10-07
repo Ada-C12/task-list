@@ -1,0 +1,29 @@
+<section>
+  <h2>~tasks to be completed~</h2>
+  <%= form_tag(completed_tasks_path, method: :put)  do %> 
+
+  <ul>
+    <% @incomplete_tasks.each do |task| %>
+    <li>
+      <%= check_box_tag 'task_id[]', task.id %>  
+      <%= task.name %> - <%= link_to task.description, task_path(task.id) %> 
+      <%= link_to "(Delete)", task_path( task.id ), method: :delete, data: { confirm: "Really really delete?"} %>
+    </li>
+
+    <%= submit_tag 'Completed?' %>
+
+
+    <% end %>
+  </ul>
+  <% end %>
+
+  <h1>~completed tasks~</h1>
+  <ul>
+  <% @completed_tasks.each do |task| %>
+    <li> 
+      <%= task.name %> - <%= link_to task.description, task_path(task.id) %> 
+      <%= link_to "(Delete)", task_path( task.id ), method: :delete, data: { confirm: "Really really delete?"}, class: "index-delete-link" %>
+    </li>
+    <% end %>
+  </ul>
+</section>
