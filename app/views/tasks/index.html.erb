@@ -2,9 +2,17 @@
 <ul>
   <% @tasks.each do |task|  %>
     <li>
-      <%= link_to task.name %> 
-      Description: <%= task[:description] %> 
-      Completion_Date: <%= task[:completion_date] %>
+      <%= link_to task.name, task_path(task.id)%> 
+      <%= link_to "Edit", edit_task_path(task.id) %> 
+      <%= link_to "Delete", task_path(task.id), method: :delete, data: {confirm: "Are you sure?"}%>
+      <% if task.completed? %>
+            <%= link_to "Mark Incomplete", complete_task_path(task.id), method: :update %> 
+      <%else%>
+      <%= link_to "Mark Complete", complete_task_path(task.id), method: :update %> 
+      <%end%>
+
+      
+      
     </li>
   <% end %>
 </ul>

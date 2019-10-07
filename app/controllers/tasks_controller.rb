@@ -1,3 +1,4 @@
+
 class TasksController < ApplicationController
   
   def index
@@ -6,10 +7,10 @@ class TasksController < ApplicationController
   
   def show
     task_id = params[:id]
-    @task = Task.where(id: task_id)
+    @task = Task.find_by(id: task_id)
     
     if @task.nil?
-      head :not_found
+      redirect_to tasks_path
       return
     end
   end
@@ -20,51 +21,75 @@ class TasksController < ApplicationController
   
   def create
     @task = Task.new(
-      name: params[:task][:description], description: params[:task][:description], completion_date: params[:task][:completion_date]) #instantiate a new task
-    if @task.save # save returns true if the database insert succeeds
-      redirect_to tasks_path # go to the index so we can see the task in the list
-      return
-    else # save failed :(
-      render :new # show the new task form view again
-      return
-    end
-  end
-  
-  def edit
-    @task = Task.find_by(id: params[:id])
-    
-    if @task.nil?
-      head :not_found
-      return
-    end
-  end
-  
-  def update
-    @task = Task.find_by(id: params[:id])
-    if @task.update(
       name: params[:task][:name], 
       description: params[:task][:description], 
-      completion_date: params[:task][:completion_date]
-    )
-    redirect_to tasks_path # go to the index so we can see the task in the list
-    return
-  else # save failed :(
-    render :edit # show the new task form view again
-    return
-  end
-  
-  def destroy
-    book_id = params[:id]
-    @book = Book.find_by(id: book_id)
-    if @book.nil?
-      head :not_found
+      completion_date: params[:task][:completion_date]) #instantiate a new task
+      if @task.save # save returns true if the database insert succeeds
+        redirect_to task_path(@task.id) # go to the index so we can see the task in the list
+        return
+      else # save failed :(
+        render :new # show the new task form view again
+        return
+      end
+    end
+    
+    def edit
+      @task = Task.find_by(id: params[:id])
+      
+      if @task.nil?
+        redirect_to tasks_path
+        return
+      end
+    end
+    
+    def update
+      @task = Task.find_by(id: params[:id])
+      if @task.nil? 
+        redirect_to tasks_path
+      else 
+        @task.update(
+          name: params[:task][:name], 
+          description: params[:task][:description],
+          completion_date: params[:task][:completion_date],
+          completed: params[:task][:completed]
+        )
+        redirect_to tasks_path # go to the index so we can see the task in the list
+      end
+      #   return
+      # else # save failed :(
+      #   render :edit # show the new task form view again
+      #   return
+    end
+    
+    def complete
+      @task = Task.find_by(id: params[:id])
+      if @task[:completed] == false
+        @task[:completed] = true
+        @task[:completion_date] = Time.now
+      else
+        @task[:completed] = false
+        @task[:completion_date] = nil
+      end
+      @task.save
+      redirect_to tasks_path
+    end
+    
+    def destroy
+      task_id = params[:id]
+      @task = Task.find_by(id: task_id)
+      if @task.nil?
+        head :not_found
+        return
+      end
+      
+      @task.destroy
+      
+      redirect_to tasks_path
       return
     end
-    @book.destroy
-    redirect_to books_path
-    return
-  end
-  
-  
-  
-end
+    
+    def task_params
+      return params.require(:task).permit(:name, :description, :completion_date, :due_date, :completed)
+    end
+    
+  end#end of class

@@ -1,3 +1,11 @@
+#TaskList has been kind of hairy this week in terms of communicating expectations! In the interest of making sure that student projects meet our learning goals and behave in a consistent manner, consider the following bullet points to override any previous instructions:
+
+#1. We expect that your tasks will have three fields consisting of two strings and a Time object, as per the tests.
+
+#2. The create action for your tasks will fill in the name and description of each task, but set the completed to nil.
+
+#3. You will create 2 custom routes that allow the user to check and uncheck the tasks. The controller actions will change the completed field either from nil to Time.today, or from a Time object to nil.
+
 # Task List
 
 Let's build a Task List in Rails! We will solve the problem of tracking tasks in a web application. This project will enable us to keep track of and persist, add, edit and remove tasks. 
