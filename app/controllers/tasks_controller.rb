@@ -35,22 +35,28 @@ class TasksController < ApplicationController
   
   def update
     @task = Task.find_by(id: params[:id])
-    @task.update( task_params )
+    if @task
+      @task.update( task_params )
+    end
     redirect_to tasks_path
   end
   
   def complete
     complete_task = Task.find_by(id: params[:id])
-    Time.zone = "Pacific Time (US & Canada)"
-    complete_task.completed = DateTime.now.in_time_zone
-    complete_task.save
+    if complete_task
+      Time.zone = "Pacific Time (US & Canada)"
+      complete_task.completed = DateTime.now.in_time_zone
+      complete_task.save
+    end
     redirect_to tasks_path
   end
   
   def uncomplete
     uncomplete_task = Task.find_by(id: params[:id])
-    uncomplete_task.completed = nil
-    uncomplete_task.save
+    if uncomplete_task
+      uncomplete_task.completed = nil
+      uncomplete_task.save
+    end
     redirect_to tasks_path
   end
   

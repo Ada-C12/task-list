@@ -105,20 +105,34 @@ describe TasksController do
   # Uncomment and complete these tests for Wave 3
   describe "update" do
     # Note:  If there was a way to fail to save the changes to a task, that would be a great thing to test.
-    it "can update an existing task" do
+    it "can update an existing task and keeps the number of tasks the same as before updating" do
       # Your code here
       new_values = {
-        name: "new name",
-        description: "new description"
+        task: {
+          name: "new name",
+          description: "new description"
+        }
       }
-      task.update(new_values)
-      expect(task.name).must_equal new_values[:name]
-      expect(task.description).must_equal new_values[:description]
+      task
+      expect{
+        patch task_path(task.id), params: new_values
+      }.must_differ "Task.count", 0
+      
+      update_task = Task.find_by(id: task.id)
+      expect(update_task.name).must_equal new_values[:task][:name]
+      expect(update_task.description).must_equal new_values[:task][:description]
+      
     end
     
     it "will redirect to the root page if given an invalid id" do
       # Your code here
-      get '/tasks/-1'
+      new_values = {
+        task: {
+          name: "new name",
+          description: "new description"
+        }
+      }
+      patch task_path(-1), params: new_values
       must_respond_with :redirect
       must_redirect_to tasks_path
     end
@@ -141,6 +155,17 @@ describe TasksController do
       }.must_differ "Task.count", 0
       must_redirect_to tasks_path
     end
+    
+    it "redirects to index page and deletes nothing the task has already been deleted" do
+      task
+      Task.destroy_all
+      
+      expect {
+        delete task_path(task.id)
+      }.must_differ "Task.count", 0
+      
+      must_redirect_to tasks_path
+    end
   end
   
   describe "complete" do
@@ -159,6 +184,14 @@ describe TasksController do
       expect(find_new_task.completed).must_be_instance_of ActiveSupport::TimeWithZone
       must_redirect_to tasks_path
     end
+    
+    it "redirects to index page and updates nothing if no task exist" do 
+      expect{
+        patch complete_task_path(-1)
+      }.must_differ "Task.count", 0
+      must_redirect_to tasks_path
+    end
+    
   end
   
   describe "uncomplete" do
@@ -170,5 +203,13 @@ describe TasksController do
       expect(uncomplete_task.completed).must_be_nil 
       must_redirect_to tasks_path
     end
+    
+    it "redirects to index page and updates nothing if no task exist" do 
+      expect{
+        patch complete_task_path(-1)
+      }.must_differ "Task.count", 0
+      must_redirect_to tasks_path
+    end
   end
+  
 end
