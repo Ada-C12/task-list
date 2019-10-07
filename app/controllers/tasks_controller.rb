@@ -78,7 +78,7 @@ class TasksController < ApplicationController
     end 
 
     if @task.completed == nil
-      @task.completed = DateTime.current
+      @task.completed = DateTime.now
       @task.save
       redirect_to root_path
       return
