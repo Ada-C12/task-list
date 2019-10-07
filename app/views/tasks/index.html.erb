@@ -1,0 +1,21 @@
+
+<section class = "index">
+  <h2>List of My Tasks</h2>
+  <ol>
+    <% @tasks.sort.each do |task| %>
+      <li>
+        <%= link_to task.name, task_path(task.id) %>: <%= task.description %>
+      </li>
+      <div>
+        <% if task.completed.nil? %>
+          <%= link_to " | Mark Complete", complete_task_path(task.id), method: :patch %>
+        <% else %>  
+          <%= link_to " | Unmark Complete", uncomplete_task_path(task.id), method: :patch %>
+        <% end %>
+        <%= link_to " | Edit Task", edit_task_path(task.id) %>
+        <%= link_to " | Delete", task_path(task.id), method: :delete, data: { confirm: "Really really?" } %>
+      </div>
+    <% end %>
+  </ol>
+  
+</section>
