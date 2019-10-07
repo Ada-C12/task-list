@@ -84,10 +84,17 @@ describe TasksController do
   # Unskip and complete these tests for Wave 3
   describe "edit" do
     it "can get the edit page for an existing task" do
+      get task_path(task.id)
+      
+      # Assert
+      must_respond_with :success
     end
     
     it "will respond with redirect when attempting to edit a nonexistant task" do
-      # Your code here
+      patch task_path(-1)
+      
+      # Assert
+      must_respond_with :redirect 
     end
   end
   
@@ -108,15 +115,14 @@ describe TasksController do
       }
       expect {
         patch task_path(existing_task.id), params: updated_task_form_data
-        must_redirect_to root_path
-      }
+      }.wont_change 'Task.count'
       
-      expect( Task.find_by(id: existing_task.id).name ).must_equal "MyString"
+      expect( Task.find_by(id: existing_task.id).name ).must_equal "Melt chocolate"
     end
   end
   
   it "will redirect to the root page if invalid id is given" do
-    invalid_id = "anything"
+    invalid_id = -1
     updated_task_form_data = {
       task: {
         name: "Melt chocolate",
@@ -125,6 +131,8 @@ describe TasksController do
       }
     }
     patch task_path(invalid_id), params: updated_task_form_data
+    
+    # Assert
     must_respond_with :redirect
     must_redirect_to root_path
   end
@@ -132,7 +140,27 @@ describe TasksController do
   # Complete these tests for Wave 4
   describe "destroy" do
     # Your tests go here
+    it "deletes a task if given a valid id" do
+      valid_task = Task.first
+      
+      expect {
+        delete task_path(valid_task)
+      }.must_change 'Task.count', 1
+      
+      # Assert
+      must_respond_with :redirect
+      must_redirect_to root_path
+    end
     
+    it "will return not found if invalid id is given to delete" do
+      invalid_id = -1
+      # Act
+      delete task_path(invalid_id)
+      
+      # Assert
+      must_respond_with :not_found
+      
+    end
   end
   
   # Complete for Wave 4

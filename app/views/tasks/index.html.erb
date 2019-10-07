@@ -1,6 +1,6 @@
 <h2>Tasks</h2>
 <ul>
-  <% @tasks.each do |task|  %>
+  <% @tasks.sort.each do |task|  %>
     <li>
       <%= link_to task.name, task_path(task) %>
       Description: <%= task[:description] %> 
@@ -8,12 +8,14 @@
         Finished on: <%= task[:completed] %> 
       <% end %> 
       <p>
-      <%= link_to "Edit", edit_task_path(task) %>
-      <%= link_to "Delete", task_path(task), method: :delete, data: {confirm: "Are you sure you want to delete this task?"}%>
-      <%= link_to "Mark as Complete", task_status_path(task) %>
+      <%= link_to "<button>Edit</button>".html_safe, edit_task_path(task) %>
+      <%= link_to "<button>Delete</button>".html_safe, task_path(task), method: :delete, data: {confirm: "Are you sure you want to delete this task?"}%>
+      <%= link_to "<button>Mark as Complete</button>".html_safe, task_status_path(task) %>
       </p>
       
     </li>
   <% end %>
 </ul>
+
+ <%# cite for button: https://stackoverflow.com/questions/4418004/ruby-on-rails-link-to-button-css %>
 

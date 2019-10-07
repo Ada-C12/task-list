@@ -67,7 +67,7 @@ class TasksController < ApplicationController
     
     @task.destroy
     
-    redirect_to tasks_path
+    redirect_to root_path
     return
   end
   
