@@ -110,7 +110,6 @@ describe TasksController do
     end
   end
   
-  # Complete these tests for Wave 4
   describe "destroy" do
     it "should delete a task when prompted to" do
       count = Task.count
@@ -168,14 +167,13 @@ describe TasksController do
     end
   end
   
-  
   describe "toggle_incomplete" do
     let (:task) {
       Task.create name: "sample task", description: "this is an example for a test",
       completed: Time.new
     }
     
-    it "can toggle_incomplete a task (populate :completed with Time.now)" do
+    it "can toggle_incomplete a task (populate :completed with nil)" do
       expect(task.completed).must_be_instance_of ActiveSupport::TimeWithZone
       patch toggle_incomplete_path(task)
       
