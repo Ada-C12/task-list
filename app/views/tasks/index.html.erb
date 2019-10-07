@@ -1,8 +1,37 @@
-<h1>Tasks</h1>
-<ul>
-  <% @tasks.each do |task|  %>
-    <li>
-      <%= task[:task] %>
-    </li>
-  <% end %>
-</ul>
+<main>
+  <section id="main-buttons-sect">
+    <div class="main-button"><%= link_to "Add Tasks", new_task_path %></div>
+    <div class="main-button"><%= link_to "All Tasks", all_tasks_path %></div>
+  </section>
+    
+  <section id="your-tasks-list">
+    <h2>Your Tasks</h2>
+    <ol>
+      <% @tasks.each do |task| %>
+        <%if task.completed.nil?%>
+          <li>
+            <p class="task-name"><%= link_to task.name, task_path(task.id) %></p>
+          </li>
+          <section class ="action-links-sect"> 
+            <%= link_to "Mark Complete", complete_task_path(task.id)%> | 
+            <%= link_to "Edit", edit_task_path(task.id)%> |
+            <%= link_to "Delete", task_path(task.id), method: :delete, data: { confirm: "Are you sure you'd like to delete that task?" } %>
+          </section>
+        <%else%>
+          <li>
+            <p class="task-name" id="completed-task"><%= link_to task.name, task_path(task.id) %></p>
+          </li>
+          <section class ="action-links-sect">
+            <%= link_to "Unmark Complete", uncomplete_task_path(task.id)%> |
+            <%= link_to "Edit", edit_task_path(task.id)%> |
+            <%= link_to "Delete", task_path(task.id), method: :delete, data: { confirm: "Are you sure you'd like to delete that task?" } %>
+          </section>  
+        <%end%>
+      <% end %>
+    </ol>
+  </section>
+</main>
+
+<footer>
+  <p>copywrite 2017</p>
+</footer>
