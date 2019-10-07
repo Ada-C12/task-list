@@ -165,6 +165,10 @@ describe TasksController do
   
   # Complete for Wave 4
   describe "toggle_complete" do
+    before do
+      @completed_task = Task.create(name: "completed task", completed: Time.now)
+      @incompleted_task = Task.create(name: "incomplete task")
+    end
     it "will respond with not found if invalid id is given" do
       invalid_id = -1
       # Act
@@ -175,17 +179,27 @@ describe TasksController do
     end
     
     it "if completed is nil assign timestamp" do
-      completed_task = Task.first
-      completed_task.completed = nil 
+      task = @incompleted_task 
       
       # Act
-      get tasks_path_root(completed_task)
+      get task_status_path(task)
       
       # Assert
-      
+      must_respond_with :redirect
+      must_redirect_to tasks_path
+      expect( Task.find_by(id: task.id).completed ).wont_be_nil 
     end 
     
     it "if completed has a timestamp, assign nil" do
+      completed_task = @completed_task
+      
+      # Act
+      get task_status_path(completed_task)
+      
+      # Assert
+      must_respond_with :redirect
+      must_redirect_to tasks_path
+      expect( Task.find_by(id: completed_task.id).completed ).must_be_nil
     end
   end
 end
