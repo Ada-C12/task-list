@@ -6,7 +6,6 @@ describe TasksController do
                 completed: Time.now + 5.days
   }
 
-  # Tests for Wave 1
   describe "index" do
     it "can get the index path" do
       # Act
@@ -25,10 +24,8 @@ describe TasksController do
     end
   end
 
-  # Unskip these tests for Wave 2
   describe "show" do
     it "can get a valid task" do
-      # skip
       # Act
       get task_path(task.id)
 
@@ -37,7 +34,6 @@ describe TasksController do
     end
 
     it "will redirect for an invalid task" do
-      # skip
       # Act
       get task_path(-1)
 
@@ -48,8 +44,6 @@ describe TasksController do
 
   describe "new" do
     it "can get the new task page" do
-      # skip
-
       # Act
       get new_task_path
 
@@ -60,8 +54,6 @@ describe TasksController do
 
   describe "create" do
     it "can create a new task" do
-      # skip
-
       # Arrange
       task_hash = {
         task: {
@@ -85,7 +77,6 @@ describe TasksController do
     end
   end
 
-  # Unskip and complete these tests for Wave 3
   describe "edit" do
     it "can get the edit page for an existing task" do
       # Act
@@ -105,10 +96,7 @@ describe TasksController do
     end
   end
 
-  # Uncomment and complete these tests for Wave 3
   describe "update" do
-    # Note:  If there was a way to fail to save the changes to a task, that would be a great
-    #        thing to test.
     it "can update an existing task" do
       # Arrange
       task_hash = {
@@ -120,19 +108,17 @@ describe TasksController do
       }
 
       # Act-Assert
-        # saving info to server by storing form information in params
-        # hash.
-        patch task_path(id: task.id), params: task_hash
+      # task_hash info is being sent to server and stored in params via the patch request
+      patch task_path(id: task.id), params: task_hash
 
-        # finding it in the database and assigning it to new variable
-        updated_task = Task.find_by(id: task.id)
+      # finding it in the database and assigning it to new variable
+      updated_task = Task.find_by(id: task.id)
 
       expect(updated_task.description).must_equal task_hash[:task][:description]
       expect(updated_task.name).must_equal task_hash[:task][:name]
     end
 
     it "will redirect to the root page if given an invalid id" do
-
       patch task_path(id: 100)
 
       must_respond_with :redirect 
