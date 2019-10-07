@@ -12,14 +12,11 @@ class TasksController < ApplicationController
       # head :not_found
       return
     end
-
   end
 
   def new
-
     # creates a new empty form
     # this is empty, because in #create, user will fill in info on the form
-
     @task = Task.new
   end
 
@@ -40,7 +37,7 @@ class TasksController < ApplicationController
   end
 
   def edit
-   @task = Task.find_by(id: params[:id])
+    @task = Task.find_by(id: params[:id])
 
     if @task.nil?
       redirect_to tasks_path
@@ -49,14 +46,14 @@ class TasksController < ApplicationController
   end
 
   def update
-    @task = Task.find_by(id: params[:id])
-    @task.name = params[:task][:name]
-    @task.description = params[:task][:description]
+    if @task = Task.find_by(id: params[:id])
 
-    if @task.save
+      @task.name = params[:task][:name]
+      @task.description = params[:task][:description]
+      @task.save
       redirect_to task_path(@task.id)
     else
-      render new_task_path
+      redirect_to root_path
     end
   end
 
@@ -95,7 +92,6 @@ class TasksController < ApplicationController
       redirect_to root_path
       return
     end
-
   end
 
 end
