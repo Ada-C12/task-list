@@ -1,9 +1,11 @@
-<h1>Edit Task </h2>
+<h2>Edit Task </h2>
+<section class="edit">
+  <% if @task.completion_date.nil? %>
+    <p><strong>Date Completed: TBD</strong></p>
+  <% else %>
+    <p><strong>Date Completed: <%= @task.completion_date%></strong></p>
+  <% end %>
 
-<% if @task.completion_date.nil? %>
-  <h3>Date Completed: TBD</h3>
-<% else %>
-  <h3>Date Completed: <%= @task.completion_date%></h3>
-<% end %>
-<%= render partial: "form", locals: {form_class: "edit-task-form", submit_button_label: "Edit Task"} %>
-<%= link_to "Delete", task_path(@task.id), method: :delete, data: {confirm: "Are you sure you want to delete this task?"} %>
+  <%= render partial: "form", locals: {form_class: "edit-task-form", submit_button_label: "Edit Task"} %>
+  <%= link_to "Delete Task", task_path(@task.id), method: :delete, data: {confirm: "Are you sure you want to delete this task?"} %>
+</section>
