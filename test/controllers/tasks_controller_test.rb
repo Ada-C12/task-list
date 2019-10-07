@@ -139,7 +139,36 @@ describe TasksController do
     end 
   end
 
-  # describe "toggle_complete" do
-  #   # Your tests go here
-  # end
+  describe "toggle_complete" do
+    @testing_task = Task.create(
+      name: "testing task",
+      description: "testing task description",
+      completed: nil
+    )
+
+    it "will mark a imcomplete task completed" do 
+      expect {
+      patch completed_task_path(@testing_task.id)
+      }.wont_change "Task.count"
+      completed_task = Task.find_by(id: @testing_task.id)
+
+      expect(completed_task.class).wont_be_nil
+
+      must_respond_with :redirect
+      must_redirect_to root_path
+    end
+
+    it "will mark a completed task incomplete" do 
+      expect {
+      patch completed_task_path(@testing_task.id)
+      }.wont_change "Task.count"
+      incomplete_task = Task.find_by(id: @testing_task.id)
+
+      expect(incomplete_task.class).wont_be_nil
+
+      must_respond_with :redirect
+      must_redirect_to root_path
+    end
+
+  end
 end
