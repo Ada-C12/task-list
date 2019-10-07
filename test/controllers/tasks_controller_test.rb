@@ -47,6 +47,7 @@ describe TasksController do
       must_respond_with :success
     end
   end
+
   describe "create" do
     it "can create a new task" do
       # Arrange
@@ -72,28 +73,47 @@ describe TasksController do
     end
   end
   
-  # Unskip and complete these tests for Wave 3
+  # Tests for Wave 3
   describe "edit" do
     it "can get the edit page for an existing task" do
-      skip
-      # Your code here
+      get edit_task_path(task.id)
+      must_respond_with :success
     end
+
     it "will respond with redirect when attempting to edit a nonexistant task" do
-      skip
-      # Your code here
+      get edit_task_path(-1)
+      must_respond_with :redirect
     end
   end
-  # Uncomment and complete these tests for Wave 3
+
   describe "update" do
-    # Note:  If there was a way to fail to save the changes to a task, that would be a great
-    #        thing to test.
+    task_hash = {
+      task: {
+        name: "updated task",
+        description: "updated task description"
+      },
+    }
+
     it "can update an existing task" do
-      # Your code here
+      expect {
+        patch task_path(task.id), params: task_hash
+      }.must_change "Task.count", 0
+
+      updated_task = Task.find_by(name: task_hash[:task][:name])
+      expect(updated_task.description).must_equal task_hash[:task][:description]
+
+      must_respond_with :redirect
+      must_redirect_to task_path(task.id)
     end
+    
     it "will redirect to the root page if given an invalid id" do
-      # Your code here
+      patch task_path(99999), params: task_hash
+      
+      must_respond_with :redirect
+      must_redirect_to root_path
     end
   end
+
   # Complete these tests for Wave 4
   describe "destroy" do
     # Your tests go here

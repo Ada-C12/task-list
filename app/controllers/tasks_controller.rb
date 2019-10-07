@@ -32,15 +32,22 @@ class TasksController < ApplicationController
     @task = Task.find_by(id: params[:id])
 
     if@task.nil?
-      head :not_found
+      redirect_to root_path
       return
     end
   end 
 
   def update
-    @task = Taks.find_by(id: params[:id])
-    if @task.update(task_params)
+    @task = Task.find_by(id: params[:id])
+
+    if@task.nil?
       redirect_to root_path
+      return
+    end
+
+    @task = Task.find_by(id: params[:id])
+    if @task.update(task_params)
+      redirect_to task_path(@task)
       return
     else
       render :edit
@@ -52,7 +59,7 @@ class TasksController < ApplicationController
     @task = Task.find_by(id: params[:id])
 
     if @task.nil?
-      head :not_found
+      redirect_to root_path
       return
     end
 
@@ -61,6 +68,26 @@ class TasksController < ApplicationController
     redirect_to root_path
     return
   end
+
+  def completed
+    @task = Task.find_by(id: params[:id])
+
+    if @taks.nil?
+      redirect_to root_path
+      return
+    end 
+
+    if @task.completed == nil
+      @task.completed = DateTime.now
+    else
+      @task.completed = nil
+    end
+
+    unless @task.save
+      redirect_to root_path
+    end
+
+  end 
 
   private
 

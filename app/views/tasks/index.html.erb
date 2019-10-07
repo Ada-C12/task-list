@@ -1,19 +1,21 @@
 <h1>Task-List</h1>
-<ol>
+
+<section class="summary">
+<p><%= link_to "All Tasks", tasks_path %></p>
+<p><%= link_to "Add a Task", new_task_path %></p>
+</section>
+
+<ol class="details">
   <% @tasks.each do |task| %>
     <li>
-      <%= link_to task.name, task_path(task) %>
+      <%= link_to task.name, task_path(task) %>: 
       <%= link_to "Edit", edit_task_path(task) %>
       <%= link_to "Delete", task_path(task), method: :delete, data: {confirm: "Are you sure?"} %>
-      <ul> 
-        <li>
-        Description: <%= task[:description] %>
-        </li>
-        <li>
-        completed by: <%= task[:completed] %>
-        </li>
-      </ul>
+      <% if task.completed == nil %>
+        <%= link_to "Mark Complete", completed_task_path(task), method: :patch %>
+      <% else %>
+        <%= link_to "Unmark Complete", completed_task_path(task), method: :patch %>
+      <% end %>
     </li>
   <% end %>
 </ol>
-<%= link_to "Create", new_task_path %>
