@@ -1,17 +1,22 @@
-<section>
-  <%= link_to("Add task!", new_task_path, class: "main-action-button") %>
-  <h2>Your tasks</h2>
-  <ul class="task-list">
-    <% @tasks.each do |task| %>
-      <li >
-      <%= link_to(task.name, task_path(task.id), class: "task-detail-link") %> -- <%= task.description %> 
-      
-      <% label = (task.completion_date) ? "Unmark complete" : "Mark complete" %> 
-      <%= link_to(label, complete_path(task.id), method: :patch, class: "action-link") %>
+<section  class="task-list">
+  <%= link_to("ADD TASK", new_task_path, class: "main-action-button") %>
+  <section class="tasks">
+    <h2>Your tasks</h2>
+    <ul>
+      <% @tasks.each do |task| %>
+        <li>
+          <% class_name = (task.completion_date) ? "crossed-task-detail-link" : "task-detail-link" %> 
+          <%= link_to(task.name, task_path(task.id), class: class_name) %> -- <%= task.description %> 
 
-      <%= link_to("Edit", edit_task_path(task.id), class: "action-link") %>
-      <%= link_to("Delete", task_path(task.id), method: :delete, data: {confirm: "Delete this task!"}, class: "action-link") %>
-      </li>
-    <%end%>
-  </ul>
+          <section>
+            <% label = (task.completion_date) ? "Unmark complete" : "Mark complete" %> 
+            <%= link_to(label, complete_path(task.id), method: :patch, class: "action-link") %>
+            <%= link_to("Edit", edit_task_path(task.id), class: "action-link") %>
+            <%= link_to("Delete", task_path(task.id), method: :delete, data: {confirm: "Delete this task!"}, class: "action-link") %>
+          </section>
+
+        </li>
+      <%end%>
+    </ul>
+  </section>
 </section>
