@@ -114,12 +114,32 @@ describe TasksController do
     end
   end
 
-  # Complete these tests for Wave 4
+  # Tests for Wave 4
   describe "destroy" do
-    # Your tests go here
+    
+    it "can delete an exisiting task" do
+      @testing_task = Task.create(
+        name: "testing task",
+        description: "testing task description"
+      )
+      
+      expect {
+        delete task_path(@testing_task.id)
+      }.must_change "Task.count", -1
+
+      must_respond_with :redirect
+      must_redirect_to root_path
+    end
+
+    it "will redirect to rooth path when given an invalid id" do 
+      delete task_path(-1)
+      
+      must_respond_with :redirect
+      must_redirect_to root_path
+    end 
   end
-  # Complete for Wave 4
-  describe "toggle_complete" do
-    # Your tests go here
-  end
+
+  # describe "toggle_complete" do
+  #   # Your tests go here
+  # end
 end

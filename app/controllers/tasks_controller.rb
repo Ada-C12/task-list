@@ -78,15 +78,16 @@ class TasksController < ApplicationController
     end 
 
     if @task.completed == nil
-      @task.completed = DateTime.now
+      @task.completed = DateTime.current
+      @task.save
+      redirect_to root_path
+      return
     else
       @task.completed = nil
-    end
-
-    unless @task.save
+      @task.save
       redirect_to root_path
+      return
     end
-
   end 
 
   private
