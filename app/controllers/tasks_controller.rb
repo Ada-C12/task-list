@@ -55,7 +55,7 @@ class TasksController < ApplicationController
     def edit
         id = params[:id].to_i
         if id < 0
-            redirect_to tasks_path
+            redirect_to root_path
         end
         @task = Task.find_by(id: id )
         
@@ -64,11 +64,12 @@ class TasksController < ApplicationController
     def update
         id = params[:id].to_i
         if id < 0
-            redirect_to tasks_path
+            redirect_to root_path
         end
-        @task = Task.find_by(id)
+        @task = Task.find_by(id: id)
         @task[:name] = params[:task][:name]
         @task[:description] = params[:task][:description]
+        @task[:completed] = params[:task][:completed]
                 
         if @task.save
             redirect_to task_path(@task.id)

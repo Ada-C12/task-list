@@ -115,16 +115,18 @@ describe TasksController do
     it "can update an existing task" do
       # Your code here
       # Instead of Task.first, do Task.create
-      existing_task = Task.create
-      update_task_from_date = {
+      existing_task = Task.create(name: "Watch TV", description: "Description for tv")
+         
+      update_task_from_data = {
         task:{
           name: "Watch TV",
-          description: "Descripton for tv",
-          completed: ""
+          description: "Descripton for tv"
+          # completed: ""
         }
       }
       # Act
-      patch task_update_path(existing_task.id)
+     patch task_path(existing_task.id, params: update_task_from_data)
+      #     must_redirect_to root_path
       # must_redirect_to root_path
 
       # Assert
@@ -133,41 +135,65 @@ describe TasksController do
 
     it "will redirect to the root page if given an invalid id" do
       # Your code here
-      # patch task_update_path, params: {id: -1}
-
+      # Arrange
+    
+      invalid_id = "-1"
+      update_task_from_data = {
+        task:{
+          name: "Watch TV",
+          description: "Descripton for tv"
+          # completed: ""
+        }
+      }
+      get task_path( invalid_id, params: update_task_from_data )
       # Assert
-      # must_respond_with :redirect
+      must_respond_with :redirect
+      # must_redirect_to task_path
     end
   end
+
 
   # Complete these tests for Wave 4
   describe "destroy" do
     # Your tests go here
-    it "Deleting is successful!" do
-      # Arrange:
-      # Create a Book... then find the newly created book's id
-      new_task = Task.new(
-        name: 'New task',
-        description: 'Test'
-      )
-      id = new_task.id
+      it "Deleting is successful!" do
+        # Create a Task, then find the newly created Task's id
+      
+        new_task = Task.create(name: "Watch TV", description: "Description for tv")
+        id = new_task.id
 
-      # expect {
-      #   delete task_delete_path, params[id: id]
-      # }.must_change "Task.count", 1
+        expect {
+          delete task_delete_path(id)
+        }.must_change "Task.count", 1
 
-    # Act-Assert:
-      # Expect Differ: The book count goes 
-      # down by one after we do "delete book_path( the newly created book's id )
-    # Assert:
-      # Must redirect to the root page
+        must_respond_with :redirect
+        must_redirect_to root_path
 
+        expect( Task.find_by(id: id) ).must_be_nil
     end
-
   end
 
-  # Complete for Wave 4
-  describe "toggle_complete" do
-    # Your tests go here
+ # Complete for Wave 4
+ describe "toggle_complete" do
+    it "can mark tasks as completed " do
+      # Your code here
+      existing_task = Task.create(name: "Watch TV", description: "Description for tv")
+          
+      update_task_from_data = {
+        task:{
+          name: "Watch TV",
+          description: "Descripton for tv",
+          completed: "yes"
+        }
+      }
+      #Act
+      patch task_path(existing_task.id, params: update_task_from_data)
+      must_redirect_to task_path
+      
+      #Assert
+      expect( Task.find_by(id: existing_task.id).completed).wont_equal nil
+    end
   end
 end
+
+

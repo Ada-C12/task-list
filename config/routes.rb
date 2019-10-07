@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   
   root :to => "tasks#index"
   
-  resources :tasks, except: [:destroy]
+  resources :tasks, only: [:index, :show, :new, :create, :edit, :update]
   # resources :tasks, except: [:name, :description]
   
 # # Routes that operate on the task collection
@@ -18,7 +18,7 @@ Rails.application.routes.draw do
 
 #   get '/tasks/:id/edit', to: 'tasks#edit', as: 'edit_task'
 
-#   patch '/tasks/update/:id', to: 'tasks#update', as: 'task_update'
+  #  patch '/tasks/update/:id', to: 'tasks#update', as: 'task_update'
 
   delete '/tasks/:id', to: 'tasks#destroy', as: 'task_delete'
 
