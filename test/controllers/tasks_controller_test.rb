@@ -187,7 +187,7 @@ describe TasksController do
     
     it "stores multiple completed tasks times in database" do
       @task = Task.find_by(id: task.id)
-      @task2 = Task.find_by(id: task.id)
+      @task2 = Task.find_by(id: task2.id)
       
       patch "/tasks", params: { task_ids: [task.id, task2.id] }
       completed_task = Task.find_by(id: task.id)
@@ -200,7 +200,19 @@ describe TasksController do
     end
     
     it "removes stored task time from database if unchecked" do
+      @task = Task.find_by(id: task.id)
+      @task2 = Task.find_by(id: task2.id)
       
+      patch "/tasks", params: { task_ids: [task.id] }
+      @completed_task = Task.find_by(id: task.id)
+      @completed_task2 = Task.find_by(id: task2.id)
+      
+      patch "/tasks", params: { task_ids: [task.id] }
+      uncompleted_task = Task.find_by(id: task2.id)
+      
+      must_respond_with :redirect
+      must_redirect_to tasks_path
+      expect uncompleted_task.completion_date = nil
     end
   end
 end
