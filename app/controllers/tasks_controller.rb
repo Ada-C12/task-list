@@ -79,16 +79,11 @@ class TasksController < ApplicationController
       redirect_to tasks_path
       return
     else
-      # if @task.completion_date.nil?
-      @task.completion_date = DateTime.now
+      Time.zone = 'Pacific Time (US & Canada)'
+      @task.completion_date = DateTime.now.in_time_zone
       @task.save
       redirect_to tasks_path
       return
-      # else
-      #   @task.completion_date = nil
-      #   redirect_to tasks_path
-      #   return
-      # end
     end
   end
 

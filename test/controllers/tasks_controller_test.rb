@@ -164,11 +164,57 @@ describe "destroy" do
     
     must_respond_with :redirect 
   end
-  
 end
+  
 
 # Complete for Wave 4
 describe "toggle_complete" do
-  # Your tests go here
+  before do 
+    Time.zone = 'Pacific Time (US & Canada)'
+    @task = Task.create name: "sample task", description: "this is an example for a test"
+  end
+
+  it "will add the date to completed_date when marked completed" do
+    # Arrange
+    
+    task_hash = {
+      task: {
+        name: "sample task", 
+        description: "this is an updated description of the task",
+        completion_date: DateTime.now.in_time_zone,
+      }
+    }
+
+    # Act
+    patch completed_task_path(@task.id), params: task_hash
+
+    @task.reload
+
+    expect(@task.completion_date).wont_be_nil
+    must_respond_with :redirect 
+    must_redirect_to tasks_path
+  end
+
+  it "will change the completion_date to nil when marked incomplete" do
+  # Arrange
+    
+  task_hash = {
+    task: {
+      name: "sample task", 
+      description: "this is an updated description of the task",
+      completion_date: nil,
+    }
+  }
+
+  # Act
+  patch incomplete_task_path(@task.id), params: task_hash
+
+  @task.reload
+
+  expect(@task.completion_date).must_be_nil
+  must_respond_with :redirect 
+  must_redirect_to tasks_path
+  end
+end  
 end
-end
+
