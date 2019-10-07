@@ -3,7 +3,7 @@ require "test_helper"
 describe TasksController do
   let (:task) {
     Task.create name: "sample task", description: "this is an example for a test",
-                completed: Time.now + 5.days
+                completed: nil
   }
 
   # Tests for Wave 1
@@ -65,7 +65,6 @@ describe TasksController do
         task: {
           name: "new task",
           description: "new task description",
-          completed: nil,
         },
       }
 
@@ -94,7 +93,7 @@ describe TasksController do
       must_respond_with :success
     end
 
-    it "will respond with redirect when attempting to edit a nonexistant task" do
+    it "will respond with redirect when attempting to edit a nonexistent task" do
 
       # Act
       get edit_task_path(-200)
@@ -111,7 +110,6 @@ describe TasksController do
 
     it "can update an existing task" do
       get update_task_path(task.id)
-
       must_respond_with :success
     end
 
@@ -125,9 +123,30 @@ describe TasksController do
 
   # Complete these tests for Wave 4
   describe "destroy" do
+    it "redirects to tasks index page and deletes no tasks if no tasks exist" do
+      Task.destroy_all
+      invalid_task_id = 1
+
+      expect {
+        delete task_path(invalid_task_id)
+      }.must_differ "Task.count", 0
+
+      must_redirect_to tasks_path
+    end
+
+    it "redirects to tasks index page and deletes no tasks if deleting a task with an id that has already been deleted" do
+      Task.create(name: "Sample", description: "Sample Description")
+      task_id = Task.find_by(name: "Sample").id
+      Task.destroy_all
+
+      expect {
+        delete task_path(task_id)
+      }.must_differ "Task.count", 0
+
+      must_redirect_to tasks_path
+    end
+
     it "decreases the task list count by one" do
-      # arrange create a book then find the newly created book's id
-      #Act-assert: expect differ: the book count goes down by one after we do delete book_path(the newly created book's )
       test_task = Task.find_by(id: task[:id])
 
       expect { delete task_path(Task.all.first.id) }.must_differ "Task.count", -1
@@ -143,5 +162,22 @@ describe TasksController do
   # Complete for Wave 4
   describe "toggle_complete" do
     # Your tests go here
+    it "returns a datetime when we mark a task completed" do
+      completed_task = Task.create name: "sample task", description: "this is an example for a test",
+                                   completed: DateTime.now
+
+      id = completed_task.id
+      patch toggle_completed_task_path(id)
+
+      completed_task = Task.find_by(id: id)
+      expect(completed_task.completed).must_be_nil
+    end
+
+    it "marks changes the completed property to a TimeWithZone object" do
+      id = task.id
+      patch toggle_completed_task_path(id)
+      task = Task.find_by(id: id)
+      expect(task.completed).must_be_kind_of ActiveSupport::TimeWithZone
+    end
   end
 end
