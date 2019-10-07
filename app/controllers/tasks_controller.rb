@@ -69,27 +69,12 @@ class TasksController < ApplicationController
     if @task.completed == nil
       @task.completed = Date.today
       @task.save
-      redirect_to root_path
+      redirect_to tasks_path
     else
       @task.completed = nil
       @task.save
-    redirect_to root_path
+      redirect_to tasks_path
     end
-
-    # @task.update_attribute(:completed, Time.now)
-    # if @task.nil?
-    #   redirect_to root_path
-    #   return
-    # if @task.completed?
-    #   @task.toggle!(:completed)
-    #   @task.completed.save = Time.now
-    #   redirect_to root_path
-    #   return
-    # else
-    #   @task.completed = nil
-    #   redirect_to root_path
-    # end
-    
   end
 
   private
