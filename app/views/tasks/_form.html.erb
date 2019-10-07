@@ -1,0 +1,27 @@
+<%= form_with model: model, edit_completion_date: edit_completion_date, class: 'task-form' do |f| %>
+  <section class="task-info">
+    <ul>
+      <li>
+        <%= f.label :name %>
+        <%= f.text_field :name %>
+      </li>
+      <li>
+        <%= f.label :description %>
+        <%= f.text_field :description %>
+      </li>
+      <li>
+        <% if edit_completion_date == true %>
+        <%= f.label :completion_date, "Completed on" %>
+          <%= f.text_field :completion_date %>
+        <% end %>
+      </li>
+    </ul>
+  </section>
+  <p class="task-button-container">
+    <%= link_to "Back", :back, class: "task-button" %>
+    <%= f.submit "Submit", class: 'task-button' %>
+    <% if edit_completion_date == true %>
+      <%= link_to "Destroy", task_path, method: :delete, data: { confirm: "Are you suuuure?" }, class: "task-button" %>
+    <% end %>
+  </p>
+<% end %>

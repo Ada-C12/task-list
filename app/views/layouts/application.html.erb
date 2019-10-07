@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>TaskList</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <link href="https://fonts.googleapis.com/css?family=Creepster&display=swap" rel="stylesheet">
+
+<!-- SOURCES -->
+  <!-- `current_path` & `path` code: https://stackoverflow.com/questions/1203892/how-can-i-find-out-the-current-route-in-rails  -->
+  <!-- icons: https://material.io/resources/icons, open source -->
+<!-- END SOURCES -->
+
+  </head>
+
+  <body class="creepy">
+
+    <header>
+      <% current_path = request.env['PATH_INFO'] %>
+      <% path = Rails.application.routes.recognize_path('/tasks') %>
+      <% if current_path.include? path[:controller] %>
+        <span class="tasklist-home">
+          <%= link_to "Home", root_path %>
+        </span>
+      <% else %>
+        <span>
+          <%= @greeting %>
+        </span>
+      <% end %>
+      <span class="tasklist-logo">
+        Tasklist
+      </span>
+    </header>
+    
+    <%= yield %>
+
+  </body>
+</html>

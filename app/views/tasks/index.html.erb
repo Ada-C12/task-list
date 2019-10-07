@@ -1,0 +1,37 @@
+<section class="task-list-container">
+  <ul class="task-list">
+    <li>
+      <span>
+        Task Name
+      </span>
+      <span>
+        Completed
+      </span>
+      <span>
+        Edit
+      </span>
+      <span>
+        Destroy
+      </span>
+    </li>
+
+    <% @tasks.sort.each do |task| %>
+      <li>
+
+        <%= link_to task[:name], task_path(task.id) %>
+
+        <% if task.completion_date.nil? %>
+          <%= link_to (image_tag("toggle_off-24px.svg", class: 'icon toggle', alt: "toggle-off")), complete_task_path(task.id), method: :patch %>
+        <% else %>
+          <%= link_to (image_tag("toggle_on-24px.svg", class: 'icon toggle', alt: "toggle-on")), complete_task_path(task.id), method: :patch %>
+        <% end %>
+
+        <%= link_to (image_tag("edit-24px.svg", class: "icon edit", alt: "edit")), edit_task_path(task.id) %>
+
+        <%= link_to (image_tag("delete-24px.svg", class: "icon delete", alt: "delete")), task_path(task.id), method: :delete, data: { confirm: "Are you SURE?" } %>
+
+      </li>
+    <% end %>
+    <%= link_to "Add New Task", new_task_path, class: "task-button" %>
+  <ul>
+</section>
