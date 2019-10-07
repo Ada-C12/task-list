@@ -59,11 +59,11 @@ class TasksController < ApplicationController
  
  def completing
   @task = Task.find_by(id:params[:id])
-  task = @task.mark_as_completed
+  @task.mark_as_completed(@task.id)
  end
  
  def mark_as_completed
-  @task = Task.find_by(id:params[:id])
+  @task = Task.find_by(id: params[:id])
   @task.progress = "completed"
   @task.completion_date = Date.today
   @task.save
@@ -71,7 +71,6 @@ class TasksController < ApplicationController
  end
  
  private
- 
  def task_params
   return params.require(:task).permit(:name, :description, :progress, :completion_date)
  end

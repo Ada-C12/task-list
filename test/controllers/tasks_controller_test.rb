@@ -143,10 +143,9 @@ describe TasksController do
     end
     it "delete causes count to decrease by 1 and refreshes root following deletion" do
       expect { 
-        @new_task.destroy
+        delete task_path (@new_task_id)
       }.must_differ 'Task.count', -1
-      ##### COME BACK TO ME!! #####
-      # must_redirect_to root_path
+      must_redirect_to root_path
     end
     
     it "delete responds with redirect to index for attempted deletion of an invalid ID" do
@@ -174,31 +173,27 @@ describe TasksController do
   
   # Complete for Wave 4
   describe "toggle_complete" do
-    before do
+    
+    it "can update an existing task's progress status to completed and it's completion_date to today" do
+      
       @new_task = Task.new
-      @new_task.name = "sample task"
+      @new_task.name = "ln 193 sample task"
       @new_task.description = "this is an example for a test"
       @new_task.completion_date = Time.now + 5.days
       @new_task.save
       
-      @new_task = Task.first
       @new_task_id = @new_task.id
-    end
-    
-    it "can update an existing task's progress status to completed and it's completion_date to today" do
       
-
-
-      #Arrange
       revising_task_description = "edited new task"
-      #Expect
-      @test_task = Task.find_by(name:"ln 115 sample task")
-      @test_task_id = @test_task.id
-      @test_task.description = revising_task_description
-      @test_task.save
-      #Assert      
-      expect(Task.find_by(name:"ln 115 sample task").description).must_equal revising_task_description
-
+      expected_progress = "completed"
+      expected_completion_date = Date.today
+      
+      
+      action = @task_controller.completing(Task.find_by(id: @new_task_id))
+      
+      expect(action.progress).must_equal expected_progress
+      expect(Task.find_by(name:"ln 193 sample task").completion_date).must_equal expected_completion_date
+      
     end
     
   end
