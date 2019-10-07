@@ -37,7 +37,9 @@ class TasksController < ApplicationController
   def update
     @task = Task.find_by(id: params[:id] )
     
-    if @task.update( task_params )
+    if @task.nil?
+      redirect_to root_path
+    elsif @task.update( task_params )
       redirect_to task_path(@task.id)
     else
       render edit_task_path
@@ -49,7 +51,7 @@ class TasksController < ApplicationController
     target_task = Task.find_by( id: params[:id] )
     
     if target_task.nil?
-      redirect_to task_path
+      redirect_to root_path
       return
     else
       target_task.destroy
@@ -61,7 +63,9 @@ class TasksController < ApplicationController
   def toggle
     @task = Task.find_by( id:params[:id])
     
-    if @task.completed == nil
+    if @task.nil?
+      redirect_to root_path
+    elsif @task.completed == nil
       @task.update(completed: Time.now)
       redirect_to root_path
     elsif @task.completed != nil

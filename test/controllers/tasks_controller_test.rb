@@ -3,45 +3,34 @@ require "test_helper"
 describe TasksController do
   let (:task) {
   Task.create name: "sample task", description: "this is an example for a test",
-  completion_date: Time.now + 5.days
+  completed: Time.now + 5.days
 }
 
-# Tests for Wave 1
 describe "index" do
   it "can get the index path" do
-    # Act
-    get tasks_path
     
-    # Assert
+    get tasks_path
     must_respond_with :success
   end
   
   it "can get the root path" do
-    # Act
-    get root_path
     
-    # Assert
+    get root_path
     must_respond_with :success
   end
 end
 
-# Unskip these tests for Wave 2
+
 describe "show" do
   it "can get a valid task" do
     
-    # Act
     get task_path(task.id)
-    
-    # Assert
     must_respond_with :success
   end
   
   it "will redirect for an invalid task" do
     
-    # Act
     get task_path(-1)
-    
-    # Assert
     must_respond_with :redirect
   end
 end
@@ -49,10 +38,8 @@ end
 describe "new" do
   it "can get the new task page" do
     
-    # Act
     get new_task_path
     
-    # Assert
     must_respond_with :success
   end
 end
@@ -65,30 +52,29 @@ describe "create" do
     task: {
     name: "new task",
     description: "new task description",
-    completion_date: nil,
+    completed: nil,
   },
 }
 
-# Act-Assert
+
 expect {
 post tasks_path, params: task_hash
 }.must_change "Task.count", 1
 
 new_task = Task.find_by(name: task_hash[:task][:name])
 expect(new_task.description).must_equal task_hash[:task][:description]
-expect(new_task.completion_date).must_equal task_hash[:task][:completion_date]
+expect(new_task.completed).must_equal task_hash[:task][:completed]
 
 must_respond_with :redirect
 must_redirect_to task_path(new_task.id)
 end
 end
 
-# Unskip and complete these tests for Wave 3
+
 describe "edit" do
   it "can get the edit page for an existing task" do
     
     get edit_task_path(task.id)
-    
     must_respond_with :success
   end
   
@@ -102,11 +88,11 @@ describe "edit" do
   end
 end
 
-# Uncomment and complete these tests for Wave 3
+
 describe "update" do
   
   before do
-    test_task = Task.create(name: "Best task", description: "Super fun things", completion_date: Time.now)
+    test_task = Task.create(name: "Best task", description: "Super fun things", completed: Time.now)
   end
   
   let (:new_task_hash) {
@@ -114,12 +100,11 @@ describe "update" do
   task: {
   name: "Errands to run",
   description: "Donate items, return library books, buy jacket",
-  completion_date: 2019/10/10
+  completed: 2019/10/10
 },
 }
 }
-# Note:  If there was a way to fail to save the changes to a task, that would be a great
-#        thing to test.
+
 it "can update an existing task" do
   id = Task.first.id
   
@@ -129,19 +114,18 @@ it "can update an existing task" do
   
 end
 
-it "will redirect to the root page if given an invalid id" do
+it "will redirect to the index page if given an invalid id" do
   task = Task.new(id: 10)
-  get edit_task_path(400)
+  get edit_task_path(-1)
   
-  must_respond_with :redirect
   must_redirect_to tasks_path
 end
 end
 
-# Complete these tests for Wave 4
+
 describe "destroy" do
   it "deletes existing task and redirects to index page" do
-    test_task = Task.create(name: "Definitely a real task", description: "obviously real task", completion_date: Time.now)
+    test_task = Task.create(name: "Definitely a real task", description: "obviously real task", completed: Time.now)
     target_id = Task.find_by(name: "Definitely a real task").id
     
     expect {delete task_path(target_id)}.must_differ "Task.count", -1
@@ -149,13 +133,38 @@ describe "destroy" do
     must_redirect_to root_path
   end
   
-  
-  
+  it "redirects to index page if task is invalid" do
+    
+    delete task_path(-1)
+    must_redirect_to root_path
+  end
 end
 
 
-# Complete for Wave 4
 describe "toggle_complete" do
-  # Your tests go here
+  it "when the value of completed is set to nil, sets the value to the current time and redirects to index" do
+    
+    target = Task.create(name: "Task Name", description: "Exciting description", completed: nil)
+    patch complete_path( target.id )
+    
+    expect (Task.find_by(id: target.id).completed).must_be_instance_of Date
+    must_redirect_to root_path
+    
+  end
+  
+  it "when the value of completed is set to a Date object, it sets the value at nil and redirects to index" do
+    
+    target = Task.create(name: "Task Name", description: "Exciting description", completed: Time.now)
+    patch complete_path( target.id )
+    
+    expect(Task.find_by(id: target.id).completed).must_equal nil
+    must_redirect_to root_path
+  end
+  
+  it "redirects if the task is not valid" do
+    
+    patch complete_path(-1)
+    must_redirect_to root_path
+  end
 end
 end
