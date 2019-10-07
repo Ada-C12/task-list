@@ -17,7 +17,7 @@ class TasksController < ApplicationController
   end
   
   def create
-    @task = Task.new(name: params[:task][:name], description: params[:task][:description], completion_date: nil) 
+    @task = Task.new(task_params) 
     if @task.save
       redirect_to task_path(@task.id)
       return
@@ -44,7 +44,7 @@ class TasksController < ApplicationController
       return
     end
     
-    if @task.update(name: params[:task][:name], description: params[:task][:description], completion_date: params[:task][:completion_date])
+    if @task.update(task_params)
       redirect_to task_path (@task.id)
       return
     else
@@ -88,6 +88,12 @@ class TasksController < ApplicationController
     
     redirect_to tasks_path
     return 
+  end
+  
+  private
+  
+  def task_params
+    return params.require(:task).permit(:name, :description, :completion_date)
   end
   
 end
