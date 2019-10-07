@@ -1,0 +1,24 @@
+<h1>Tasks</h1>
+
+<section>
+  <h2>These things need to be done!</h2>
+  <aside>
+    <%= link_to "Add a new task", new_task_path %>
+  </aside>
+  <ul>
+    <% @tasks.each do |task| %>
+      <li>
+        <p>
+          <%= link_to task.name, task_path( task.id ) %>
+          <% mark_complete_text = task.completed ? "Unmark Complete" : "Mark Complete" %>
+          <%= task.description %> | 
+          <%= link_to  mark_complete_text, toggle_completed_path( task.id ), method: :patch %> | 
+          <%= link_to "delete", task_path( task.id ), method: :delete %>
+        </p>
+        <p>
+          <%# "Should be completed by: " + task.due_date.to_s %>
+        </p>
+      </li>
+    <% end %>
+  </ul>
+</section>
