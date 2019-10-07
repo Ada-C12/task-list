@@ -58,7 +58,17 @@ class TasksController < ApplicationController
     end
   end
   
-  
+  def toggle
+    @task = Task.find_by( id:params[:id])
+    
+    if @task.completed == nil
+      @task.update(completed: Time.now)
+      redirect_to root_path
+    elsif @task.completed != nil
+      @task.update(completed: nil)
+      redirect_to root_path
+    end
+  end
   
   private 
   def task_params
