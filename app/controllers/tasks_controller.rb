@@ -18,16 +18,21 @@ class TasksController < ApplicationController
     end
     
     def create    
-        @task = Task.new(task_params)
-        begin
-            @task.save!
-        rescue ActiveRecord::RecordInvalid
-            redirect_to new_task_path
-            return
-        end 
-        
-        redirect_to task_path(@task.id)   
-        return    
+        @task = Task.new(task_params) rescue nil
+        if @task
+            begin
+                @task.save!
+            rescue ActiveRecord::RecordInvalid
+                redirect_to new_task_path
+                return
+            end 
+            
+            redirect_to task_path(@task.id)   
+            return  
+        end
+
+        redirect_to new_task_path
+        return 
     end
     
     def edit
@@ -40,37 +45,29 @@ class TasksController < ApplicationController
     
     def update
         @task = Task.find_by(id: params[:id])
-        if @task
-            @task.name = params[:task][:name]
-            @task.description = params[:task][:description]
-            @task.completion_date = params[:task][:completion_date]
-            
+        if @task           
             begin
-                @task.save!
-            rescue ActiveRecord::RecordInvalid
+                @task.update!(task_params)
+            rescue ActionController::ParameterMissing, ActiveRecord::RecordInvalid
                 redirect_to edit_task_path(@task.id)
                 return
             end 
-            
             redirect_to task_path(@task.id)
             return
-        else
-            redirect_to tasks_path
-            return
-        end  
+        end
+        redirect_to tasks_path
+        return
     end
     
     def destroy
-        selected_task = Task.find_by(id: params[:id])
-        
-        if !selected_task
-            redirect_to tasks_path
-            return
-        else
+        selected_task = Task.find_by(id: params[:id])   
+        if selected_task
             selected_task.destroy
             redirect_to tasks_path
-            return
+            return      
         end
+        redirect_to tasks_path
+        return       
     end
     
     def mark_complete
@@ -78,9 +75,9 @@ class TasksController < ApplicationController
         if @task
             @task.completion_date = (@task.completion_date) ? nil : Date.current()
             @task.save
-        end 
-        redirect_to tasks_path
-        return
+            redirect_to tasks_path
+            return
+        end   
     end
     
     private

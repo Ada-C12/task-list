@@ -92,7 +92,12 @@ describe TasksController do
             description: "No name task description",
             completion_date: nil,
           },
-        }   
+        },
+        {
+          task: {
+            
+          }
+        }
       ]
       
       task_hashes.each do |task_hash|
@@ -127,7 +132,8 @@ describe TasksController do
       @task_hash = {
         task: {
           name: "updated task",
-          description: "updated task description"
+          description: "updated task description", 
+          completion_date: nil
         }
       }
     end
@@ -174,7 +180,10 @@ describe TasksController do
             description: "No name task description",
             completion_date: nil,
           }
-        }   
+        },
+        {
+          task: {}
+        }  
       ]
       
       existing_task = Task.find_by(id: task[:id])
@@ -256,7 +265,7 @@ describe TasksController do
         patch complete_path(existing_task_id)
       }.must_differ "Task.count", 0
 
-      expect _(Task.all.first.completion_date).wont_be_nil
+      expect _(Task.all.first.completion_date).must_equal Date.current()
       must_respond_with :redirect
       must_redirect_to tasks_path
     end
@@ -267,7 +276,7 @@ describe TasksController do
       expect _(Task.count).must_equal 1
 
       patch complete_path(existing_task_id)
-      expect _(Task.all.first.completion_date).wont_be_nil
+      expect _(Task.all.first.completion_date).must_equal Date.current()
 
       expect {
         patch complete_path(existing_task_id)
