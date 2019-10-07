@@ -175,7 +175,7 @@ describe TasksController do
       new_task = Task.create(name: "Luhn Exercism", description: "Homework", completion_date: nil)
       patch complete_path(new_task.id)
     
-      expect (Task.find_by(id: new_task.id).completion_date).must_be_instance_of ActiveSupport::TimeWithZone
+      expect (Task.find_by(id: new_task.id).completion_date).wont_be_nil
       must_redirect_to tasks_path
     end
     it "updates completion_date to nil when unmark complete is clicked and redirects to home" do

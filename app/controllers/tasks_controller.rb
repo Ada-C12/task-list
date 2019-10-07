@@ -20,7 +20,7 @@ class TasksController < ApplicationController
     @task = Task.new(name: params[:task][:name], description: params[:task][:description], completion_date: nil)
     if @task.save
       redirect_to task_path(@task.id)
-      return 
+      return
     else
       render new_task_path
       return
@@ -32,7 +32,7 @@ class TasksController < ApplicationController
     @task = Task.find_by(id: params[:id])
     if @task.nil?
       redirect_to edit_task_path
-      return 
+      return
     end
   end
 
@@ -41,10 +41,10 @@ class TasksController < ApplicationController
     if !@task.nil?
       @task.update(name: params[:task][:name], description: params[:task][:description], completion_date: params[:task][:completion_date])
       redirect_to task_path(@task.id)
-      return 
+      return
     else
       redirect_to root_path
-      return 
+      return
     end
   end
 
@@ -64,16 +64,15 @@ class TasksController < ApplicationController
     @task = Task.find_by(id: params[:id])
     if @task.nil?
       redirect_to root_path
-      return 
-    end
-    if @task.completion_date?
+      return
+    elsif @task.completion_date?
       @task.update(completion_date: nil)
       redirect_to tasks_path
-      return 
+      return
     else
       @task.update(completion_date: Time.now)
       redirect_to tasks_path
-      return 
+      return
     end
   end
 end
