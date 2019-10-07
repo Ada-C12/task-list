@@ -184,29 +184,30 @@ describe TasksController do
       # Arrange
       new_task = Task.create(name: "crochet lobster", description: "mainly just need to finish up them arms!")
       update_params = {
-        task: {
-          completed: Time.now
-        }
+        id: new_task.id
       }
+      assert_nil new_task.completed
       # Act
       patch toggle_completed_path(new_task.id), params: update_params
       # Assert
-      assert_not_nil(new_task.completed)
+      assert_not_nil Task.find_by(id: new_task.id).completed
+      must_respond_with :found
       must_redirect_to tasks_path
 
     end
     it "changes a completed task's completed value back to nil and redirects to tasks path" do
       # Arrange
-      completed_task = Task.create(name: "it's done!", description: "that was easy! .... ", completed: Time.now - 5)
+      completed_task = Task.create(name: "it's done!", description: "that was easy! .... ", completed: Time.now)
       update_params = {
         task: {
-          completed: nil
+          completed: completed_task.completed
         }
       }
       # Act
       patch toggle_completed_path(completed_task.id), params: update_params
       # Assert
-      assert_nil(new_task.completed)
+      assert_nil Task.find_by(id: completed_task.id).completed
+      must_respond_with :found
       must_redirect_to tasks_path
     end
 
