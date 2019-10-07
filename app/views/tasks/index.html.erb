@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Tasks</title>
+</head>
+
+  <body>
+    <header>
+      <nav>
+        <%= link_to "Add Task", "tasks/new" %>
+      <nav>
+    </header>
+    
+    <section>
+      <h1>Tasks</h1>
+      <ul>
+        <% @tasks.each do |task|  %>
+          <% if task.completion_date != nil%>
+            <li><strike>Name:<%= link_to task.name, task_path(task) %></strike></li> 
+            <li>Completed: <%= task.completion_date %></li>
+          <% else%>
+            <li>Name:<%= link_to task.name, task_path(task) %></li>
+          <%end%>
+          <%= button_to 'Delete', task_path(task),method: :delete, data: {confirm: "Are you sure?"} %>
+          <%= button_to 'Edit', edit_task_path(task.id), method: :get %>
+          <%= button_to 'Mark as complete', complete_task_path(task.id), method: :put %>
+          <hr>
+        <% end %>
+      </ul>
+    </section>
+  </body>
+</html>
