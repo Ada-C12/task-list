@@ -25,7 +25,6 @@ describe TasksController do
     end
   end
   
-  # Unskip these tests for Wave 2
   describe "show" do
     it "can get a valid task" do
       # Act
@@ -81,7 +80,6 @@ describe TasksController do
     end
   end
   
-  # Unskip and complete these tests for Wave 3
   describe "edit" do
     it "can get the edit page for an existing task" do
       get task_path(task.id)
@@ -102,8 +100,7 @@ describe TasksController do
     before do
       @new_task = Task.create(name: "new task")
     end
-    # Note:  If there was a way to fail to save the changes to a task, that would be a great
-    #        thing to test.
+    
     it "can update an existing task" do
       existing_task = Task.first
       updated_task_form_data = {
@@ -137,9 +134,7 @@ describe TasksController do
     must_redirect_to root_path
   end
   
-  # Complete these tests for Wave 4
   describe "destroy" do
-    # Your tests go here
     it "deletes a task if given a valid id" do
       valid_task = Task.first
       
@@ -163,7 +158,6 @@ describe TasksController do
     end
   end
   
-  # Complete for Wave 4
   describe "toggle_complete" do
     before do
       @completed_task = Task.create(name: "completed task", completed: Time.now)
