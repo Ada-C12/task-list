@@ -3,14 +3,19 @@
 <section class="task list">
  <ul>
   <% @tasks.each do |task| %>
+
    <li>
     <%= link_to task.name, task_path(task.id) %> 
+
     <% if task.progress == "completed" %>
-     <%= button_to "completed task" %>
+     <%= "completed task" %>
     <% else %>
-     <%= button_to "complete this task" %>
-    <% end %>
+    <%= button_to "mark as completed", completing_path(task.id), :method=> :patch%>
+    <%# <%= button_to "mark as completed", task_path(task.id), method: Task.mark_as_completed %>
+    <%end%>
+
      <%= link_to "delete", task_path(task.id), method: :delete, data: { confirm: "Do you really want to delete this task?" } %>
+
    </li>
   <% end %>
  </ul>

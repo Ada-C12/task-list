@@ -174,6 +174,32 @@ describe TasksController do
   
   # Complete for Wave 4
   describe "toggle_complete" do
-    # Your tests go here
+    before do
+      @new_task = Task.new
+      @new_task.name = "sample task"
+      @new_task.description = "this is an example for a test"
+      @new_task.completion_date = Time.now + 5.days
+      @new_task.save
+      
+      @new_task = Task.first
+      @new_task_id = @new_task.id
+    end
+    
+    it "can update an existing task's progress status to completed and it's completion_date to today" do
+      
+
+
+      #Arrange
+      revising_task_description = "edited new task"
+      #Expect
+      @test_task = Task.find_by(name:"ln 115 sample task")
+      @test_task_id = @test_task.id
+      @test_task.description = revising_task_description
+      @test_task.save
+      #Assert      
+      expect(Task.find_by(name:"ln 115 sample task").description).must_equal revising_task_description
+
+    end
+    
   end
 end
