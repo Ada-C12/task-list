@@ -150,22 +150,34 @@ describe TasksController do
   
   describe "toggle_complete" do
     it "can update an existing task as completed(value=time selected)" do
-     
+      new_task = Task.create(name: "New Task", description: "New Description")
+      new_task_id = new_task.id
       
       get complete_task_path(new_task_id)
-      # must_respond_with :redirect
+    
+      must_respond_with :redirect
       expect(new_task.completed).wont_equal nil
     end
     
     it "will redirect to the root page if given an invalid id" do
+      get complete_task_path(-1)
+      
+      must_respond_with :redirect
     end
 
   end
   describe "toggle_uncomplete" do
-    it "can update an existing task as uncompleted(value=nil)" do
+    it "can update an existing task as uncompleted(value=nil)" do      
+      get uncomplete_task_path(task.id)
+    
+      must_respond_with :redirect
+      expect(task.completed).must_equal nil
     end
     
     it "will redirect to the root page if given an invalid id" do
+      get uncomplete_task_path(-1)
+      
+      must_respond_with :redirect
     end
   end
 end

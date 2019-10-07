@@ -104,6 +104,8 @@ def uncomplete
 
   if @task.completed != nil
     @task.update(completed: nil)
+  else
+    raise StandardError.new("trying to uncomplete an uncompleted task")
   end
   
   if @task.save

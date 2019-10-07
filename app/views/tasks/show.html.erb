@@ -1,6 +1,11 @@
-<section>
+<section id="single-task-sect">
   <h1><%=@task.name%></h1>
-  <h2><%=@task.description%></h2>
-  <h3>Completed: <%=@task.completed%></h3>
-  <%= link_to "Edit this task", edit_task_path(@task.id) %>
+  <h4><%=@task.description%></h4>
+  <%if @task.completed != nil%>
+    <h4>You completed this task <%=@task.completed%></h4>
+  <%end%>
+  <section class ="action-links-sect">
+    <%= link_to "Edit Task", edit_task_path(@task.id) %> | 
+    <%= link_to "Delete Task", task_path(@task.id), method: :delete, data: { confirm: "Are you sure you'd like to delete this task?" } %>
+  </section>
 </section>
