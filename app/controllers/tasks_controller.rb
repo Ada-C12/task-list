@@ -94,7 +94,6 @@ class TasksController < ApplicationController
     redirect_to root_path
   end
   
-  
   private
   def task_params
     return params.require(:task).permit(:name, :description, :id)
