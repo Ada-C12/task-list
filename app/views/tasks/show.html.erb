@@ -1,0 +1,21 @@
+<h1>Task Details</h1>
+<h2>
+  <%= link_to "Edit THIS task here", edit_task_path(@task.id) %>
+</h2>
+<h3>
+  <%= link_to "DELETE THIS task", task_path, method: :delete, data: {confirm: "U sure?" } %>
+</h3>
+
+
+<p><%= @task.name %></p>
+<ul>
+  <li><%= @task.description %></li>
+  <li>
+    <% if @task.completion_date == nil %>
+      <%= link_to "Mark Complete", completed_task_path(@task.id), method: :patch %>
+    <% else %>
+      Completed on <%= @task.completion_date %>
+      <%= link_to "Mark Incomplete", completed_task_path(@task.id), method: :patch %>
+    <% end %>
+  </li>
+</ul>
