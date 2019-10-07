@@ -30,7 +30,10 @@ class TasksController < ApplicationController
   def complete
     params[:task_ids].each do |id|
       @task = Task.find_by(id: id.to_i )
-      @task.completion_date = Time.now
+      if @task.completion_date == nil
+        @task.completion_date = Time.now
+        @task.save
+      end
     end
     
     if @task.save
@@ -42,6 +45,10 @@ class TasksController < ApplicationController
   
   def update
     @task = Task.find_by(id: params[:id] )
+    if @task.nil?
+      redirect_to tasks_path
+      return
+    end
     @task.name = params[:task][:name]
     @task.description = params[:task][:description]
     
