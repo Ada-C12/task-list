@@ -1,8 +1,8 @@
 
 class TasksController < ApplicationController
   def index
-    @tasks = Task.all
-    @ordered_tasks = @tasks.order(:name)
+    @tasks = Task.all.order(:name)
+    #@ordered_tasks = @tasks.order(:name)
   end
   
   def show
@@ -74,7 +74,8 @@ class TasksController < ApplicationController
     @task = Task.find_by(id: params[:id])
     
     if @task.completion_date == nil
-      @task.update(completion_date: DateTime.now)
+      @task.update(completion_date: Time.current)
+      
       redirect_to root_path
       return
     else
