@@ -1,6 +1,6 @@
 class TasksController < ApplicationController
   def index
-    @tasks = Task.all
+    @tasks = Task.all.order(:created_at)
   end 
   
   # Wave 2 - shows task
@@ -22,9 +22,9 @@ class TasksController < ApplicationController
   
   def create 
     @task = Task.new(
-      name: params[:task][:name],
-      description: params[:task][:description],
-      completion_date: nil
+    name: params[:task][:name],
+    description: params[:task][:description],
+    completion_date: nil
     ) #instantiates a new task
     
     if @task.save #save returns true if the database insert succeeds
