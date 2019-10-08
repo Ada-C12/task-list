@@ -70,12 +70,14 @@ class TasksController < ApplicationController
   end
 
   def completed
+    puts "running complete function"
     @task = Task.find_by(id: params[:id])
 
-    if @taks.nil?
+    if @task.nil?
       redirect_to root_path
       return
     end 
+    
 
     if @task.completed == nil
       @task.completed = DateTime.now
@@ -88,7 +90,7 @@ class TasksController < ApplicationController
       redirect_to root_path
       return
     end
-  end 
+  end
 
   private
 

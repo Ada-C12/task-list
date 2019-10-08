@@ -140,11 +140,12 @@ describe TasksController do
   end
 
   describe "toggle_complete" do
-    @testing_task = Task.create(
-      name: "testing task",
-      description: "testing task description",
-      completed: nil
-    )
+    before do 
+      @testing_task = Task.create(
+        name: "testing task",
+        description: "testing task description"
+      )
+    end
 
     it "will mark a imcomplete task completed" do 
       expect {
