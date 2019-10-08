@@ -190,7 +190,7 @@ describe TasksController do
         },
         {
           task: {
-            name: "",
+            name: "      ",
             description: "      ",
             completion_date: nil,
           }
