@@ -43,7 +43,7 @@ class TasksController < ApplicationController
     
     if @task.nil?
       # head :not_found
-      redirect_to tasks_path
+      redirect_to root_path
       return
     end
   end
@@ -54,7 +54,7 @@ class TasksController < ApplicationController
     
     if @task.nil?
       # head :not_found
-      redirect_to tasks_path
+      redirect_to root_path
       return
     end
     
@@ -75,7 +75,7 @@ class TasksController < ApplicationController
     @task = Task.find_by(id: task_id)
     
     if @task.nil?
-      redirect_to tasks_path
+      redirect_to root_path
       return
     end
     
@@ -90,11 +90,11 @@ class TasksController < ApplicationController
     
     if @task.completion_date == nil
       @task.update(completion_date: DateTime.now.to_date)
-      redirect_to tasks_path
+      redirect_to root_path
       return
     else 
       @task.update(completion_date: nil)
-      redirect_to tasks_path
+      redirect_to root_path
       return
     end 
   end

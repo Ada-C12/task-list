@@ -98,7 +98,7 @@ describe TasksController do
       # updates the task data, send the updated form to params
       # checks if update is not going to change the task count
       expect {
-        patch task_path(existing_task.id), params: updated_task_form_data
+        post task_path(existing_task.id), params: updated_task_form_data
       }.wont_change "Task.count"
       
       expect(Task.find_by(id: existing_task.id).name).must_equal "updated task"
@@ -150,7 +150,7 @@ describe TasksController do
       }      
       
       expect {
-        patch complete_task_path(existing_task.id)
+        post complete_task_path(existing_task.id)
       }.wont_change "Task.count"
       
       expect(Task.find_by(id: existing_task.id).name).must_equal "completed task"
