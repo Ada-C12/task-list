@@ -150,7 +150,7 @@ describe TasksController do
       }      
       
       expect {
-        post complete_task_path(existing_task.id)
+        patch complete_task_path(existing_task.id)
       }.wont_change "Task.count"
       
       expect(Task.find_by(id: existing_task.id).name).must_equal "completed task"
