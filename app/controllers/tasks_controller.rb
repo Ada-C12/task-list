@@ -52,6 +52,7 @@ class TasksController < ApplicationController
         redirect_to edit_task_path(@task.id)
         return
       end 
+      
       redirect_to task_path(@task.id)
       return
     end
@@ -62,10 +63,9 @@ class TasksController < ApplicationController
   def destroy
     selected_task = Task.find_by(id: params[:id])   
     if selected_task
-      selected_task.destroy
-      redirect_to tasks_path
-      return      
+      selected_task.destroy     
     end
+    
     redirect_to tasks_path
     return       
   end
