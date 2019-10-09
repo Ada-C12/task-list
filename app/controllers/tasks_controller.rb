@@ -57,11 +57,6 @@ class TasksController < ApplicationController
   end
  end
  
- def completing
-  @task = Task.find_by(id:params[:id])
-  @task.mark_as_completed(@task.id)
- end
- 
  def mark_as_completed
   @task = Task.find_by(id: params[:id])
   @task.progress = "completed"

@@ -7,11 +7,7 @@ Rails.application.routes.draw do
   
   patch '/tasks/:id', to: 'tasks#update'
   
-  get '/tasks/:id/completing', to: 'tasks#completing', as: 'completing'
-  
   patch '/tasks/:id/completing', to: 'tasks#mark_as_completed', as: 'completed'
-  
-  # patch '/tasks/:id', to: 'tasks#mark_as_completed', as: 'mark_as_completed'
   
   resources :tasks
   

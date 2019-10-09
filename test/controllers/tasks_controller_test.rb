@@ -118,7 +118,6 @@ describe TasksController do
     it "can update an existing task" do
       #Arrange
       revising_task_description = "edited new task"
-      #Expect
       @test_task = Task.find_by(name:"ln 115 sample task")
       @test_task_id = @test_task.id
       @test_task.description = revising_task_description
@@ -188,11 +187,11 @@ describe TasksController do
       expected_progress = "completed"
       expected_completion_date = Date.today
       
+      patch completing_path((Task.find_by(id: @new_task_id)))
       
-      action = @task_controller.completing(Task.find_by(id: @new_task_id))
+      expect((Task.find_by(name:"ln 193 sample task")).progress).must_equal expected_progress
       
-      expect(action.progress).must_equal expected_progress
-      expect(Task.find_by(name:"ln 193 sample task").completion_date).must_equal expected_completion_date
+      expect((Task.find_by(name:"ln 193 sample task")).completion_date).must_equal expected_completion_date
       
     end
     
