@@ -16,7 +16,7 @@ class TasksController < ApplicationController
             redirect_to new_task_path
             return
         end
-         
+       
     end
 
     def new
