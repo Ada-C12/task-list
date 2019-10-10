@@ -84,7 +84,7 @@ describe TasksController do
     it "can get the edit page for an existing task" do
       get edit_task_path(task.id)
       
-      must_respond_with :success, "#{task.id}"
+      must_respond_with :success
     end
     
     it "will respond with redirect when attempting to edit a nonexistant task" do
