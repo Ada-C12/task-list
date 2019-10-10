@@ -8,7 +8,7 @@ class TasksController < ApplicationController
     @task = Task.find_by(id: task_id)
     
     if @task.nil?
-      head :not_found
+      redirect_to root_path, :status => 301
       return
     end
   end
@@ -20,7 +20,7 @@ class TasksController < ApplicationController
   def create
     @task = Task.new(task_params)
     if @task.save
-      redirect_to root_path
+      redirect_to root_path, :status => 301
       return
     else
       render :new
@@ -32,7 +32,7 @@ class TasksController < ApplicationController
     @task = Task.find(params[:id])
     
     if @task == nil?
-      redirect_to root_path
+      redirect_to root_path, :status => 301
     end
   end
   
@@ -47,10 +47,12 @@ class TasksController < ApplicationController
     @task.delete
     redirect_to root_path
   end
+  
+  private
+  
+  def task_params
+    return params.require(:task).permit(:name, :description, :completed)
+  end
 end
 
-private
 
-def task_params
-  return params.require(:task).permit(:name, :title, :description, :completed)
-end

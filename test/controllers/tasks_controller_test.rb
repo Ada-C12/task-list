@@ -28,7 +28,7 @@ describe TasksController do
   # Unskip these tests for Wave 2
   describe "show" do
     it "can get a valid task" do
-      
+      #skip
       # Act
       get task_path(task.id)
       
@@ -37,7 +37,7 @@ describe TasksController do
     end
     
     it "will redirect for an invalid task" do
-      
+      #skip
       # Act
       get task_path(-1)
       
@@ -48,7 +48,7 @@ describe TasksController do
   
   describe "new" do
     it "can get the new task page" do
-      
+      #skip
       
       # Act
       get new_task_path
@@ -60,7 +60,7 @@ describe TasksController do
   
   describe "create" do
     it "can create a new task" do
-      
+      #skip
       
       # Arrange
       task_hash = {
@@ -88,51 +88,83 @@ describe TasksController do
   # Unskip and complete these tests for Wave 3
   describe "edit" do
     it "can get the edit page for an existing task" do
-      # Act
-      get edit_task_path
-      
-      # Assert
+      #skip
+      # Your code here
+      get edit_task_path(task.id)
       must_respond_with :success
+    end
+    
+    it "will respond with redirect when attempting to edit a nonexistant task" do
+      #skip
+      # Your code here
+      get edit_task_path(5000)
+      must_respond_with :not_found
     end
   end
   
-  it "will respond with redirect when attempting to edit a nonexistant task" do
+  # Uncomment and complete these tests for Wave 3
+  describe "update" do
+    before do
+      @valid_task = Task.create(name: "Buy Milk", description: "Whole Milk", completed: nil)
+    end
+    # Note:  If there was a way to fail to save the changes to a task, that would be a great
+    #        thing to test. 
     
-    expect {
+    it "updates an existing passenger successfully and redirects to home" do
+      
+      existing_task = Task.first
+      
+      updated_task_hash = {
+        task: {
+          name: "Buy OJ",
+          description: "Lots of Pulp", 
+          completed: nil
+        }
+      }
+      
+      expect {
+        patch task_path(existing_task.id), params: updated_task_hash
+      }.wont_change 'Task.count'
+      
+      # Assert
+      expect( Task.find_by(id: existing_task.id).name ).must_equal "Buy OJ"
+      expect( Task.find_by(id: existing_task.id).description ).must_equal "Lots of Pulp"
+    end
+    
+    
+    it "will redirect to the root page if given an invalid id" do
+      get task_path("5000")
+      must_respond_with :not_found
+    end
+  end
+  
+  # Complete these tests for Wave 4
+  describe "destroy" do
+    # Your tests go here
+    it 'deletes a new task successfully with valid data, and redirects the user to the task page' do
+      
+      task_hash = {
+        task: {
+          name: "Take Over the World",
+          description: "One New Non-CIS Male Dev at a Time",
+          completion: nil
+        }
+      }
+      
       post tasks_path, params: task_hash
-    }.must_change "Task.count", 1
+      identifier = Task.find_by(name: "Take Over the World")
+      
+      expect {
+        delete task_path(identifier.id)
+      }.must_differ 'Task.count', -1
+      
+      must_redirect_to tasks_path
+    end
     
-    new_task = Task.find_by(name: task_hash[:task][:name])
-    expect(new_task.description).must_equal task_hash[:task][:description]
-    expect(new_task.completed).must_equal task_hash[:task][:completed]
-    
-    must_respond_with :redirect
-    must_redirect_to task_path(new_task.id)
-  end
-  #end
-end
-
-# Uncomment and complete these tests for Wave 3
-describe "update" do
-  # Note:  If there was a way to fail to save the changes to a task, that would be a great
-  #        thing to test.
-  it "can update an existing task" do
-    # Your code here
   end
   
-  it "will redirect to the root page if given an invalid id" do
-    # Your code here
+  # Complete for Wave 4
+  describe "toggle_complete" do
+    # Your tests go here
   end
 end
-
-# Complete these tests for Wave 4
-describe "destroy" do
-  # Your tests go here
-  
-end
-
-# Complete for Wave 4
-#describe "toggle_complete" do
-# Your tests go here
-#end
-#end
