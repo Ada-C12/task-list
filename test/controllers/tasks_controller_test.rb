@@ -174,9 +174,9 @@ describe TasksController do
   
  end
   
-  # #   # Complete for Wave 4
+   # Complete for Wave 4
    describe "toggle_complete" do
-  # #     # Your tests go here
+   # Your tests go here
     # Note:  If there was a way to fail to save the changes to a task, that would be a great thing to test.
     it "can mark tasks as completed " do
       # Your code here

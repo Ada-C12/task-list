@@ -21,6 +21,4 @@ Rails.application.routes.draw do
 
   # Change this to a better path if you think of a better one
   patch '/tasks/:id/complete', to: 'tasks#toggle_complete', as: 'completed'
-  
-  
 end

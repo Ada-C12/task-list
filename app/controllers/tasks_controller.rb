@@ -88,7 +88,6 @@ class TasksController < ApplicationController
       redirect_to task_path
       return
     end
-    
   end
   
   private
