@@ -1,0 +1,25 @@
+<h2>Sam's tasks</h2>
+
+<ul>
+<% @tasks.each do |task| %>
+  <li><h3><%= link_to task.name, task_path(task) %></h3>
+  
+  <p>
+  <%= link_to "Edit", edit_task_path(task) %>
+  <%= link_to "Delete", task_path(task), method: :delete, data: {confirm: "Do you want to delete this task?"}%>
+  </p>
+  
+  <%= form_with model: @task, class: 'complete-task', url: complete_task_path(task) do |f| %>
+    <% f.submit "Completed" %>
+  <% end %>
+  
+  Completion date: <%= task.completion_date%>
+
+  </li>
+  </br>
+  <% end %>
+</ul>
+
+<p>
+  <%= link_to "Create new task", new_task_path %>
+</p>
