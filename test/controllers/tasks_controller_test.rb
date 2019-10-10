@@ -187,7 +187,7 @@ describe TasksController do
       expected_progress = "completed"
       expected_completion_date = Date.today
       
-      patch completing_path((Task.find_by(id: @new_task_id)))
+      patch completed_path((Task.find_by(id: @new_task_id)))
       
       expect((Task.find_by(name:"ln 193 sample task")).progress).must_equal expected_progress
       
