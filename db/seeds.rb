@@ -5,3 +5,15 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
+
+
+
+tasks = [
+    {name: "Finish Recursion Homework", description: "due on thursday", completion_date: nil},
+    {name: "Finish RideShare Rails", description: "due on friday"},
+  ]
+  
+  tasks.each do |task|
+    Task.create task
+  end
+  
