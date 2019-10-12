@@ -1,0 +1,39 @@
+<main>
+  <section id="site-opener">
+    <h1>Welcome to your Kaya tasks list!</h1>
+    <p>(this is the index action page)</p>
+  </section>
+</main>
+
+<main class="front-display">
+  <section id="opening-photo">
+    <%= image_tag "kayas-mugshot.jpg", alt: "Kaya the shibo looking straight into the camera with a 'are-you-serious?' face" %>
+  </section>
+
+  <section class="task-list">
+    <h2>Here are all the tasks:</h2>
+    <ul>
+      <% @tasks.each do |task| %>
+        <li>
+          <section id="task-name">
+            <%= link_to task.name, task_path(task.id) %>
+          </section>
+  
+          <section class="options">
+            <button class="an-option">
+              <%= link_to (task.completed ? "Completed" : "Not completed"), completed_task_path(task.id), method: :patch, data: {confirm: "Did you really???"} %>
+            </button> 
+            <button class="an-option">
+              <%= link_to "Delete Task", task_path(task.id), method: :delete, data: {confirm: "Think about Kaya before doing this..."} %>
+            </button>
+          </section>
+        </li>
+      <% end %>
+
+    </ul>
+  </section>
+</main>
+
+<%# <%= link_to "Task Completed!", task_path(task.id), method: :patch, data: {confirm: "Did you really???"} %> 
+<%# <%= link_to (task.completed ? "Completed" : "Not completed"),task_path(task.id), method: :toggle, data: {confirm: "Did you really???"} %>
+<%# <section class="an-option"><%= check_box_tag 'completed_task', task.id Completed! </section> %> 
