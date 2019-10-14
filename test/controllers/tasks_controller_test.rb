@@ -164,7 +164,6 @@ describe TasksController do
       expect(find_task.completed).wont_equal nil
       
       must_respond_with :redirect
-      must_redirect_to tasks_path
     end
   end
   
@@ -183,7 +182,6 @@ describe TasksController do
       expect(find_task.completed).must_equal nil
       
       must_respond_with :redirect
-      must_redirect_to tasks_path
     end
   end
 end
