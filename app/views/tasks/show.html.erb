@@ -1,0 +1,34 @@
+<h2>Task #<%= @task.id %></h2>
+
+<section class="task-data">
+  <div class="task-wrapper">
+    <% if @task.completion_date.nil? %>
+      <h3><%= @task.name %></h3>
+    <% else %>
+      <h3 class="task-complete"><%= @task.name %></h3>
+    <% end %>
+  </div>
+
+  <div class="task-details">
+    <p><%= @task.description %></p>
+
+    <% if @task.completion_date.nil? %>
+      <p>Incomplete</p>
+    <% else %>
+      <p>Completed: <%= @task.completion_date.in_time_zone("Pacific Time (US & Canada)").strftime("%A, %d %B %G at %I:%M %P %Z") %></p>
+    <% end %>
+  </div>
+
+  <div class="task-options">
+    <%= link_to "Return to Task List", tasks_path %>
+    
+    <% if @task.completion_date.nil? %>
+      <%= link_to "Mark Complete", mark_complete_path(@task.id), method: :patch %>
+    <% else %>
+      <%= link_to "Mark Incomplete", mark_complete_path(@task.id), method: :patch %>
+    <% end %>
+
+    <%= link_to 'Edit Task', edit_task_path %>
+    <%= link_to "Delete", task_path(@task.id), method: :delete, data: {confirm: "Are you sure you want to delete this task?"} %>
+  </div>
+</section>
