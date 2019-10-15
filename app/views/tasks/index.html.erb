@@ -1,0 +1,30 @@
+<h1>Task List</h1>
+
+
+
+<%# <%= image_tag "tasks.jpg", alt: "Picture of tasks." %>
+
+
+<ol>
+  <% @tasks.each do |task|  %>
+    <li> <%= link_to "Task: #{task.name}", task_path(task.id) %> </li>
+
+      <ul>
+        <li> Details: <%= task.description %> </li>
+
+        <% if task.completed == nil %>
+            <li> Status: Not Complete </li>
+            <%= link_to "Mark as Complete", completed_task_path(task), method: :patch %>
+        <% else %>
+            <li> Status: Completed on <%= task.completed %> </li>
+            <%= link_to "Mark as Not Complete", not_completed_task_path(task), method: :patch %>
+        <% end %>
+
+        <%= link_to "Edit", edit_task_path(task) %> 
+        <%= link_to "Delete", task_path(task), method: :delete, data: {confirm: "Are you sure you want to delete?"} %>
+      </ul>
+  <% end %>
+</ol>
+
+<%= link_to "Add a new task", new_task_path %> 
+
