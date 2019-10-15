@@ -25,9 +25,11 @@ class TasksController < ApplicationController
     @task = Task.new(task_params)
     
     if @task.save
+      flash[:success] = "New task added successfully"
       redirect_to task_path(@task.id)
       return
     else 
+      flash.now[:failure] = "New task was not added successfully"
       render :new 
       return
     end
@@ -49,9 +51,11 @@ class TasksController < ApplicationController
       redirect_to root_path
       return
     elsif @task.update(task_params)
+      flash[:success] = "Task updated successfully"
       redirect_to task_path(@task.id)
       return
     else 
+      flash.now[:failure] = "New task was not edited successfully"
       render :edit
       return
     end
