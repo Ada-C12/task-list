@@ -2,8 +2,7 @@ require "test_helper"
 
 describe TasksController do
   let (:task) {
-    Task.create name: "sample task", description: "this is an example for a test",
-    completed: Time.now + 5.days
+    tasks(:task)
   }
   
   # Tests for Wave 1
@@ -179,16 +178,14 @@ describe TasksController do
       
       completed_task = Task.find_by(name: "An incomplete task")
       
-      expect (completed_task.completed).must_be_kind_of ActiveSupport::TimeWithZone
-      expect (completed_task.completed).must_be_close_to Time.now, 0.05
+      expect(completed_task.completed).must_be_kind_of ActiveSupport::TimeWithZone
+      expect(completed_task.completed).must_be_close_to Time.now, 0.05
     end
     
     it "will change a task from completed with DateTime object to not completed" do
       patch toggle_complete_path(task.id)
       
-      completed_task = Task.find_by(id: task.id)
-      
-      expect (completed_task.completed).must_be_nil
+      expect(task.completed).must_be_nil
     end
     
     it "will redirect to task index for invalid task" do
