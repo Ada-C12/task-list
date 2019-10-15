@@ -1,0 +1,17 @@
+<h1>Tasks</h1>
+<ul class="task-general">
+  <% @tasks.each do  |task|  %>
+    <li class="task-list">
+      <%= task.name %>
+      <%= task.description %>
+      <%= task.completed %>
+      <%= link_to "Edit", edit_task_path(task) %> <%= link_to "Delete", task_path(task), method: :delete, data: {confirm: "Are you sure?"}%>
+      
+      <%= form_with model: @task, class: 'completed-task', url: "/tasks/#{task.id}/complete", method: :patch do |f| %>
+        <%= f.label :completed %>
+        <%= f.check_box :completed, { onchange: 'this.form.submit();' , checked: task.completed != nil} %>
+      <% end %>
+
+    </li>
+  <% end %>
+</ul>
