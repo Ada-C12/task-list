@@ -1,6 +1,25 @@
 # Task List
 
+
 Let's build a Task List in Rails! We will solve the problem of tracking tasks in a web application. This project will enable us to keep track of and persist, add, edit and remove tasks. 
+
+## Frequently Asked Questions
+
+### Due October Seventh!?
+
+**THIS IS COHORT 12's TASK LIST.  Are you in Cohort 13?  If so you probably meant to use [Cohort 13's Task List](https://github.com/Ada-C13/task-list/).**
+
+### Wait, I'm in Cohort 13 how did I get here then?
+
+That's our bad, we forgot to update the calendar link from last time to point at this Cohort's fork of task-list.  Sorry about that!
+
+### Oh no, I forked this already!
+
+Don't panic!  You will need to [delete your old C12 fork](https://help.github.com/en/github/administering-a-repository/deleting-a-repository) and create a new C13 fork.  If you haven't made any commits already then you're good to go after doing this.
+
+#### Umm... what if I already made some commits?
+
+Things are a little more involved.  You still want to [delete](https://help.github.com/en/github/administering-a-repository/deleting-a-repository) and re-fork but patching things up will take a little extra work.  Ask an instructor for help.
 
 ## At a Glance
 - Individual, [stage 1](https://github.com/Ada-Developers-Academy/pedagogy/blob/master/rule-of-three.md#stage-1) project
