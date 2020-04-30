@@ -19,7 +19,7 @@ Don't panic!  You will need to [delete your old C12 fork](https://help.github.co
 
 #### Umm... what if I already made some commits?
 
-Things are a little more involved.  You still want to [delete](https://help.github.com/en/github/administering-a-repository/deleting-a-repository) and re-fork but patching things up will take a little extra work.  Ask an instructor for help.
+Things are a little more involved.  Don't worry.  Just let an instructor know and we will make sure to grade your fork from the C12 repository.
 
 ## At a Glance
 - Individual, [stage 1](https://github.com/Ada-Developers-Academy/pedagogy/blob/master/rule-of-three.md#stage-1) project
